@@ -23,7 +23,7 @@ export default function NavLinks(){
                         key={link.name}
                         href={link.href}
                         className={clsx(`text-dark-brown flex justify-start grow lg:justify-center
-                             text-base sm:text-lg md:text-xl`,
+                             text-base py-2 lg:py-0 sm:text-lg md:text-xl`,
                             {
                                 'font-bold': pathname === link.href
                             }
@@ -37,3 +37,6 @@ export default function NavLinks(){
        </>
     )
 }
+
+
+

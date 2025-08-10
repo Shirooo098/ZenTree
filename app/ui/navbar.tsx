@@ -13,7 +13,7 @@ export default function NavBar() {
     }
 
     return (
-        <nav className="bg-main-white w-full px-8">
+        <nav className="inset-shadow-nav bg-main-white w-full px-8">
             <div className="flex flex-row items-center justify-between w-full">
                 <div className="relative w-[100px] h-[100px]">
                     <Image
@@ -42,7 +42,7 @@ export default function NavBar() {
 
             {/* Menu in Mobile viewport */}
             {isOpen && (
-                <div className="lg:hidden flex flex-col bg-main-white">
+                <div className="lg:hidden flex flex-col">
                     <NavLinks />
                 </div>
             )}
