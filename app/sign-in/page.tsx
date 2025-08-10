@@ -7,7 +7,7 @@ export default function SignIn(){
     return(
         <>
             <div className='w-full inline-block'>
-                <article className="relative w-full h-screen flex justify-center text-dark-brown">
+                <article className="relative w-full h-screen flex justify-center">
                     <Image
                         priority={true}
                         loading='eager'

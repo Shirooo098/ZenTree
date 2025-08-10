@@ -1,3 +1,5 @@
+'use client';
+
 import Link from "next/link";
 import { usePathname } from "next/navigation"
 import clsx from "clsx"
@@ -20,7 +22,8 @@ export default function NavLinks(){
                     <Link
                         key={link.name}
                         href={link.href}
-                        className={clsx(`text-dark-brown flex justify-center grow items-center text-xl`,
+                        className={clsx(`text-dark-brown flex justify-start grow lg:justify-center
+                             text-base sm:text-lg md:text-xl`,
                             {
                                 'font-bold': pathname === link.href
                             }
