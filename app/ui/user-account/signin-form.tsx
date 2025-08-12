@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export default function SignInForm(){
     return(
-        <form className="flex flex-col py-4 px-6 w-[300px] sm:w-[400px] lg:w-[480px] bg-main-white text-dark-brown">
+        <form className="flex flex-col py-4 px-6 w-[300px] sm:w-[400px] lg:w-[480px] bg-main-white text-dark-brown rounded-lg">
             <Image
                 loading='eager'
                 priority={true}
@@ -25,7 +25,7 @@ export default function SignInForm(){
             className="outline-none border-0 px-1  focus:ring-0 placeholder:text-center
                 placeholder:text-lg border-b border-black focus:border-black bg-transparent
                 text-lg xs:text-xl sm:text-2xl;" />
-            <button className="w-full mt-5 p-2 rounded-sm bg-dark-brown text-main-white">Sign In</button>
+            <button className="w-full mt-5 p-2 rounded-md bg-dark-brown text-main-white">Sign In</button>
             <p className='capitalize mt-4 text-center'>Don&apos;t Have an Account? | <Link href='/sign-up' className='text-blue-800'>Sign-up</Link></p>
 
         </form>

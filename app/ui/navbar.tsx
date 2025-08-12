@@ -13,7 +13,7 @@ export default function NavBar() {
     }
 
     return (
-        <nav className="inset-shadow-nav bg-main-white w-full px-8">
+        <nav className="inset-shadow-nav bg-main-white w-full px-8 rounded-md">
             <div className="flex flex-row items-center justify-between w-full">
                 <div className="relative w-[100px] h-[100px]">
                     <Image
@@ -35,7 +35,7 @@ export default function NavBar() {
                 {/* Hidden Menu Bar on Desktop viewport */}
                 <div className="lg:hidden flex items-center">
                     <button onClick={toggleMenu}>
-                        <AlignJustify />
+                        <AlignJustify color="var(--color-dark-brown)"/>
                     </button>
                 </div>
             </div>
