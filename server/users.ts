@@ -1,9 +1,8 @@
 "use server";
 
 import { auth } from "@/app/lib/auth"
-import { SignInResult } from "@/app/types/definition";
  
-export const signIn = async (email: string, password: string): Promise<SignInResult> => {
+export const signIn = async (email: string, password: string) => {
     try {
         await auth.api.signInEmail({
             body: {
@@ -15,11 +14,15 @@ export const signIn = async (email: string, password: string): Promise<SignInRes
 
         })
 
-        return { success: true, error: null}
+        return { 
+            success: true, 
+            message: "Signed in successfully.",
+        }
     } catch (error) {
+        const e = error as Error
         return {
             success: false,
-            error: error instanceof Error ? error.message : "Login Failed"
+            message: { error: e.message || "An unknown error occured."}
         }
     }
 }

@@ -12,6 +12,8 @@ import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+import { signInWithGoogle } from '@/app/lib/auth-client';
+
 const formSchema = z.object({
     email: z.email(),
     password: z.string().min(8, "Password is required")
@@ -34,17 +36,15 @@ export default function SignInForm(){
         },
     })
 
+
+
     async function onSubmit(values: z.infer<typeof formSchema>){
         try {
             setError(null);
             setIsSubmitting(true)
             const result = await signIn(values.email, values.password);
             
-            if(result.success){
-                router.push('/');
-            }else{
-                setError(result.error || "Login Failed")
-            }
+            if(result.success) router.push('/');
         } catch (error) {
             setError(error instanceof Error? error.message: "An unknown error occured")
         } finally {
@@ -85,8 +85,8 @@ export default function SignInForm(){
                 text-lg xs:text-xl sm:text-2xl;" />
             {errors.password && <span className="text-red-500">{errors.password.message}</span>}
             {error && <div className="text-red-500 text-start mb-4">{error}</div>}
-            <Button variant="secondary" size="md" className=' mt-5 p-2'>Sign-In</Button>
-            <Button variant='primary' size="md" className='mt-5 p-2 inline-flex justify-center items-center gap-2'>
+            <Button disabled={isSubmitting} variant="secondary" size="md" className=' mt-5 p-2'>Sign-In</Button>
+            <Button type="button" onClick={signInWithGoogle} variant='primary' size="md" className='mt-5 p-2 inline-flex justify-center items-center gap-2'>
                 <PiGoogleLogoBold />
                 Sign In with Google
             </Button>
