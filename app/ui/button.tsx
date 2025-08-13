@@ -34,7 +34,7 @@ const buttonVariants = cva("rounded-md hover:cursor-pointer transition-colors du
         },
         size: {
             sm: "text-sm px-1 py-0",
-            md: "text-base px-2 py-1",
+            md: "text-md px-2 py-1",
             lg: "text-xl px-4 py-1"
         },
         defaultVariants: {

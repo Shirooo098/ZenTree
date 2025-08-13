@@ -1,10 +1,41 @@
+'use client';
+
 import Image from 'next/image'
 import Link from 'next/link'
+import Button from '../../ui/button'
+import { signUp } from '@/server/users'
+
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+
+const formSchema = z.object({
+    username: z.string()
+        .min(3, "Username must be at least 3 characters")
+        .max(30, "Username must be less than 30 characters"),
+    email: z.email("Please enter a valid email address"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+})
 
 export default function SignUpForm(){
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            username: "",
+            email: "",
+            password: "",
+        },
+    })
+
+    function onSubmit(values: z.infer<typeof formSchema>){
+        console.log(values)
+    }
+
     return(
         <>
-            <form className="flex flex-col py-4 px-6 w-[300px] sm:w-[400px] lg:w-[480px] bg-main-white text-dark-brown rounded-lg" >
+            <form {...form}
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="flex flex-col py-4 px-6 w-[300px] sm:w-[400px] lg:w-[480px] bg-main-white text-dark-brown rounded-lg" >
                 <Image
                     loading='eager'
                     priority={true}
@@ -31,8 +62,7 @@ export default function SignUpForm(){
                 className="outline-none border-0 px-1  focus:ring-0 placeholder:text-center
                     placeholder:text-lg border-b border-black focus:border-black bg-transparent
                     text-lg xs:text-xl sm:text-2xl;" />
-                <button className="w-full mt-5 p-2 rounded-md bg-dark-brown text-main-white">Sign Up</button>
-
+                <Button onClick={signUp} variant="primary" size="md" className='mt-5 p-2'>Sign Up</Button>
                 <p className='capitalize mt-4 text-center'>Already Have an Account? | <Link href='/sign-in' className='text-blue-800'>Sign-in</Link></p>
             </form>
         </>
