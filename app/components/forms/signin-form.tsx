@@ -9,6 +9,8 @@ import { signIn } from '@/server/users';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
     email: z.email(),
@@ -16,6 +18,10 @@ const formSchema = z.object({
 })
 
 export default function SignInForm(){
+    const [error, setError] = useState<string | null>(null)
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const router = useRouter();
+
     const {
         register,
         handleSubmit,
@@ -28,8 +34,23 @@ export default function SignInForm(){
         },
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>){
-            console.log(values)
+    async function onSubmit(values: z.infer<typeof formSchema>){
+        try {
+            setError(null);
+            setIsSubmitting(true)
+            const result = await signIn(values.email, values.password);
+            
+            if(result.success){
+                router.push('/');
+            }else{
+                setError(result.error || "Login Failed")
+            }
+        } catch (error) {
+            setError(error instanceof Error? error.message: "An unknown error occured")
+        } finally {
+            setIsSubmitting(false)
+        }
+
     }
 
     return(
@@ -50,6 +71,7 @@ export default function SignInForm(){
             <label htmlFor="Email" className='mt-4 font-bold text-base sm:text-lg lg:text-xl'>Email:</label>
             <input type="text" 
                 {...register('email')}
+                
                 className="outline-none border-0 px-1 
                 focus:ring-0 placeholder:text-center
                 placeholder:text-lg border-b border-black focus:border-black bg-transparent
@@ -62,7 +84,8 @@ export default function SignInForm(){
                 placeholder:text-lg border-b border-black focus:border-black bg-transparent
                 text-lg xs:text-xl sm:text-2xl;" />
             {errors.password && <span className="text-red-500">{errors.password.message}</span>}
-            <Button onClick={signIn} variant="secondary" size="md" className=' mt-5 p-2'>Sign-In</Button>
+            {error && <div className="text-red-500 text-start mb-4">{error}</div>}
+            <Button variant="secondary" size="md" className=' mt-5 p-2'>Sign-In</Button>
             <Button variant='primary' size="md" className='mt-5 p-2 inline-flex justify-center items-center gap-2'>
                 <PiGoogleLogoBold />
                 Sign In with Google

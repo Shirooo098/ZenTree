@@ -1,7 +1,4 @@
-export type SignInState = {
-    errors?: {
-        email?: string,
-        password?: string
-    }
-    message?: string | null
+export type SignInResult = {
+    success: boolean,
+    error: string | null
 }
