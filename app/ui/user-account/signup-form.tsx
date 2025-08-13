@@ -16,17 +16,17 @@ export default function SignUpForm(){
                     style={{width: 'auto', height: 'auto'}}
                 />
                 <h1 className="text-center text-lg sm:text-xl lg:text-2xl font-bold">Sign-Up Form</h1>
+                <label htmlFor="Username" className='mt-4 font-bold text-base sm:text-lg lg:text-xl'>Username:</label>
+                <input type="text" 
+                className="outline-none border-0 px-1  focus:ring-0 placeholder:text-center
+                    placeholder:text-lg border-b border-black focus:border-black bg-transparent
+                    text-lg xs:text-xl sm:text-2xl;" />
                 <label htmlFor="Email" className='mt-4 font-bold text-base sm:text-lg lg:text-xl'>Email:</label>
                 <input type="text" className="outline-none border-0 px-1 
                     focus:ring-0 placeholder:text-center
                     placeholder:text-lg border-b border-black focus:border-black bg-transparent
                     text-lg xs:text-xl sm:text-2xl;"/>
                 <label htmlFor="Password" className='mt-4 font-bold text-base sm:text-lg lg:text-xl'>Password:</label>
-                <input type="password" 
-                className="outline-none border-0 px-1  focus:ring-0 placeholder:text-center
-                    placeholder:text-lg border-b border-black focus:border-black bg-transparent
-                    text-lg xs:text-xl sm:text-2xl;" />
-                <label htmlFor="Password" className='mt-4 font-bold text-base sm:text-lg lg:text-xl'>Confirm Password:</label>
                 <input type="password" 
                 className="outline-none border-0 px-1  focus:ring-0 placeholder:text-center
                     placeholder:text-lg border-b border-black focus:border-black bg-transparent

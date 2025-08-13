@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import Button from '../button'
 
 export default function SignInForm(){
     return(
@@ -25,7 +26,8 @@ export default function SignInForm(){
             className="outline-none border-0 px-1  focus:ring-0 placeholder:text-center
                 placeholder:text-lg border-b border-black focus:border-black bg-transparent
                 text-lg xs:text-xl sm:text-2xl;" />
-            <button className="w-full mt-5 p-2 rounded-md bg-dark-brown text-main-white">Sign In</button>
+            <Button variant="secondary" size="md" className='capitalize mt-5 p-2'>Sign In</Button>
+            <Button variant='primary' size="md" className='mt-5 p-2 '>Sign In with Google</Button>
             <p className='capitalize mt-4 text-center'>Don&apos;t Have an Account? | <Link href='/sign-up' className='text-blue-800'>Sign-up</Link></p>
 
         </form>
