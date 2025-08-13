@@ -33,9 +33,9 @@ const buttonVariants = cva("rounded-md hover:cursor-pointer transition-colors du
             danger: "border-none text-main-white bg-red-500 hover:bg-red-700"
         },
         size: {
-            sm: "text-sm px-1 py-0",
-            md: "text-md px-2 py-1",
-            lg: "text-xl px-4 py-1"
+            sm: "text-sm px-1 py-0 text-xs md:text-sm lg:text-base",
+            md: "px-2 py-1 text-sm md:text-base lg:text-md",
+            lg: "text-xl px-4 py-1 text-base md:text-lg lg:text-xl"
         },
         defaultVariants: {
             variant: "primary",

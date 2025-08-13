@@ -56,28 +56,25 @@ export default function SignInForm(){
     return(
         <form 
             onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col py-4 px-6 w-[300px] sm:w-[400px] lg:w-[480px] bg-main-white text-dark-brown rounded-lg">
-            <Image
+            className="flex flex-col py-4 px-6 w-[260px] xs:w-[280px] sm:w-[320px] lg:w-[380px]
+                bg-main-white text-dark-brown rounded-lg">
+             <Image
                 loading='eager'
                 priority={true}
                 src={"/img/Logo.png"}
                 alt="ZenTree Logo"
-                width={150}
-                height={150}
-                className='mx-auto'
-                style={{width: 'auto', height: 'auto'}}
+                width={120}
+                height={120}
+                className='mx-auto size-[90px] md:size-[120px] lg:size-[120px]'
             />
             <h1 className="text-center text-lg sm:text-xl lg:text-2xl font-bold">Sign-In Form</h1>
-            <label htmlFor="Email" className='mt-4 font-bold text-base sm:text-lg lg:text-xl'>Email:</label>
+            <label htmlFor="Email" className='label-style'>Email:</label>
             <input type="text" 
                 {...register('email')}
                 
-                className="outline-none border-0 px-1 
-                focus:ring-0 placeholder:text-center
-                placeholder:text-lg border-b border-black focus:border-black bg-transparent
-                text-lg xs:text-xl sm:text-2xl;"/>
+                className="input-style"/>
             {errors.email && <span className="text-red-500">{errors.email.message}</span>}
-            <label htmlFor="Password" className='mt-4 font-bold text-base sm:text-lg lg:text-xl'>Password:</label>
+            <label htmlFor="Password" className='label-style'>Password:</label>
             <input type="password" 
                 {...register('password')}
                 className="outline-none border-0 px-1  focus:ring-0 placeholder:text-center
@@ -90,7 +87,7 @@ export default function SignInForm(){
                 <PiGoogleLogoBold />
                 Sign In with Google
             </Button>
-            <p className='capitalize mt-4 text-center'>Don&apos;t Have an Account? | <Link href='/sign-up' className='text-blue-800'>Sign-Up</Link></p>
+            <p className='capitalize mt-4 text-center text-xs md:text-sm lg:text-base'>Don&apos;t Have an Account? | <Link href='/sign-up' className='text-blue-800'>Sign-Up</Link></p>
 
         </form>
     )

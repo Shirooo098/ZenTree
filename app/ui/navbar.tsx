@@ -15,15 +15,15 @@ export default function NavBar() {
     return (
         <nav className="inset-shadow-nav bg-main-white w-full px-8 rounded-md">
             <div className="flex flex-row items-center justify-between w-full">
-                <div className="relative w-[100px] h-[100px]">
+                <div className="relative size-[65px] md:size-[80px] lg:size-[100px]">
                     <Image
                         priority={true}
                         loading="eager"
                         src={'/img/Logo.png'}
                         alt="ZenTree Logo"
-                        fill
-                        sizes="100px"
-                        className="object-contain h-[100px]"
+                        height={100}
+                        width={100}
+                        className="object-contain size-[65px] md:size-[80px] lg:size-[100px] "
                     />
                 </div>
 

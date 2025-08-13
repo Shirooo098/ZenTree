@@ -13,6 +13,7 @@
   --color-hover-dark-brown: #16120b;
   --color-hover-army-brown: #51493f;
   --inset-shadow-nav:  0 2px 3px rgba(0, 0, 0, 0.25);
+  --breakpoint-xs: 475px;
 }
 
 
@@ -20,9 +21,13 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* 
-.input-style{
-  @apply outline-none border-0 p-0 mx-2 focus:ring-0 placeholder:text-center
-  placeholder:text-lg border-b border-black focus:border-black bg-transparent
-  text-lg xs:text- xl sm:text-2xl
-} */
+
+.input-style {
+  @apply outline-none border-0 px-2 focus:ring-0 placeholder:text-center
+         placeholder:text-lg border-b border-black focus:border-black bg-transparent
+        text-xs sm:text-sm lg:text-base;
+}
+
+.label-style{
+  @apply mt-4 font-medium text-sm sm:text-base lg:text-lg
+}
