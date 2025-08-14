@@ -5,6 +5,7 @@ import { nextCookies } from "better-auth/next-js";
 import { schema } from "@/db/schema"
 import { Resend } from "resend"
 import EmailVerify from "../components/emails/verify-email";
+import { username } from "better-auth/plugins";
 
 const resend = new Resend(process.env.ZENTREE_RESEND_API_KEY as string)
 
@@ -31,11 +32,13 @@ export const auth = betterAuth({
 
             
         },
+        autoSignInAfterVerification: true,
         sendOnSignUp: true
     },
     socialProviders: {
         google: {
-            prompt: "select_account",
+            accessType: "offline",
+            prompt: "select_account+consent",
             clientId: process.env.GOOGLE_CLIENT_ID as string,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
         },
@@ -48,6 +51,29 @@ export const auth = betterAuth({
         provider: "pg", // or "mysql", "sqlite"
         schema
     }),
-    plugins: [nextCookies()],
-    trustedOrigins: ["http://localhost:3000"]
+    plugins: [
+        nextCookies(),
+        username({
+            minUsernameLength: 5,
+            displayUsernameValidator: (displayUsername) => {
+                return /^[a-zA-Z0-9_-]+$/.test(displayUsername)
+            },
+            usernameNormalization: (username) => {
+                return username.toLowerCase()
+                    .replaceAll("0", "o")
+                    .replaceAll("3", "e")
+                    .replaceAll("4", "a");
+            },
+            validationOrder: {
+                username: "post-normalization",
+                displayUsername: "post-normalization",
+            }
+        }),
+    ],
+    trustedOrigins: ["http://localhost:3000"],
+    rateLimit: {
+        enabled: true,
+        window: 30,
+        max: 50,
+    }
 });

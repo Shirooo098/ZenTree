@@ -12,8 +12,10 @@ const links = [
     { name: 'Sign-In', href: '/sign-in'}
 ]
 
+
 export default function NavLinks(){
     const pathname = usePathname();
+
 
     return(
        <>
