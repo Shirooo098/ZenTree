@@ -1,11 +1,10 @@
 import Link from 'next/link'
+import Hero from './ui/Hero';
 
 export default function Home() {
   return (
     <>
-      <h1>Landing Page</h1>
-      <Link href="/sign-in">Sign-In</Link>
-      <Link href="/sign-up">Sign-Up</Link>
+      <Hero />
     </>
   );
 }

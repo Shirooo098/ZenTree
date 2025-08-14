@@ -31,3 +31,7 @@ body {
 .label-style{
   @apply mt-4 font-medium text-sm sm:text-base lg:text-lg
 }
+
+.error-span{
+  @apply text-red-500 text-sm sm:text-start lg:text-base
+}

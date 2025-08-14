@@ -36,15 +36,17 @@ export default function SignInForm(){
         },
     })
 
-
-
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             setError(null);
             setIsSubmitting(true)
             const result = await signIn(values.email, values.password);
             
-            if(result.success) router.push('/');
+            if(result.success) {
+                router.push('/')
+            }else {
+                setError(result.message || 'Sign-in Failed')
+            }
         } catch (error) {
             setError(error instanceof Error? error.message: "An unknown error occured")
         } finally {
@@ -73,15 +75,15 @@ export default function SignInForm(){
                 {...register('email')}
                 
                 className="input-style"/>
-            {errors.email && <span className="text-red-500">{errors.email.message}</span>}
+            {errors.email && <span className="error-span">{errors.email.message}</span>}
             <label htmlFor="Password" className='label-style'>Password:</label>
             <input type="password" 
                 {...register('password')}
                 className="outline-none border-0 px-1  focus:ring-0 placeholder:text-center
                 placeholder:text-lg border-b border-black focus:border-black bg-transparent
                 text-lg xs:text-xl sm:text-2xl;" />
-            {errors.password && <span className="text-red-500">{errors.password.message}</span>}
-            {error && <div className="text-red-500 text-start mb-4">{error}</div>}
+            {errors.password && <span className="error-span">{errors.password.message}</span>}
+            {error && <div className="error-span mt-2 mb-4">{error}</div>}
             <Button disabled={isSubmitting} variant="secondary" size="md" className=' mt-5 p-2'>Sign-In</Button>
             <Button type="button" onClick={signInWithGoogle} variant='primary' size="md" className='mt-5 p-2 inline-flex justify-center items-center gap-2'>
                 <PiGoogleLogoBold />

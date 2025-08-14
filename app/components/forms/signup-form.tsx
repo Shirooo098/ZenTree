@@ -47,7 +47,11 @@ export default function SignUpForm(){
             setIsSubmitting(true);
             const result = await signUp(values.email, values.password, values.username)
 
-            if(result.success) router.push('/sign-in');
+            if(result.success) {
+                router.push('/sign-in')
+            }else{
+                setError(result.message || "Sign-up Failed")
+            };
         } catch (error) {
             setError(error instanceof Error? error.message: "An unknown error occured")
 
@@ -76,7 +80,7 @@ export default function SignUpForm(){
                 <input type="text" 
                     {...register('username')}
                className='input-style'/>
-                {errors.username && <span className="text-red-500">{errors.username.message}</span>}
+                {errors.username && <span className="error-span">{errors.username.message}</span>}
                 <label htmlFor="Email" className='label-style'>Email:</label>
                 <input type="text" 
                     {...register('email')}
@@ -86,12 +90,12 @@ export default function SignUpForm(){
                 <input type="password" 
                     {...register('password')}
                     className='input-style'/>
-                {errors.password && <span className="text-red-500">{errors.password.message}</span>}
-                {error && <div className="text-red-500 text-start mb-4">{error}</div>}
+                {errors.password && <span className="error-span">{errors.password.message}</span>}
+                {error && <div className="error-span text-start mb-4">{error}</div>}
                 <Button disabled={isSubmitting} variant="secondary" size="md" className='mt-5 p-2'>Sign Up</Button>
                 <Button type="button" onClick={signInWithGoogle} variant='primary' size="md" className='mt-5 p-2 inline-flex justify-center items-center gap-2'>
                         <PiGoogleLogoBold />
-                        Sign In with Google
+                        Sign Up with Google
                 </Button>
                 <p className='capitalize mt-4 text-center text-xs md:text-sm lg:text-base'>Already Have an Account? | <Link href='/sign-in' className='text-blue-800'>Sign-in</Link></p>
             </form>
