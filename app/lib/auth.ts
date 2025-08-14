@@ -70,7 +70,7 @@ export const auth = betterAuth({
             }
         }),
     ],
-    trustedOrigins: ["http://localhost:3000"],
+    trustedOrigins: [ process.env.BETTER_AUTH_URL as string ,"http://localhost:3000"],
     rateLimit: {
         enabled: true,
         window: 30,
