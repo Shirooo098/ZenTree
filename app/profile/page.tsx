@@ -1,7 +1,8 @@
 import { headers } from "next/headers"
 import { auth } from "../lib/auth"
 import { redirect } from "next/navigation"
-import Button from "../ui/button"
+import Logout from "../ui/logout"
+
 
 
 export default async function Profile() {
@@ -13,10 +14,10 @@ export default async function Profile() {
 
   return (
     <>
-      <div>
+      <div className="h-screen flex justify-center items-center">
         <h1>Profile Page</h1>
         <p>Welcome {session.user.name}</p>
-        <Button variant="primary" size="lg">Logout</Button>
+        <Logout/>
       </div>
     </>
   )
