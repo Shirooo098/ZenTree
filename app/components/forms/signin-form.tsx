@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation';
 
 import { signInWithGoogle } from '@/app/lib/auth-client';
 import { ManRope } from '@/app/ui/fonts';
+import { Loader } from '../loader/loader';
 
 const formSchema = z.object({
     email: z.email(),
@@ -85,7 +86,9 @@ export default function SignInForm(){
                 text-lg xs:text-xl sm:text-2xl;" />
             {errors.password && <span className="error-span">{errors.password.message}</span>}
             {error && <div className="error-span mt-2 mb-4">{error}</div>}
-            <Button disabled={isSubmitting} variant="secondary" size="md" className=' mt-5 p-2'>Sign-In</Button>
+            <Button disabled={isSubmitting} variant="secondary" size="md" className='inline-flex justify-center items-center mt-5 p-2'>
+                {isSubmitting ? <Loader /> : "Sign-In"}
+            </Button>
             <Button type="button" onClick={signInWithGoogle} variant='primary' size="md" className='mt-5 p-2 inline-flex justify-center items-center gap-2'>
                 <PiGoogleLogoBold />
                 Sign In with Google
