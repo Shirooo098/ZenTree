@@ -10,31 +10,31 @@ import { username } from "better-auth/plugins";
 const resend = new Resend(process.env.ZENTREE_RESEND_API_KEY as string)
 
 export const auth = betterAuth({
-    emailVerification: {
-        sendVerificationEmail: async({ user, url }) => {
-            try {
-                const { data, error } = await resend.emails.send({
-                    from: `${process.env.EMAIL_SENDER_NAME} <${process.env.EMAIL_SENDER_ADDRESS}>`,
-                    to: user.email,
-                    subject: "Verify your email address",
-                    react: EmailVerify({ username: user.name, verifyUrl: url})
-                })
-                if (error) {
-                    console.error('Failed to send verification email:', error);
-                    throw error;
-                }
+    // emailVerification: {
+    //     sendVerificationEmail: async({ user, url }) => {
+    //         try {
+    //             const { data, error } = await resend.emails.send({
+    //                 from: `${process.env.EMAIL_SENDER_NAME} <${process.env.EMAIL_SENDER_ADDRESS}>`,
+    //                 to: user.email,
+    //                 subject: "Verify your email address",
+    //                 react: EmailVerify({ username: user.name, verifyUrl: url})
+    //             })
+    //             if (error) {
+    //                 console.error('Failed to send verification email:', error);
+    //                 throw error;
+    //             }
 
-                console.log('Verification email sent:', data);
-            } catch (error) {
-                console.error('Error in sendVerificationEmail:', error);
-                throw error; 
-            }
+    //             console.log('Verification email sent:', data);
+    //         } catch (error) {
+    //             console.error('Error in sendVerificationEmail:', error);
+    //             throw error; 
+    //         }
 
             
-        },
-        autoSignInAfterVerification: true,
-        sendOnSignUp: true
-    },
+    //     },
+    //     autoSignInAfterVerification: true,
+    //     sendOnSignUp: true
+    // },
     socialProviders: {
         google: {
             accessType: "offline",
@@ -45,7 +45,7 @@ export const auth = betterAuth({
     },
     emailAndPassword: {
         enabled: true,
-        requireEmailVerification: true,
+        // requireEmailVerification: true,
     },
     database: drizzleAdapter(db, {
         provider: "pg", // or "mysql", "sqlite"
