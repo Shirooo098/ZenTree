@@ -13,6 +13,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { signInWithGoogle } from '@/app/lib/auth-client';
+import { ManRope } from '@/app/ui/fonts';
 
 const formSchema = z.object({
     email: z.email(),
@@ -58,8 +59,8 @@ export default function SignInForm(){
     return(
         <form 
             onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col py-4 px-6 w-[260px] xs:w-[280px] sm:w-[320px] lg:w-[380px]
-                bg-main-white text-dark-brown rounded-lg">
+            className={`${ManRope.className} flex flex-col py-4 px-6 w-[260px] xs:w-[280px] sm:w-[320px] lg:w-[380px]
+                bg-main-white text-dark-brown rounded-lg`}>
              <Image
                 loading='eager'
                 priority={true}
