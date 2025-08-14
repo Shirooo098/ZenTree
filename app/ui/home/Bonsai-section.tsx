@@ -13,6 +13,7 @@ export default function BonsaiSection(){
                             alt='Ginseng Ficus (Ficus Microcarpa)'
                             height={700}
                             width={700}
+                            loading='lazy'
                             className='size-[280px] sm:size-[350px] md:size-[450px] lg:size-[700px] object-cover'
                         />
                         </div>
@@ -31,6 +32,7 @@ export default function BonsaiSection(){
                             alt='Ginseng Ficus (Ficus Microcarpa)'
                             height={700}
                             width={700}
+                            loading='lazy'
                             className='size-[280px] sm:size-[350px] md:size-[450px] lg:size-[700px] object-cover'
                         />
                         </div>
