@@ -44,9 +44,9 @@ body {
 }
 
 .footer-heading{
-  @apply capitalize text-3xl font-semibold
+  @apply capitalize text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold
 }
 
 .footer-nav{
-  @apply capitalize mt-5 space-y-2 text-xl
+  @apply capitalize mt-5 space-y-0 lg:space-y-2 text-sm sm:text-base md:text-lg lg:text-xl
 }
