@@ -3,7 +3,7 @@ import Image from "next/image"
 export default function Hero(){
     return ( 
         <>
-            <main className="flex h-screen justify-center items-center">
+            <main className="relative flex h-screen justify-center items-center">
                 <Image 
                     src={"/img/hero.jpg"}
                     alt="ZenTree Hero"

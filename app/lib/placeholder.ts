@@ -10,7 +10,7 @@ export const ReviewsData : {
     {
         id: 1,
         title: 'Ginseng Ficus',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing m...',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing m',
         profile: '/img/reviewprofile.png',
         author: 'Jontillano, L.',
         date: '08/09/2025',
@@ -19,7 +19,7 @@ export const ReviewsData : {
     {
         id: 2,
         title: 'Ginseng Ficus',
-        description: 'Lorem Ipsum dolor sit amet, consectetur',
+        description: 'Lorem ipsum dolor sit amet,consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi',
         profile: '/img/reviewprofile.png',
         author: 'Panoringan, M.',
         date: '08/09/2025',
@@ -28,7 +28,7 @@ export const ReviewsData : {
     {
         id: 3,
         title: 'Ginseng Ficus',
-        description: 'Lorem Ipsum dolor sit amet, consectetur',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi',
         profile: '/img/reviewprofile.png',
         author: 'Madonan, C.',
         date: '08/09/2025',
