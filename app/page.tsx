@@ -1,7 +1,8 @@
-import BonsaiSection from './ui/home/Bonsai-section';
-import CheckNow from './ui/home/CheckNow';
-import Hero from './ui/home/Hero';
-import Reviews from './ui/home/Reviews';
+import BonsaiSection from './ui/landing/Bonsai-section';
+import CheckNow from './ui/landing/CheckNow';
+import Footer from './ui/landing/Footer';
+import Hero from './ui/landing/Hero';
+import Reviews from './ui/landing/Reviews';
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
         <BonsaiSection/>
         <Reviews/>
         <CheckNow/>
+        <Footer/>
       </div>
     </>
   );
