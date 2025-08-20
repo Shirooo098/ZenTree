@@ -4,7 +4,7 @@ import { DMSans, ManRope } from '../fonts'
 export default function BonsaiSection(){
     return(
         <>
-            <main className="min-h-screen mt-20 px-4 sm:px-8 md:px-12 lg:px-16 mx-auto max-w-screen">
+            <main className="min-h-screen my-20 px-4 sm:px-8 md:px-12 lg:px-16 mx-auto max-w-screen">
                 <section className="flex flex-col gap-8 md:gap-12 lg:gap-16">
                     <article className='flex flex-col lg:flex-row justify-center items-center gap-2 mt-10 md:gap-4 lg:gap-8'>
                         <div className="flex justify-center items-center w-2/3 lg:1/3">

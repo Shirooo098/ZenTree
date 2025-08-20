@@ -1,6 +1,3 @@
-import { string } from "zod"
-
-
 export const ReviewsData : {
     id: number,
     title: string,
@@ -13,8 +10,8 @@ export const ReviewsData : {
     {
         id: 1,
         title: 'Ginseng Ficus',
-        description: 'Lorem Ipsum dolor sit amet, consectetur',
-        profile: '',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing m...',
+        profile: '/img/reviewprofile.png',
         author: 'Jontillano, L.',
         date: '08/09/2025',
         stars: 4
@@ -23,7 +20,7 @@ export const ReviewsData : {
         id: 2,
         title: 'Ginseng Ficus',
         description: 'Lorem Ipsum dolor sit amet, consectetur',
-        profile: '',
+        profile: '/img/reviewprofile.png',
         author: 'Panoringan, M.',
         date: '08/09/2025',
         stars: 5
@@ -32,7 +29,7 @@ export const ReviewsData : {
         id: 3,
         title: 'Ginseng Ficus',
         description: 'Lorem Ipsum dolor sit amet, consectetur',
-        profile: '',
+        profile: '/img/reviewprofile.png',
         author: 'Madonan, C.',
         date: '08/09/2025',
         stars: 4

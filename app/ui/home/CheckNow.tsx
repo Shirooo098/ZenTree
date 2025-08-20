@@ -4,7 +4,7 @@ import Button from "../button"
 
 export default function CheckNow(){
     return(
-        <section className="relative flex justify-center items-center h-[60vh] mt-20">
+        <section className="relative flex justify-center items-center h-[60vh]">
             <Image
                 src={'/img/login-bg.jpeg'}
                 alt="Check Our Bonzai"
