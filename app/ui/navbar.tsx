@@ -2,6 +2,7 @@
 
 import NavLinks from "./nav-links";
 import Image from "next/image";
+import Link from "next/link"
 import { AlignJustify } from "lucide-react";
 import { useState } from "react";
 import { DMSans } from "./fonts";
@@ -17,15 +18,17 @@ export default function NavBar() {
         <nav className={`${DMSans.className} inset-shadow-nav bg-main-white w-full px-8 rounded-md`}>
             <div className="flex flex-row items-center justify-between w-full">
                 <div className="relative size-[65px] md:size-[80px] lg:size-[100px]">
-                    <Image
-                        priority={true}
-                        loading="eager"
-                        src={'/img/Logo.png'}
-                        alt="ZenTree Logo"
-                        height={100}
-                        width={100}
-                        className="object-contain size-[65px] md:size-[80px] lg:size-[100px] "
-                    />
+                    <Link href="/"> 
+                            <Image
+                            priority={true}
+                            loading="eager"
+                            src={'/img/Logo.png'}
+                            alt="ZenTree Logo"
+                            height={100}
+                            width={100}
+                            className="object-contain size-[65px] md:size-[80px] lg:size-[100px] "
+                        />
+                    </Link>
                 </div>
 
                 {/* Desktop navigation (mobile view) */}

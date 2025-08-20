@@ -13,7 +13,7 @@ export default function ReviewCard({
 }: ReviewCardProps){
     return(
         <>
-            <div className={`${ManRope.className} flex flex-col col-span-1 row-span-1 relative`}>
+            <div className={`${ManRope.className} drop-shadow-black flex flex-col col-span-1 row-span-1 relative `}>
                 <h4 className="font-bold text-lg sm:text-xl lg:text-2xl">{title}</h4>
                 <p className="hidden">{id}</p>
                 <p className="capitalize inline-block mt-2 text-base line-clamp-3">{description}</p>
