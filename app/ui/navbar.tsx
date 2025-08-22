@@ -38,7 +38,7 @@ export default function NavBar() {
                 </div>
 
                 <div className="hidden lg:flex justify-end space-x-6">
-                    <NavLinks links={rightSideLinks}/>
+                    <NavLinks links={rightSideLinks} showIcons={true}/>
                 </div>
 
                 {/* Hidden Menu Bar on Desktop viewport */}

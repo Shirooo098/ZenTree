@@ -1,3 +1,4 @@
+import { User, ShoppingCart  } from 'lucide-react';
 
 export type ReviewCardProps = {
     id: number,
@@ -17,11 +18,12 @@ export const centerSideLinks:NavLink[] = [
 ]
 
 export const rightSideLinks:NavLink[] = [
-    { name: 'Profile', href: '/profile' },
-    { name: 'Cart', href: '/cart' }
+    { name: 'Profile', href: '/profile', icon: User },
+    { name: 'Cart', href: '/cart', icon: ShoppingCart },
 ]
 
 export interface NavLink {
     name: string,
-    href: string
+    href: string,
+    icon?: React.ComponentType<any>
 }
