@@ -16,18 +16,19 @@ export default function NavBar() {
     }
 
     return (
-        <nav className={`${DMSans.className} inset-shadow-nav bg-main-white w-full px-8 rounded-md`}>
-            <div className="flex flex-row items-center justify-between w-full">
-                <div className="relative size-[65px] md:size-[80px] lg:size-[100px]">
+        <nav className={`${DMSans.className} inset-shadow-nav bg-main-white h-full w-full px-8 rounded-md`}>
+            <div className="flex items-center justify-between w-full">
+                <div className="relative flex justify-center items-center size-[65px] md:size-[75px] lg:size-[85px]">
                     <Link href="/"> 
-                            <Image
-                            priority={true}
+                        <Image
+                            priority
                             loading="eager"
                             src={'/img/Logo.png'}
                             alt="ZenTree Logo"
                             height={100}
-                            width={100}
-                            className="object-contain size-[65px] md:size-[80px] lg:size-[100px] "
+                            width={90}
+                            className="object-contain size-auto"
+
                         />
                     </Link>
                 </div>

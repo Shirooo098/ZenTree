@@ -28,7 +28,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="fixed py-10 px-4 sx:px-10 sm:px-14 md:px-16 lg:px-20 flex w-full items-center z-20">
+        <div className="fixed py-10 px-4 sx:px-10 sm:px-14 lg:px-20 flex w-full items-center z-20">
           <NavBar/>
         </div>
         {children}
