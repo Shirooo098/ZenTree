@@ -3,17 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation"
 import clsx from "clsx"
-
-const links = [
-    { name: 'Store', href: '/store'},
-    { name: 'About', href: '/about'},
-    { name: 'Contact', href: '/contact'},
-    { name: 'FAQs', href: '/faqs'},
-    { name: 'Sign-In', href: '/sign-in'}
-]
+import { NavLink } from "../types/definition";
 
 
-export default function NavLinks(){
+interface NavLinkProps{
+    links: NavLink[]
+}
+export default function NavLinks({ links } : NavLinkProps){
     const pathname = usePathname();
 
 

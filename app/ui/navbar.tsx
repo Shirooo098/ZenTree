@@ -6,6 +6,7 @@ import Link from "next/link"
 import { AlignJustify } from "lucide-react";
 import { useState } from "react";
 import { DMSans } from "./fonts";
+import { centerSideLinks, rightSideLinks } from "../types/definition";
 
 export default function NavBar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -32,8 +33,12 @@ export default function NavBar() {
                 </div>
 
                 {/* Desktop navigation (mobile view) */}
-                <div className="hidden lg:flex w-[60vw] justify-between">
-                    <NavLinks />
+                <div className="hidden lg:flex w-[40vw] justify-center">
+                    <NavLinks links={centerSideLinks}/>
+                </div>
+
+                <div className="hidden lg:flex justify-end space-x-6">
+                    <NavLinks links={rightSideLinks}/>
                 </div>
 
                 {/* Hidden Menu Bar on Desktop viewport */}
@@ -47,7 +52,10 @@ export default function NavBar() {
             {/* Menu in Mobile viewport */}
             {isOpen && (
                 <div className="lg:hidden flex flex-col">
-                    <NavLinks />
+                    <NavLinks links={centerSideLinks} />
+                    <div className="my-4 border-t pt-4">
+                        <NavLinks links={rightSideLinks} />
+                    </div>
                 </div>
             )}
         </nav>
