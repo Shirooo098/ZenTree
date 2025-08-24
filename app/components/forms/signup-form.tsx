@@ -17,6 +17,9 @@ import { signInWithGoogle } from '@/app/lib/auth-client';
 import { Loader } from '../loader/loader';
 
 const formSchema = z.object({
+    name: z.string()
+        .min(6, "Name must be at least 6 characters")
+        .max(70, "Name must be less than 70 characters"),
     username: z.string()
         .min(3, "Username must be at least 3 characters")
         .max(20, "Username must be less than 20 characters"),
@@ -36,6 +39,7 @@ export default function SignUpForm(){
     } = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
+            name: "",
             username: "",
             email: "",
             password: "",
@@ -46,7 +50,7 @@ export default function SignUpForm(){
         try {
             setError(null)
             setIsSubmitting(true);
-            const result = await signUp(values.email, values.password, values.username)
+            const result = await signUp(values.email, values.password, values.username, values.name)
 
             if(result.success) {
                 router.push('/sign-in')
@@ -77,6 +81,12 @@ export default function SignUpForm(){
                     className='mx-auto size-[90px] md:size-[120px] lg:size-[120px]'
                 />
                 <h1 className="text-center text-lg sm:text-xl lg:text-2xl font-bold">Sign-Up Form</h1>
+                <label htmlFor="Name" className='label-style'>Name:</label>
+                <input type="text" 
+                    {...register('name')}
+               className='input-style'/>
+                {errors.name && <span className="error-span">{errors.name.message}</span>}
+
                 <label htmlFor="Username" className='label-style'>Username:</label>
                 <input type="text" 
                     {...register('username')}
@@ -96,9 +106,18 @@ export default function SignUpForm(){
                 <Button disabled={isSubmitting} variant="secondary" size="md" className='inline-flex justify-center items-center mt-5 p-2'>
                     {isSubmitting ? <Loader /> : "Sign-Up"}
                 </Button>
-                <Button type="button" onClick={signInWithGoogle} variant='primary' size="md" className='mt-5 p-2 inline-flex justify-center items-center gap-2'>
+                <div className="">
+
+                <div className='relative flex items-center mt-2'>
+                    <div className="grow border-t border-black"></div>
+                    <span className='capitalize text-center px-2 text-sm'> or continue with</span>
+                    <div className='grow border-t '></div>
+                </div>
+
+                </div>
+                <Button type="button" onClick={signInWithGoogle} variant='primary' size="md" className='mt-2 p-2 inline-flex justify-center items-center gap-2'>
                         <PiGoogleLogoBold />
-                        Sign Up with Google
+                        Sign In with Google
                 </Button>
                 <p className='capitalize mt-4 text-center text-xs md:text-sm lg:text-base'>Already Have an Account? | <Link href='/sign-in' className='text-blue-800'>Sign-in</Link></p>
             </form>

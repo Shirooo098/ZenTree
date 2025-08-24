@@ -89,7 +89,15 @@ export default function SignInForm(){
             <Button disabled={isSubmitting} variant="secondary" size="md" className='inline-flex justify-center items-center mt-5 p-2'>
                 {isSubmitting ? <Loader /> : "Sign-In"}
             </Button>
-            <Button type="button" onClick={signInWithGoogle} variant='primary' size="md" className='mt-5 p-2 inline-flex justify-center items-center gap-2'>
+
+            
+            <div className='relative flex items-center mt-2'>
+                <div className="grow border-t border-black"></div>
+                <span className='capitalize text-center px-2 text-sm'> or continue with</span>
+                <div className='grow border-t '></div>
+            </div>
+
+            <Button type="button" onClick={signInWithGoogle} variant='primary' size="md" className='mt-2 p-2 inline-flex justify-center items-center gap-2'>
                 <PiGoogleLogoBold />
                 Sign In with Google
             </Button>

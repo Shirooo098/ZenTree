@@ -1,12 +1,22 @@
 import { createAuthClient } from "better-auth/react"
 import { usernameClient, adminClient } from "better-auth/client/plugins";
+import { ac, admin, user, myCustomRole } from "./auth/permissions"
+
 
 export const authClient = createAuthClient({
     /** The base URL of the server (optional if you're using the same domain) */
     baseURL: process.env.BETTER_AUTH_URL,
     plugins: [
         usernameClient(),
-        adminClient()
+        adminClient({
+            ac, 
+            roles: {
+                admin, 
+                user,
+                myCustomRole
+            }
+        }),
+
     ] 
 
 })
@@ -31,3 +41,4 @@ export const signInWithEmail = async (email: string, password: string) => {
         }
     })
 }
+

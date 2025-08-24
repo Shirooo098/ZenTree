@@ -5,7 +5,9 @@ import { nextCookies } from "better-auth/next-js";
 import { schema } from "@/db/schema"
 import { Resend } from "resend"
 import EmailVerify from "../components/emails/verify-email";
-import { username, admin } from "better-auth/plugins";
+import { username, admin as adminPlugin } from "better-auth/plugins";
+import { ac, admin, myCustomRole, user } from "./auth/permissions"
+
 
 const resend = new Resend(process.env.ZENTREE_RESEND_API_KEY as string)
 
@@ -69,8 +71,13 @@ export const auth = betterAuth({
                 displayUsername: "post-normalization",
             }
         }),
-        admin({
-            adminRoles: ['admin', 'superadmin']
+        adminPlugin({
+            ac,
+            roles: {
+                admin,
+                user,
+                myCustomRole
+            }
         }),
     ],
     trustedOrigins: [ process.env.BETTER_AUTH_URL as string ,"http://localhost:3000"],

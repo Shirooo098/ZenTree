@@ -28,13 +28,14 @@ export const signIn = async (email: string, password: string) => {
     }
 }
 
-export const signUp = async (email: string, password: string, username: string) => {
+export const signUp = async (email: string, password: string, username: string, name: string) => {
     try {
         await auth.api.signUpEmail({
             body: {
                 email,
                 password,
-                name: username,
+                name,
+                username
             },
         })
         return{
