@@ -4,8 +4,7 @@ import { TiSocialTwitter } from "react-icons/ti";
 
 
 
-export default function Footer({ showFooter = true}:  { showFooter: boolean }) {
-    if(!showFooter) return null;
+export default function Footer() {
 
   return (
     <>

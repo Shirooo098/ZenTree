@@ -1,9 +1,7 @@
-'use client';
+import Image from 'next/image'
+import SignUpForm from '../../components/forms/signup-form'
 
-import Image from 'next/image';
-import SignInForm from '../components/forms/signin-form';
-
-export default function SignIn(){
+export default function SignUp(){
     return(
         <>
             <div className='w-full inline-block'>
@@ -18,7 +16,7 @@ export default function SignIn(){
                     />
                 
                     <div className="size-full flex justify-center items-center z-0">
-                        <SignInForm/>
+                        <SignUpForm/>
                     </div>
                 </article>
             </div>
