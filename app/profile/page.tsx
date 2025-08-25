@@ -14,10 +14,12 @@ export default async function Profile() {
 
   return (
     <>
-      <div className="h-screen flex justify-center items-center">
+      <div className="h-screen flex flex-col justify-center items-center">
         <h1>Profile Page</h1>
         <p>Welcome {session.user.name}</p>
         <p>Email: {session.user.email}</p>
+        <p>Role: {session.user.role}</p>
+
         <Logout/>
       </div>
     </>

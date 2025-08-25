@@ -1,23 +1,25 @@
-"use server";
+'use server'
 
 import { auth } from "@/app/lib/auth"
- 
+import { getUserRole } from "@/app/util/action";
+
+
 export const signIn = async (email: string, password: string) => {
     try {
         await auth.api.signInEmail({
             body: {
                 email,
-                password,
-                callbackURL: "/"
+                password
             },
-
         })
+
+        const userRole = await getUserRole(email)
 
         return { 
             success: true, 
             message: "Signed in successfully.",
+            role: userRole
         }
-
 
     } catch (error) {
         const e = error as Error

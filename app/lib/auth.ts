@@ -6,7 +6,7 @@ import { schema } from "@/db/schema"
 import { Resend } from "resend"
 import EmailVerify from "../components/emails/verify-email";
 import { username, admin as adminPlugin } from "better-auth/plugins";
-import { ac, admin, myCustomRole, user } from "./auth/permissions"
+import { ac, admin, user } from "./auth/permissions"
 
 
 const resend = new Resend(process.env.ZENTREE_RESEND_API_KEY as string)
@@ -76,7 +76,6 @@ export const auth = betterAuth({
             roles: {
                 admin,
                 user,
-                myCustomRole
             }
         }),
     ],

@@ -4,22 +4,17 @@ import { defaultStatements, adminAc } from "better-auth/plugins/admin/access";
 
 const statement = { 
     ...defaultStatements,
-    project: ["create", "share", "update", "delete"], 
+    project: ["create", "share", "update", "delete", "update:own", "delete:own"], 
 } as const; 
 
 export const ac = createAccessControl(statement); 
 
 
 export const user = ac.newRole({
-        project: ["create"]
+        project: ["create", "share", "update:own", "delete:own"]
 })
 
 export const admin = ac.newRole({
-    project: ["create", "update"],
+    project: ["create", "share", "update", "delete", "update:own", "delete:own"],
     ...adminAc.statements
 })
-
-export const myCustomRole = ac.newRole({ 
-    project: ["create", "update", "delete"], 
-    user: ["ban"], 
-}); 

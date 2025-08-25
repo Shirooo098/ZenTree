@@ -45,8 +45,13 @@ export default function SignInForm(){
             const result = await signIn(values.email, values.password);
             
             if(result.success) {
-                router.push('/')
-            }else {
+                if (result.role === 'admin') {
+                    router.push('/admin');
+                }else{
+                    router.push('/profile');
+                }
+            
+            } else {
                 setError(result.message || 'Sign-in Failed')
             }
         } catch (error) {

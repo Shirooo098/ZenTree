@@ -53,7 +53,7 @@ export default function SignUpForm(){
             const result = await signUp(values.email, values.password, values.username, values.name)
 
             if(result.success) {
-                router.push('/sign-in')
+                router.push('/profile')
             }else{
                 setError(result.message || "Sign-up Failed")
             };
@@ -106,7 +106,7 @@ export default function SignUpForm(){
                 <Button disabled={isSubmitting} variant="secondary" size="md" className='inline-flex justify-center items-center mt-5 p-2'>
                     {isSubmitting ? <Loader /> : "Sign-Up"}
                 </Button>
-                <div className="">
+
 
                 <div className='relative flex items-center mt-2'>
                     <div className="grow border-t border-black"></div>
@@ -114,7 +114,6 @@ export default function SignUpForm(){
                     <div className='grow border-t '></div>
                 </div>
 
-                </div>
                 <Button type="button" onClick={signInWithGoogle} variant='primary' size="md" className='mt-2 p-2 inline-flex justify-center items-center gap-2'>
                         <PiGoogleLogoBold />
                         Sign In with Google
