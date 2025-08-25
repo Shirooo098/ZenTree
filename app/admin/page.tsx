@@ -1,6 +1,7 @@
 import { headers } from "next/headers"
 import { auth } from "../lib/auth"
 import { redirect } from "next/navigation"
+import Logout from "../ui/logout"
 
 export default async function Admin(){
     const session = await auth.api.getSession({
@@ -13,11 +14,13 @@ export default async function Admin(){
     
     return(
         <>
-            <div className="flex flex-col items-center">
-                <h1>Admin</h1>
-                <p>Name: {session.user.name}</p>
+            <div className="h-screen flex flex-col justify-center items-center">
+                <h1>Profile Page</h1>
+                <p>Welcome {session.user.name}</p>
                 <p>Email: {session.user.email}</p>
                 <p>Role: {session.user.role}</p>
+        
+                <Logout/>
             </div>
         </>
     )

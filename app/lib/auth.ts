@@ -84,5 +84,6 @@ export const auth = betterAuth({
         enabled: true,
         window: 30,
         max: 50,
-    }
+    },
+    
 });
