@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-calm-green: #F0FFF0;
+  --color-dark-brown: #2F2518;
+  --color-army-brown: #675d50; 
+  --color-main-white: #F6F6F6;
+  --color-hover-dark-brown: #16120b;
+  --color-hover-army-brown: #51493f;
+  --inset-shadow-nav:  0 2px 3px rgba(0, 0, 0, 0.25);
+  --breakpoint-xs: 475px;
+}
+
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.input-style {
+  @apply outline-none border-0 px-2 focus:ring-0 placeholder:text-center
+         placeholder:text-lg border-b border-black focus:border-black bg-transparent
+        text-xs sm:text-sm lg:text-base;
+}
+
+.label-style{
+  @apply mt-4 font-medium text-sm sm:text-base lg:text-lg
+}
+
+.error-span{
+  @apply text-red-500 text-sm sm:text-start lg:text-base
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.footer-heading{
+  @apply capitalize text-sm sm:text-base md:text-lg lg:text-xl font-medium
+}
+
+.footer-nav{
+  @apply capitalize mt-5 space-y-0 lg:space-y-2 text-xs md:text-sm
+}
