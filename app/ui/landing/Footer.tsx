@@ -3,7 +3,10 @@ import { SlSocialInstagram, SlSocialFacebook  } from "react-icons/sl";
 import { TiSocialTwitter } from "react-icons/ti";
 
 
-export default function Footer() {
+
+export default function Footer({ showFooter = true}:  { showFooter: boolean }) {
+    if(!showFooter) return null;
+
   return (
     <>
         <section className="flex flex-col justify-between bg-dark-brown size-full text-calm-green py-4 md:py-8 lg:py-12 px-4 sm:px-6 md:px-12 lg:px-20">

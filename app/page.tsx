@@ -1,6 +1,5 @@
 import BonsaiSection from './ui/landing/Bonsai-section';
 import CheckNow from './ui/landing/CheckNow';
-import Footer from './ui/landing/Footer';
 import Hero from './ui/landing/Hero';
 import Reviews from './ui/landing/Reviews';
 
@@ -12,7 +11,6 @@ export default function Home() {
         <BonsaiSection/>
         <Reviews/>
         <CheckNow/>
-        <Footer/>
       </div>
     </>
   );

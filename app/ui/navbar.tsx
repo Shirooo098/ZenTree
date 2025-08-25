@@ -8,7 +8,7 @@ import { useState } from "react";
 import { DMSans } from "./fonts";
 import { centerSideLinks, rightSideLinks } from "../types/definition";
 
-export default function NavBar() {
+export default function NavBar() { 
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleMenu = () => {
