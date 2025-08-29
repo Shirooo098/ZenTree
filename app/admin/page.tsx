@@ -1,7 +1,17 @@
 import { headers } from "next/headers"
 import { auth } from "../lib/auth"
 import { redirect } from "next/navigation"
-import Logout from "../ui/logout"
+import { AppSidebar } from "@/components/app-sidebar"
+import { ChartAreaInteractive } from "@/components/chart-area-interactive"
+import { DataTable } from "@/components/data-table"
+import { SectionCards } from "@/components/section-cards"
+import { SiteHeader } from "@/components/site-header"
+import {
+  SidebarInset,
+  SidebarProvider,
+} from "@/components/ui/sidebar"
+
+import data from './../lib/data.json'
 
 export default async function Admin(){
     const session = await auth.api.getSession({
@@ -14,14 +24,30 @@ export default async function Admin(){
     
     return(
         <>
-            <div className="h-screen flex flex-col justify-center items-center">
-                <h1>Profile Page</h1>
-                <p>Welcome {session.user.name}</p>
-                <p>Email: {session.user.email}</p>
-                <p>Role: {session.user.role}</p>
-        
-                <Logout/>
-            </div>
+            <SidebarProvider
+                style={
+                    {
+                    "--sidebar-width": "calc(var(--spacing) * 72)",
+                    "--header-height": "calc(var(--spacing) * 12)",
+                    } as React.CSSProperties
+                }
+            >
+                <AppSidebar variant="inset" />
+                <SidebarInset>
+                    <SiteHeader />
+                    <div className="flex flex-1 flex-col">
+                    <div className="@container/main flex flex-1 flex-col gap-2">
+                        <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+                        <SectionCards />
+                        <div className="px-4 lg:px-6">
+                            <ChartAreaInteractive />
+                        </div>
+                        <DataTable data={data} />
+                        </div>
+                    </div>
+                    </div>
+                </SidebarInset>
+            </SidebarProvider>
         </>
     )
 }
