@@ -17,10 +17,10 @@ export default async function Admin(){
     const session = await auth.api.getSession({
         headers: await headers()
     })
-
     if(!session) redirect ("/sign-in")
     
     if(session.user.role !== "admin") return <h1>Unauthorized</h1>
+
     
     return(
         <>
@@ -32,7 +32,12 @@ export default async function Admin(){
                     } as React.CSSProperties
                 }
             >
-                <AppSidebar variant="inset" />
+                <AppSidebar variant="inset"
+                    user={{
+                        name: session.user.name,
+                        email: session.user.email,
+                        role: session.user.role
+                    }} />
                 <SidebarInset>
                     <SiteHeader />
                     <div className="flex flex-1 flex-col">

@@ -27,3 +27,10 @@ export interface NavLink {
     href: string,
     icon?: React.ComponentType<any>
 }
+
+export interface User{
+  name: string
+  email: string
+  avater?: string
+  role?: string
+}
