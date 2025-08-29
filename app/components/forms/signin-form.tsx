@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 import Button from '../../ui/button'
 import { PiGoogleLogoBold } from "react-icons/pi";
@@ -15,6 +14,7 @@ import { useRouter } from 'next/navigation';
 import { signInWithGoogle } from '@/app/lib/auth-client';
 import { ManRope } from '@/app/ui/fonts';
 import { Loader } from '../loader/loader';
+import Logo from '@/app/ui/Logo';
 
 const formSchema = z.object({
     email: z.email(),
@@ -67,31 +67,23 @@ export default function SignInForm(){
             onSubmit={handleSubmit(onSubmit)}
             className={`${ManRope.className} flex flex-col py-4 px-6 w-[260px] xs:w-[280px] sm:w-[320px] lg:w-[380px]
                 bg-main-white text-dark-brown rounded-lg`}>
-             <Image
-                loading='eager'
-                priority={true}
-                src={"/img/Logo.png"}
-                alt="ZenTree Logo"
-                width={120}
-                height={120}
-                className='mx-auto size-[90px] md:size-[120px] lg:size-[120px]'
-            />
+            <Logo />
             <h1 className="text-center text-lg sm:text-xl lg:text-2xl font-bold">Sign-In Form</h1>
             <label htmlFor="Email" className='label-style'>Email:</label>
-            <input type="text" 
+            <input type="text"
+                placeholder='johndoe@gmail.com'
                 {...register('email')}
                 
                 className="input-style"/>
             {errors.email && <span className="error-span">{errors.email.message}</span>}
             <label htmlFor="Password" className='label-style'>Password:</label>
             <input type="password" 
+                placeholder='********'
                 {...register('password')}
-                className="outline-none border-0 px-1  focus:ring-0 placeholder:text-center
-                placeholder:text-lg border-b border-black focus:border-black bg-transparent
-                text-lg xs:text-xl sm:text-2xl;" />
+                className="input-style" />
             {errors.password && <span className="error-span">{errors.password.message}</span>}
             {error && <div className="error-span mt-2 mb-4">{error}</div>}
-            <Button disabled={isSubmitting} variant="secondary" size="md" className='inline-flex justify-center items-center mt-5 p-2'>
+            <Button disabled={isSubmitting} variant="primary" size="md" className='inline-flex justify-center items-center mt-5 p-2'>
                 {isSubmitting ? <Loader /> : "Sign-In"}
             </Button>
 
@@ -102,7 +94,7 @@ export default function SignInForm(){
                 <div className='grow border-t '></div>
             </div>
 
-            <Button type="button" onClick={signInWithGoogle} variant='primary' size="md" className='mt-2 p-2 inline-flex justify-center items-center gap-2'>
+            <Button type="button" onClick={signInWithGoogle} variant='secondary' size="md" className='mt-2 p-2 inline-flex justify-center items-center gap-2'>
                 <PiGoogleLogoBold />
                 Sign In with Google
             </Button>

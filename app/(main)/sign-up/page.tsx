@@ -5,7 +5,7 @@ export default function SignUp(){
     return(
         <>
             <div className='w-full inline-block'>
-                <article className="relative w-full h-screen flex justify-center">
+                <article className="relative w-full flex justify-center">
                     <Image
                         priority={true}
                         loading='eager'
@@ -15,7 +15,7 @@ export default function SignUp(){
                         className=' object-center object-cover -z-10'
                     />
                 
-                    <div className="size-full flex justify-center items-center z-0">
+                    <div className="size-full min-h-svh flex justify-center items-center z-0 ">
                         <SignUpForm/>
                     </div>
                 </article>

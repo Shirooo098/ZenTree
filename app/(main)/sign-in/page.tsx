@@ -17,7 +17,7 @@ export default function SignIn(){
                         className=' object-center object-cover -z-10'
                     />
                 
-                    <div className="size-full flex justify-center items-center z-0">
+                    <div className="w-full min-h-svh flex justify-center items-center z-0">
                         <SignInForm/>
                     </div>
                 </article>

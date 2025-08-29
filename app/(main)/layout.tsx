@@ -3,9 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./../globals.css";
 import NavBar from "../ui/navbar";
 import Footer from "../ui/landing/Footer";
-import { headers } from "next/headers";
-import { auth } from "../lib/auth";
-import { redirect } from "next/navigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,12 +24,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth.api.getSession({
-      headers: await headers()
-  })
-
-  if(session?.user.role === "admin") redirect('/admin')
-
   return (
     <html lang="en">
       <body

@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image'
 import Link from 'next/link'
 import Button from '../../ui/button'
 import { signUp } from '@/server/users'
@@ -15,6 +14,7 @@ import { useState } from 'react';
 
 import { signInWithGoogle } from '@/app/lib/auth-client';
 import { Loader } from '../loader/loader';
+import Logo from '../../ui/Logo';
 
 const formSchema = z.object({
     name: z.string()
@@ -71,39 +71,35 @@ export default function SignUpForm(){
                 onSubmit={handleSubmit(onSubmit)}
                 className="flex flex-col py-4 px-6 w-[260px] xs:w-[280px] sm:w-[320px] lg:w-[380px]
                 bg-main-white text-dark-brown rounded-lg" >
-                <Image
-                    loading='eager'
-                    priority={true}
-                    src={"/img/Logo.png"}
-                    alt="ZenTree Logo"
-                    width={120}
-                    height={120}
-                    className='mx-auto size-[90px] md:size-[120px] lg:size-[120px]'
-                />
+                <Logo />
                 <h1 className="text-center text-lg sm:text-xl lg:text-2xl font-bold">Sign-Up Form</h1>
                 <label htmlFor="Name" className='label-style'>Name:</label>
                 <input type="text" 
+                    placeholder='John Doe'
                     {...register('name')}
-               className='input-style'/>
+               className='input-style text-start'/>
                 {errors.name && <span className="error-span">{errors.name.message}</span>}
 
                 <label htmlFor="Username" className='label-style'>Username:</label>
                 <input type="text" 
+                    placeholder='johndoe'
                     {...register('username')}
                className='input-style'/>
                 {errors.username && <span className="error-span">{errors.username.message}</span>}
                 <label htmlFor="Email" className='label-style'>Email:</label>
                 <input type="text" 
+                    placeholder='johndoe@gmail.com'
                     {...register('email')}
                     className="input-style"/>
                 {errors.email && <span className="text-red-500">{errors.email.message}</span>}
                 <label htmlFor="Password" className='label-style'>Password:</label>
                 <input type="password" 
+                    placeholder='********'
                     {...register('password')}
                     className='input-style'/>
                 {errors.password && <span className="error-span">{errors.password.message}</span>}
                 {error && <div className="error-span text-start mb-4">{error}</div>}
-                <Button disabled={isSubmitting} variant="secondary" size="md" className='inline-flex justify-center items-center mt-5 p-2'>
+                <Button disabled={isSubmitting} variant="primary" size="md" className='inline-flex justify-center items-center mt-5 p-2'>
                     {isSubmitting ? <Loader /> : "Sign-Up"}
                 </Button>
 
@@ -114,7 +110,7 @@ export default function SignUpForm(){
                     <div className='grow border-t '></div>
                 </div>
 
-                <Button type="button" onClick={signInWithGoogle} variant='primary' size="md" className='mt-2 p-2 inline-flex justify-center items-center gap-2'>
+                <Button type="button" onClick={signInWithGoogle} variant='secondary' size="md" className='mt-2 p-2 inline-flex justify-center items-center gap-2'>
                         <PiGoogleLogoBold />
                         Sign In with Google
                 </Button>
