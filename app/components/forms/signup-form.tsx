@@ -55,7 +55,7 @@ export default function SignUpForm(){
             const result = await signUp(values.email, values.password, values.username, values.name)
 
             if(result.success) {
-                toast("Sign-Up Success");
+                toast("Sign-Up Success, Verify your email before signing-in");
                 router.push('/profile')
             }else{
                 setError(result.message || "Sign-up Failed")
