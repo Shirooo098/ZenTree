@@ -4,7 +4,7 @@ import { db } from "@/db/drizzle"; // your drizzle instance
 import { nextCookies } from "better-auth/next-js";
 import { schema } from "@/db/schema"
 import { Resend } from "resend"
-import EmailVerify from "../components/emails/verify-email";
+
 import { username, admin as adminPlugin } from "better-auth/plugins";
 import { ac, admin, user } from "./auth/permissions"
 
@@ -47,7 +47,7 @@ export const auth = betterAuth({
     },
     emailAndPassword: {
         enabled: true,
-        // requireEmailVerification: true,
+        requireEmailVerification: true,
     },
     database: drizzleAdapter(db, {
         provider: "pg", // or "mysql", "sqlite"
@@ -79,7 +79,7 @@ export const auth = betterAuth({
             }
         }),
     ],
-    trustedOrigins: [ process.env.BETTER_AUTH_URL as string ,"http://localhost:3000"],
+    trustedOrigins: [process.env.BETTER_AUTH_URL as string, "http://localhost:3000"],
     rateLimit: {
         enabled: true,
         window: 30,

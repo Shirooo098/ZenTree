@@ -16,6 +16,8 @@ import { signInWithGoogle } from '@/app/lib/auth-client';
 import { Loader } from '../loader/loader';
 import Logo from '../../ui/Logo';
 
+import { toast } from "sonner"
+
 const formSchema = z.object({
     name: z.string()
         .min(6, "Name must be at least 6 characters")
@@ -53,6 +55,7 @@ export default function SignUpForm(){
             const result = await signUp(values.email, values.password, values.username, values.name)
 
             if(result.success) {
+                toast("Sign-Up Success");
                 router.push('/profile')
             }else{
                 setError(result.message || "Sign-up Failed")

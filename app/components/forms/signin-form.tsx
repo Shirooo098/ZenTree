@@ -40,7 +40,6 @@ export default function SignInForm(){
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
-            setError(null);
             setIsSubmitting(true)
             const result = await signIn(values.email, values.password);
             
@@ -52,7 +51,7 @@ export default function SignInForm(){
                 }
             
             } else {
-                setError(result.message || 'Sign-in Failed')
+                setError(result.message)
             }
         } catch (error) {
             setError(error instanceof Error? error.message: "An unknown error occured")

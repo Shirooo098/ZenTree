@@ -1,7 +1,7 @@
 'use server'
 
 import { auth } from "@/app/lib/auth"
-import { getUserRole } from "@/app/util/action";
+import { getUserRole } from "@/app/util/user-role.action";
 
 
 export const signIn = async (email: string, password: string) => {
@@ -17,7 +17,7 @@ export const signIn = async (email: string, password: string) => {
 
         return { 
             success: true, 
-            message: "Signed in successfully.",
+            message: "Signed-In Successfully.",
             role: userRole
         }
 
@@ -42,7 +42,7 @@ export const signUp = async (email: string, password: string, username: string, 
         })
         return{
             success: true,
-            message: "Signed up successfully"
+            message: "Signed-Up Successfully"
         }
     } catch (error) {
         const e = error as Error
