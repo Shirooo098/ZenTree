@@ -15,6 +15,7 @@ import { signInWithGoogle } from '@/app/lib/auth-client';
 import { ManRope } from '@/app/ui/fonts';
 import { Loader } from '../loader/loader';
 import Logo from '@/app/ui/Logo';
+import { toast } from 'sonner';
 
 const formSchema = z.object({
     email: z.email(),
@@ -44,6 +45,8 @@ export default function SignInForm(){
             const result = await signIn(values.email, values.password);
             
             if(result.success) {
+                toast('Signed-In Successfully');
+
                 if (result.role === 'admin') {
                     router.push('/admin');
                 }else{
