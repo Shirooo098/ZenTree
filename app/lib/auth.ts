@@ -54,7 +54,6 @@ export const auth = betterAuth({
         schema
     }),
     plugins: [
-        nextCookies(),
         username({
             minUsernameLength: 5,
             displayUsernameValidator: (displayUsername) => {
@@ -78,6 +77,7 @@ export const auth = betterAuth({
                 user,
             }
         }),
+        nextCookies(),
     ],
     trustedOrigins: [process.env.BETTER_AUTH_URL as string, "http://localhost:3000"],
     rateLimit: {

@@ -1,8 +1,7 @@
 'use server'
 
 import { auth } from "@/app/lib/auth"
-import { getUserRole } from "@/app/util/user-role.action";
-
+import { getUserRole } from "@/app/util/user-role.action"
 
 export const signIn = async (email: string, password: string) => {
     try {
@@ -12,7 +11,7 @@ export const signIn = async (email: string, password: string) => {
                 password
             },
         })
-
+        
         const userRole = await getUserRole(email)
 
         return { 

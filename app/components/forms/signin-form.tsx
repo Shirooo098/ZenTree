@@ -46,13 +46,12 @@ export default function SignInForm(){
             
             if(result.success) {
                 toast('Signed-In Successfully');
-
+                
                 if (result.role === 'admin') {
                     router.push('/admin');
                 }else{
                     router.push('/profile');
                 }
-            
             } else {
                 setError(result.message)
             }
