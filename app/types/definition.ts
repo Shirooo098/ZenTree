@@ -11,7 +11,8 @@ export type ReviewCardProps = {
 }
 
 export const centerSideLinks:NavLink[] = [
-    { name: 'Shop', href: '/shop'},
+    { name: 'Product', href: '/product'},
+    { name: 'Care Guide', href: '/care-guide'},
     { name: 'About', href: '/about'},
     { name: 'Contact', href: '/contact'},
     { name: 'FAQs', href: '/faqs'},
