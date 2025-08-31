@@ -1,4 +1,4 @@
-"user server";
+"use server";
 
 import transporter from "../lib/nodemailer";
 
@@ -30,7 +30,7 @@ export async function sendEmailAction({
             <div style="${styles.container}">
                 <h1 style="${styles.header}">${subject}</h1>
                 <p style="${styles.paragraph}">${meta.description}</p>
-                <a href="${meta.link}" styles="${styles.link}">CLick Here</a>
+                <a href="${meta.link}" styles="${styles.link}">Click Here to Verify</a>
             </div>
         `,
     };
