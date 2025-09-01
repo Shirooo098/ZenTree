@@ -3,7 +3,7 @@
 import transporter from "../lib/nodemailer";
 
 const styles = {
-    container: 'max-width: 500px; margin: 20px auto; padding: 20px, border: 1px solid #000; border-radius:6px;',
+    container: 'max-width: 500px; margin: 20px auto; padding: 20px; border: 1px solid #000; border-radius:6px;',
     header: 'font-size: 20px; color:#333;',
     paragraph: 'font-size: 16px;',
     link: 'display: inline-block; margin-top:15 px; padding: 10px; background: #007bff; color: #fff; text-decoration:none; border-radius: 4px;'

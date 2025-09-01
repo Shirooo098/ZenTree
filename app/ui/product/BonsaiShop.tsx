@@ -67,7 +67,17 @@ export default function BonsaiShop() {
   return (
     <div>
       <div className="product-container">
-        <div className="filter">
+        <div className="flex justify-evenly">
+          <h2 className="bg-red-400 w-20px">hello</h2>
+          <h2 className="bg-red-400 w-20px">hello</h2>
+          <h2 className="bg-red-400 w-20px">hello</h2>
+          <h2 className="bg-red-400 w-20px">hello</h2>
+          <h2 className="bg-red-400 w-20px">hello</h2>
+        </div>
+
+
+        <div className="flex">
+          <div className="filter">
           <Search />
         </div>
         <div className="card-wrapper">
@@ -120,6 +130,7 @@ export default function BonsaiShop() {
               </span>
             </div>
           ))}
+        </div>
         </div>
       </div>
 
