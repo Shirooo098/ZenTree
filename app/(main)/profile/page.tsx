@@ -4,13 +4,14 @@ import { redirect } from "next/navigation"
 import Logout from "../../ui/logout"
 
 
-
 export default async function Profile() {
   const session = await auth.api.getSession({
     headers: await headers()
   })
 
-  if(!session) redirect ("/sign-in")
+  if(!session) {
+    redirect ("/sign-in")
+  }
 
   return (
     <>

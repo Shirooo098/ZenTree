@@ -1,6 +1,8 @@
 import { ReviewCardProps } from "@/app/types/definition";
 import { ManRope } from "@/app/ui/fonts";
+import { SkeletonReview } from "@/components/ui/skeleton/skeleton";
 import Image from 'next/image';
+import { Suspense } from "react";
 
 export default function ReviewCard({
     id,
@@ -13,6 +15,7 @@ export default function ReviewCard({
 }: ReviewCardProps){
     return(
         <>
+            <Suspense fallback={<SkeletonReview/>}>
             <div className={`${ManRope.className} drop-shadow-black flex flex-col col-span-1 row-span-1 relative `}>
                 <h4 className="font-bold text-lg sm:text-xl lg:text-2xl">{title}</h4>
                 <p className="hidden">{id}</p>
@@ -32,6 +35,7 @@ export default function ReviewCard({
                 </div>
                 <div className="mt-2">{stars}</div>
             </div>
+            </Suspense>
         </>
     )
 }
