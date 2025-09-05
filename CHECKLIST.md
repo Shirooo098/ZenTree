@@ -15,3 +15,8 @@ Suspense
  - Refactor Card
  - Make Componenents
  - Types for product
+
+Profile 
+ - Fetch User's Information
+ - Edit User's Information
+ - Update User's Information

@@ -34,6 +34,7 @@ export default async function Admin(){
             >
                 <AppSidebar variant="inset"
                     user={{
+                        id: session.user.id,
                         name: session.user.name,
                         email: session.user.email,
                         role: session.user.role

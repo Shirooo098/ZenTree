@@ -54,7 +54,6 @@ export default function BonsaiShop() {
       />
 
       <div className="flex">
-      
         <div className="filter">
           <Search filters={filters} setFilters={setFilters} />
         </div>

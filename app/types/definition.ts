@@ -30,10 +30,13 @@ export interface NavLink {
 }
 
 export interface User{
-  name: string
-  email: string
-  avater?: string
-  role?: string
+    id: string,
+    name: string,
+    username: string | null | undefined,
+    phoneNumber: string | null | undefined,
+    email: string,
+    avater?: string,
+    role?: string,
 }
 
 export type ProductFilters = {
@@ -45,11 +48,21 @@ export type ProductFilters = {
 }
 
 export type BonsaiProps = {
-  id: number;
-  name: string;
-  care: string;
-  style: string;
-  price: number;
-  age: string;
-  image: string;
+    id: number;
+    name: string;
+    care: string;
+    style: string;
+    price: number;
+    age: string;
+    image: string;
 };
+
+export type EditProfileState = {
+    errors?: {
+        name?: string[],
+        username?: string[],
+        phoneNumber?: string[],
+        image?: string[]
+    };
+    errorMessage: string | null
+}

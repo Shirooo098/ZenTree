@@ -4,7 +4,7 @@ import { db } from "@/db/drizzle"; // your drizzle instance
 import { nextCookies } from "better-auth/next-js";
 import { schema } from "@/db/schema"
 
-import { username, admin as adminPlugin } from "better-auth/plugins";
+import { username, admin as adminPlugin, phoneNumber } from "better-auth/plugins";
 import { ac, admin, user } from "./auth/permissions"
 import { sendEmailAction } from "../actions/send-email.action";
 
@@ -44,6 +44,11 @@ export const auth = betterAuth({
         schema
     }),
     plugins: [
+        phoneNumber({
+            sendOTP: ({ phoneNumber, code}, request) => {
+                
+            }
+        }),
         username({
             minUsernameLength: 5,
             displayUsernameValidator: (displayUsername) => {
