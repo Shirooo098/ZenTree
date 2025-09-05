@@ -97,16 +97,13 @@
 }
 
 .card-wrapper {
-  width: 100%;
   display: grid;
   gap: 2rem;
   grid-template-columns: repeat(3, 1fr);
   padding-top: 2rem;
-  height: auto;
 }
 
 .card {
-  height: 390px;
   width: 390px;
   background: #ffffff;
   border-radius: 8px;

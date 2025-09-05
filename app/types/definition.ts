@@ -43,3 +43,13 @@ export type ProductFilters = {
     care: string,
     query: string,
 }
+
+export type BonsaiProps = {
+  id: number;
+  name: string;
+  care: string;
+  style: string;
+  price: number;
+  age: string;
+  image: string;
+};
