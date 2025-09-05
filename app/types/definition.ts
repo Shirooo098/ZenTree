@@ -64,5 +64,5 @@ export type EditProfileState = {
         phoneNumber?: string[],
         image?: string[]
     };
-    errorMessage: string | null
+    message?: string | null
 }

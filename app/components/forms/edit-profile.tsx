@@ -12,7 +12,7 @@ interface EditProfileProps {
 export default function EditProfile({ userData }: EditProfileProps){
     const [userProfile, setUserProfile] = useState<User>(userData);
     const [isEdit, setIsEdit] = useState(false);
-    const initialState: EditProfileState = { errorMessage: null, errors: {}}
+    const initialState: EditProfileState = { message: null, errors: {}}
     const [state, formAction] = useActionState(editProfileInformation, initialState)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
