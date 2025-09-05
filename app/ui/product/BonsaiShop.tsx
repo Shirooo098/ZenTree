@@ -8,7 +8,13 @@ import BonsaiProduct from "./BonsaiProduct";
 
 
 export default function BonsaiShop() {
-  const [filters, setFilters] = useState({ size: "", price: "", age: "", care: "", query: "" });
+  const [filters, setFilters] = useState({
+      size: "",
+      price: "",
+      age: "", 
+      care: "", 
+      query: "" 
+    });
   const [activeStyle, setActiveStyle] = useState("All Styles");
   const [sort, setSort] = useState("Featured");
 
@@ -54,7 +60,9 @@ export default function BonsaiShop() {
         </div>
 
         <div className="card-wrapper">
-          <BonsaiProduct/>
+          <BonsaiProduct
+            products={filteredProducts}
+          />
         </div>
       </div>
     </div>

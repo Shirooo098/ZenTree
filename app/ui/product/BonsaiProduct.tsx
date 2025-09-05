@@ -1,10 +1,14 @@
 import BonsaiCard from "@/app/components/cards/bonsai-card";
-import { bonsaiProducts } from "@/app/types/placeholder";
+import { BonsaiProps } from "@/app/types/definition";
 
-export default function BonsaiProduct(){
+type BonsaiProductProps = {
+  products: BonsaiProps[];
+};
+
+export default function BonsaiProduct({products}: BonsaiProductProps){
     return(
         <>
-            {bonsaiProducts.map((bons) => {
+            {products.map((bons) => {
                 return(
                     <BonsaiCard 
                         key={bons.id}
