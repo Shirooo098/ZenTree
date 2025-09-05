@@ -1,11 +1,13 @@
-import Image from 'next/image'
-import SignUpForm from '../../components/forms/signup-form'
+'use client';
 
-export default function SignUp(){
+import Image from 'next/image';
+import SignInForm from '../components/forms/signin-form';
+
+export default function SignIn(){
     return(
         <>
             <div className='w-full inline-block'>
-                <article className="relative w-full flex justify-center">
+                <article className="relative w-full h-screen flex justify-center">
                     <Image
                         priority={true}
                         loading='eager'
@@ -15,8 +17,8 @@ export default function SignUp(){
                         className=' object-center object-cover -z-10'
                     />
                 
-                    <div className="size-full min-h-svh flex justify-center items-center z-0 ">
-                        <SignUpForm/>
+                    <div className="w-full min-h-svh flex justify-center items-center z-0">
+                        <SignInForm/>
                     </div>
                 </article>
             </div>
