@@ -3,8 +3,7 @@
 import { db } from "@/db/drizzle";
 import { EditProfileState } from "../types/definition";
 import { z } from "zod";
-import { eq, sql } from "drizzle-orm";
-import { toast } from "sonner";
+import { eq } from "drizzle-orm";
 import { schema } from "@/db/schema";
 
 const EditProfileFormSchema = z.object({

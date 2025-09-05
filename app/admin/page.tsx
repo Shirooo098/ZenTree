@@ -36,6 +36,7 @@ export default async function Admin(){
                     user={{
                         id: session.user.id,
                         name: session.user.name,
+                        username: session.user.username,
                         email: session.user.email,
                         role: session.user.role
                     }} />

@@ -33,7 +33,7 @@ export interface User{
     id: string,
     name: string,
     username: string | null | undefined,
-    phoneNumber: string | null | undefined,
+    phoneNumber?: string | null | undefined,
     email: string,
     avater?: string,
     role?: string,

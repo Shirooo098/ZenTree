@@ -3,9 +3,7 @@
 import { headers } from "next/headers"
 import { auth } from "../../../lib/auth"
 import { redirect } from "next/navigation"
-import Logout from "../../../ui/logout"
 import EditProfile from "@/app/components/forms/edit-profile"
-import SideProfile from "@/app/ui/profile/SideProfile"
 import { Suspense } from "react"
 import { SkeletonProfile } from "@/components/ui/skeleton/skeleton"
 
