@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { authClient } from "../lib/auth-client"
 import Button from "./button";
+import { IoLogOut } from "react-icons/io5";
 
 export default function Logout(){
     const router = useRouter();
@@ -16,8 +17,11 @@ export default function Logout(){
     }
 
     return(
-        <Button onClick={handleLogout} variant="primary" size="lg">
-            Logout
+       <Button onClick={handleLogout} className="text-left text-lg font-dmSans">
+            <span className="flex items-center gap-3">
+                <IoLogOut />
+                Log Out
+            </span>
         </Button>
     )
 }

@@ -3,7 +3,8 @@
 import { editProfileInformation } from "@/app/actions/edit-profile.action";
 import { EditProfileState, User } from "@/app/types/definition";
 import Button from "@/app/ui/button";
-import { useActionState, useState } from "react"
+import { useActionState, useEffect, useState } from "react"
+import { toast } from "sonner";
 
 interface EditProfileProps {
     userData: User
@@ -27,6 +28,17 @@ export default function EditProfile({ userData }: EditProfileProps){
         setUserProfile(userData);
         setIsEdit(false);
     }
+
+    useEffect(() => {
+        if (state.message) {
+            if (state.message === 'Update user information successfully.') {
+                toast.success(state.message);
+                setIsEdit(false); // Exit edit mode on success
+            } else if (state.message === 'Failed to update profile. Please try again.') {
+                toast.error(state.message);
+            }
+        }
+    }, [state.message]);
 
     return(
         <>
@@ -99,10 +111,13 @@ export default function EditProfile({ userData }: EditProfileProps){
                     ))
                     }
                 </div>
-                <Button variant="secondary" size="lg" onClick={handleCancel}>
-                    Cancel
-                </Button>
-                <Button variant="primary" size="lg">Save</Button>
+                
+                <div className="flex justify-between mt-5">
+                    <Button variant="secondary" size="lg" onClick={handleCancel}>
+                        Cancel
+                    </Button>
+                    <Button variant="primary" size="lg">Edit Profile</Button>
+                </div>
             </form>
         </>
     )

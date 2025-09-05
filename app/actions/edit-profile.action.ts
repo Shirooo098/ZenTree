@@ -3,7 +3,9 @@
 import { db } from "@/db/drizzle";
 import { EditProfileState } from "../types/definition";
 import { z } from "zod";
-import { sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
+import { toast } from "sonner";
+import { schema } from "@/db/schema";
 
 const EditProfileFormSchema = z.object({
     id: z.string(),
@@ -39,17 +41,18 @@ export async function editProfileInformation(
     const {id, name, username, phoneNumber} = validateFields.data;
 
     try {
-       await db.execute(sql`        
-            UPDATE user 
-            SET name = ${name}
-                username = ${username}
-                phoneNumber = ${phoneNumber}
-            WHERE id = ${id}
-        `)
+        await db.update(schema.user)
+                .set({
+                    name,
+                    username,
+                    phoneNumber
+                })
+                .where(eq(schema.user.id, id));
 
         return{
             message: 'Update user information successfully.'
         }
+
     } catch (error) {
         console.error('Database error:', error);
         return{
