@@ -11,4 +11,7 @@ Suspense
  - Handle Suspense loading for page contents
 
  Product Catalog
-  - 
+ - Integrate Marven's Work
+ - Refactor Card
+ - Make Componenents
+ - Types for product

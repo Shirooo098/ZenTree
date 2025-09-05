@@ -35,3 +35,11 @@ export interface User{
   avater?: string
   role?: string
 }
+
+export type ProductFilters = {
+    size: string,
+    price: string,
+    age: string,
+    care: string,
+    query: string,
+}
