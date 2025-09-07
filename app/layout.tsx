@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./../globals.css";
-import "./../globalproduct.css";
-import NavBar from "../ui/navbar";
-import Footer from "../ui/landing/Footer";
+import "./globals.css";
+import "./globalproduct.css";
 import { Toaster } from "@/components/ui/sonner"
 
 
@@ -32,12 +30,8 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="fixed py-10 px-4 sx:px-10 sm:px-14 lg:px-20 flex w-full items-center z-20">
-          <NavBar/>
-        </div>
-        {children}
+        <main>{children}</main>
         <Toaster />
-        <Footer />
       </body>
     </html>
   );

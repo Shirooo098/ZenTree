@@ -1,5 +1,5 @@
 import { createAuthClient } from "better-auth/react"
-import { usernameClient, adminClient } from "better-auth/client/plugins";
+import { usernameClient, adminClient, phoneNumberClient } from "better-auth/client/plugins";
 import { ac, admin, user } from "./auth/permissions"
 
 
@@ -7,6 +7,7 @@ export const authClient = createAuthClient({
     /** The base URL of the server (optional if you're using the same domain) */
     baseURL: process.env.BETTER_AUTH_URL,
     plugins: [
+        phoneNumberClient(),
         usernameClient(),
         adminClient({
             ac, 
@@ -34,7 +35,7 @@ export const signInWithEmail = async (email: string, password: string) => {
     }, {
         onError: (ctx) => {
             if(ctx.error.status === 403) {
-                alert("Please verify your email address")
+                alert("Please verify your email address.")
             }
             alert(ctx.error.message)
         }

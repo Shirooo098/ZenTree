@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <>
       <div className='text-dark-brown'>
-        <Hero />
+        <Hero/>
         <BonsaiSection/>
         <Reviews/>
         <CheckNow/>

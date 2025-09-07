@@ -19,14 +19,21 @@ import Logo from '../../ui/Logo';
 import { toast } from "sonner"
 
 const formSchema = z.object({
-    name: z.string()
-        .min(6, "Name must be at least 6 characters")
-        .max(70, "Name must be less than 70 characters"),
+    firstName: z.string()
+        .min(2, "First name must be at least 2 characters")
+        .max(50, "First name must be less than 50 characters"),
+    lastName: z.string()
+        .min(2, 'Last name must be at least 2 characters')
+        .max(50, 'Last name must be at least 50 characters'),
     username: z.string()
         .min(3, "Username must be at least 3 characters")
         .max(20, "Username must be less than 20 characters"),
     email: z.email("Please enter a valid email address"),
     password: z.string().min(8, "Password must be at least 8 characters"),
+    confirmPassword: z.string().min(8, 'Please confirm your password'),
+}).refine((data) => data.password === data.confirmPassword, {
+    message: "Password don't match",
+    path: ["confirmPassword"],
 })
 
 export default function SignUpForm(){
@@ -41,10 +48,12 @@ export default function SignUpForm(){
     } = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
+            firstName: "",
+            lastName: "",
             username: "",
             email: "",
             password: "",
+            confirmPassword: "",
         },
     })
 
@@ -52,7 +61,10 @@ export default function SignUpForm(){
         try {
             setError(null)
             setIsSubmitting(true);
-            const result = await signUp(values.email, values.password, values.username, values.name)
+
+            const fullName = `${values.firstName} ${values.lastName}`.trim();
+
+            const result = await signUp(values.email, values.password, values.username, fullName)
 
             if(result.success) {
                 toast("Sign-Up Success, Verify your email before signing-in");
@@ -72,16 +84,29 @@ export default function SignUpForm(){
         <>
             <form 
                 onSubmit={handleSubmit(onSubmit)}
-                className="flex flex-col py-4 px-6 w-[260px] xs:w-[280px] sm:w-[320px] lg:w-[380px]
+                className="flex flex-col py-4 px-6 w-[350px] md:w-[400px] lg:w-[450px]
                 bg-main-white text-dark-brown rounded-lg" >
                 <Logo />
                 <h1 className="text-center text-lg sm:text-xl lg:text-2xl font-bold">Sign-Up Form</h1>
-                <label htmlFor="Name" className='label-style'>Name:</label>
-                <input type="text" 
-                    placeholder='John Doe'
-                    {...register('name')}
-               className='input-style text-start'/>
-                {errors.name && <span className="error-span">{errors.name.message}</span>}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full">
+                    <div className="flex flex-col">
+                        <label htmlFor="First Name" className='label-style'>First Name:</label>
+                        <input type="text" 
+                            placeholder='John Doe'
+                            {...register('firstName')}
+                    className='input-style text-start'/>
+                    {errors.firstName && <span className="error-span">{errors.firstName.message}</span>}
+                    </div>
+
+                    <div className="flex flex-col">
+                        <label htmlFor="Last Name" className='label-style'>Last Name:</label>
+                        <input type="text" 
+                            placeholder='Jackson'
+                            {...register('lastName')}
+                    className='input-style text-start'/>
+                        {errors.lastName && <span className="error-span">{errors.lastName.message}</span>}
+                    </div>
+                </div>
 
                 <label htmlFor="Username" className='label-style'>Username:</label>
                 <input type="text" 
@@ -101,6 +126,14 @@ export default function SignUpForm(){
                     {...register('password')}
                     className='input-style'/>
                 {errors.password && <span className="error-span">{errors.password.message}</span>}
+
+                <label htmlFor="Confirm Password" className='label-style'>Confirm Password:</label>
+                <input type="password" 
+                    placeholder='********'
+                    {...register('confirmPassword')}
+                    className='input-style'/>
+                {errors.confirmPassword && <span className="error-span">{errors.confirmPassword.message}</span>}
+                
                 {error && <div className="error-span text-start mb-4">{error}</div>}
                 <Button disabled={isSubmitting} variant="primary" size="md" className='inline-flex justify-center items-center mt-5 p-2'>
                     {isSubmitting ? <Loader /> : "Sign-Up"}

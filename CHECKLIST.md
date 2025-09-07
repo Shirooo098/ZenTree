@@ -5,3 +5,18 @@ Verify Email
  - Handle Error 
  - sendVerificationEmail
  - Handle Login Page Not Verified
+
+Suspense 
+ - Create a skeleton
+ - Handle Suspense loading for page contents
+
+ Product Catalog
+ - Integrate Marven's Work
+ - Refactor Card
+ - Make Componenents
+ - Types for product
+
+Profile 
+ - Fetch User's Information
+ - Edit User's Information
+ - Update User's Information
