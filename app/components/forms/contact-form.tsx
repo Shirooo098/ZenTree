@@ -39,7 +39,7 @@ export default function ContactForm() {
       <div className="mb-4">
         <textarea
           placeholder="Message"
-          rows={1}
+          rows={5}
           className="border-b border-gray-400 focus:outline-none p-2 w-full text-sm resize-none"
         />
       </div>
