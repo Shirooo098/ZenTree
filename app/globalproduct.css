@@ -480,3 +480,16 @@ h3{
   border-color: #3b82f6;
 }
 
+/* Bene Contact */
+
+.Hero-H1 {
+font-size: 85px; 
+  font-family: 'DM Sans, DM Sans Fallback';
+  margin-bottom: 1rem; 
+  line-height: 0.9; 
+}
+
+.text2 {
+  font-family: 'DM Sans, DM Sans Fallback';
+  font-size: 30px;
+}
