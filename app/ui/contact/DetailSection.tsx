@@ -5,8 +5,8 @@ import { Mail } from 'lucide-react';
 export default function DetailSection() {
     return(
         <main className="relative flex h-screen bg-[#FaF8F8]">
-            <div className="max-w-3x1 mx-auto ">
-                <h1 className="text2 font-semibold tracking-wide p-20">We're here for you.</h1>
+            <div className="max-w-3x1 mx-auto mt-20">
+                <h1 className="text2 font-semibold tracking-wide p-20">We&apos;re here for you.</h1>
 
                 {/* First row Location and Contact*/}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-20 mb-6">
