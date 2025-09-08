@@ -5,6 +5,7 @@ import { EditProfileState, User } from "@/app/types/definition";
 import Button from "@/app/ui/button";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { UserRound, Mail, Phone } from 'lucide-react';
 
 interface EditProfileProps {
   userData: User;
@@ -49,18 +50,13 @@ export default function EditProfile({ userData }: EditProfileProps) {
         action={formAction}
         className="bg-white shadow-lg rounded-xl p-9 space-y-6"
       >
-        {/* Name */}
+        <input type="hidden" name="id" value={userData.id} />
+        
         <div className="flex justify-between items-center border-b border-gray-200 pb-3">
-          <label htmlFor="name" className="text-gray-500 font-medium flex items-center gap-2">
-            <svg
-              className="w-5 h-5 text-gray-400"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z" />
-            </svg>
-            Name:
-          </label>
+          <div className="flex gap-2">
+            <UserRound />
+            <label htmlFor="name" className="text-gray-500 font-medium flex items-center">Name:</label>
+          </div>
           <input
             name="name"
             type="text"
@@ -78,18 +74,11 @@ export default function EditProfile({ userData }: EditProfileProps) {
           ))}
         </div>
 
-        {/* Username */}
         <div className="flex justify-between items-center border-b border-gray-200 pb-3">
-          <label htmlFor="username" className="text-gray-500 font-medium flex items-center gap-2">
-            <svg
-              className="w-5 h-5 text-gray-400"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z" />
-            </svg>
-            Username:
-          </label>
+          <div className="flex gap-2">
+            <UserRound />
+            <label htmlFor="name" className="text-gray-500 font-medium flex items-center">Username:</label>
+          </div>
           <input
             name="username"
             type="text"
@@ -107,18 +96,13 @@ export default function EditProfile({ userData }: EditProfileProps) {
           ))}
         </div>
 
-        {/* Email */}
         <div className="flex justify-between items-center border-b border-gray-200 pb-3">
-          <label htmlFor="email" className="text-gray-500 font-medium flex items-center gap-2">
-            <svg
-              className="w-5 h-5 text-gray-400"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z" />
-            </svg>
-            Email:
-          </label>
+          <div className="flex gap-2">
+            <Mail />
+            <label htmlFor="email" className="text-gray-500 font-medium flex items-center">
+              Email:
+            </label>
+          </div>
           <input
             type="email"
             defaultValue={userProfile.email}
@@ -127,18 +111,13 @@ export default function EditProfile({ userData }: EditProfileProps) {
           />
         </div>
 
-        {/* Mobile Number */}
         <div className="flex justify-between items-center">
-          <label htmlFor="phoneNumber" className="text-gray-500 font-medium flex items-center gap-2">
-            <svg
-              className="w-5 h-5 text-gray-400"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.21c1.2.48 2.5.74 3.85.74a1 1 0 011 1v3.5a1 1 0 01-1 1C10.07 22 2 13.93 2 4.5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.35.26 2.65.74 3.85a1 1 0 01-.21 1.11l-2.2 2.2z" />
-            </svg>
-            Phone Number:
-          </label>
+          <div className="flex gap-2">
+            <Phone />
+            <label htmlFor="phoneNumber" className="text-gray-500 font-medium flex items-center">
+              Phone Number:
+            </label>
+          </div>
           <input
             name="phoneNumber"
             type="text"
@@ -157,7 +136,6 @@ export default function EditProfile({ userData }: EditProfileProps) {
           ))}
         </div>
 
-        {/* Buttons */}
         <div className="flex justify-between mt-5">
           <Button variant="secondary" size="lg" onClick={handleCancel}>
             Cancel

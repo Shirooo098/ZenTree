@@ -16,7 +16,6 @@ const EditProfileFormSchema = z.object({
 })
 
 
-
 export async function editProfileInformation(
     prevState: EditProfileState, 
     formData: FormData
@@ -38,6 +37,9 @@ export async function editProfileInformation(
     }
 
     const {id, name, username, phoneNumber} = validateFields.data;
+
+    
+    console.log(validateFields.data);
 
     try {
         await db.update(schema.user)
