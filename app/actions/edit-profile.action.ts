@@ -29,10 +29,10 @@ export async function editProfileInformation(
     })
 
     if (!validateFields.success) {
-        const flattened = z.flattenError(validateFields.error)
+        const { fieldErrors } = z.flattenError(validateFields.error)
         return {
             message: "Validation failed",
-            errors: flattened.fieldErrors
+            errors: fieldErrors
         };
     }
 

@@ -51,7 +51,7 @@ export default function EditProfile({ userData }: EditProfileProps) {
         className="bg-white shadow-lg rounded-xl p-9 space-y-6"
       >
         <input type="hidden" name="id" value={userData.id} />
-        
+
         <div className="flex justify-between items-center border-b border-gray-200 pb-3">
           <div className="flex gap-2">
             <UserRound />
