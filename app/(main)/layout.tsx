@@ -35,7 +35,7 @@ export default async function RootLayout({
         <div className="fixed py-10 px-4 sx:px-10 sm:px-14 lg:px-20 flex w-full items-center z-20">
           <NavBar/>
         </div>
-        <main>{children}</main>
+        <main className="bg-[#faf8f8]">{children}</main>
         <Toaster />
         <Footer />
       </body>
