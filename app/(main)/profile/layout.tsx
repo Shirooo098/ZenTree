@@ -7,7 +7,7 @@ export default async function RootLayout({ children }: {children: React.ReactNod
   return (
       <div className="flex justify-between gap-6 w-full pt-40 pb-20 px-21">
           <SideProfile/>
-          <div className="w-full bg-gray-100 rounded-md inset-shadow-nav">
+          <div className="w-full p-8 bg-gray-100 rounded-md inset-shadow-nav">
             {children}
           </div>
           <Toaster/>

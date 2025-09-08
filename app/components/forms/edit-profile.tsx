@@ -6,6 +6,7 @@ import Button from "@/app/ui/button";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { UserRound, Mail, Phone } from 'lucide-react';
+import { ManRope } from "@/app/ui/fonts";
 
 interface EditProfileProps {
   userData: User;
@@ -45,10 +46,10 @@ export default function EditProfile({ userData }: EditProfileProps) {
     }, [state.message]);
 
   return (
-    <div className="pt-10 rounded-xl">
+    <div className="w-full mt-4 rounded-xl">
       <form
         action={formAction}
-        className="bg-white shadow-lg rounded-xl p-9 space-y-6"
+        className={`${ManRope.className} bg-white shadow-lg rounded-xl p-9 space-y-6`}
       >
         <input type="hidden" name="id" value={userData.id} />
 
