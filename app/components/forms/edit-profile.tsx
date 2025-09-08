@@ -45,7 +45,7 @@ export default function EditProfile({ userData }: EditProfileProps) {
     }, [state.message]);
 
   return (
-    <div className="pt-10">
+    <div className="pt-10 rounded-xl">
       <form
         action={formAction}
         className="bg-white shadow-lg rounded-xl p-9 space-y-6"
@@ -136,7 +136,7 @@ export default function EditProfile({ userData }: EditProfileProps) {
           ))}
         </div>
 
-        <div className="flex justify-between mt-5">
+        <div className="flex justify-between mt-7">
           <Button variant="secondary" size="lg" onClick={handleCancel}>
             Cancel
           </Button>
