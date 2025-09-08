@@ -20,3 +20,5 @@ Profile
  - Fetch User's Information
  - Edit User's Information
  - Update User's Information
+
+ - Fix Error handling, specify that number is already used.

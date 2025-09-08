@@ -33,7 +33,7 @@ export default function EditProfile({ userData }: EditProfileProps){
         if (state.message) {
             if (state.message === 'Update user information successfully.') {
                 toast.success(state.message);
-                setIsEdit(false); // Exit edit mode on success
+                setIsEdit(false);
             } else if (state.message === 'Failed to update profile. Please try again.') {
                 toast.error(state.message);
             }
