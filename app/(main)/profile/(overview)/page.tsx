@@ -17,7 +17,7 @@ export default async function Profile() {
   return (
     <>
       <div className="w-full flex flex-col ">
-        <div className="flex justify-between items-center w-full px-3 font-sans">
+        <div className="flex justify-between items-center w-full px-3 font-sans border-b border-black pb-5">
           <h1 className="text-2xl font-bold">Profile</h1>
           <h1 className="text-2xl font-bold">Edit Profile</h1>
         </div>
