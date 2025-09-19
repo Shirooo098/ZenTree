@@ -21,9 +21,9 @@ export default function BonsaiShop() {
 
   let filteredProducts = bonsaiProducts.filter((p) => {
     let inPriceRange = true;
-    if (filters.price === "500-3000") inPriceRange = p.price >= 500 && p.price <= 3000;
-    if (filters.price === "3000-15000") inPriceRange = p.price >= 3000 && p.price <= 15000;
-    if (filters.price === "15000-250000") inPriceRange = p.price >= 15000 && p.price <= 250000;
+    if (filters.price === "9999-18999") inPriceRange = p.price >= 9999 && p.price <= 18999;
+    if (filters.price === "18999-24999") inPriceRange = p.price >= 18999 && p.price <= 24999;
+    if (filters.price === "24999-34999") inPriceRange = p.price >= 24999 && p.price <= 34999;
 
     return (
       (filters.care ? p.care === filters.care : true) &&
