@@ -1,5 +1,8 @@
+import AboutUsHero from "@/app/ui/about/AboutUsHero";
+
 export default function About(){
     return(
-        <h1>About</h1>
+        <><AboutUsHero />
+        </>
     )
 }

@@ -513,3 +513,16 @@ h3 {
 .profile-content{
   width: 80%;
 }
+
+/* contact us page */
+.Hero-H1 {
+  font-size: 85px;
+  font-family: "DM Sans, DM Sans Fallback";
+  margin-bottom: 1rem;
+  line-height: 0.9;
+}
+
+.text2 {
+  font-family: "DM Sans, DM Sans Fallback";
+  font-size: 20px;
+}
