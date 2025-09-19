@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import SignUpForm from '../../components/forms/signup-form'
+import SignUpForm from '../../components/forms/auth-form/signup-form'
 
 
 export default function SignUp(){

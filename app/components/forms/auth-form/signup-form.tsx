@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link'
-import Button from '../../ui/button'
+import Button from '../../../ui/button'
 import { signUp } from '@/server/users'
 import { PiGoogleLogoBold } from "react-icons/pi";
 
@@ -13,8 +13,8 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { signInWithGoogle } from '@/app/lib/auth-client';
-import { Loader } from '../loader/loader';
-import Logo from '../../ui/Logo';
+import { Loader } from '../../loader/loader';
+import Logo from '../../../ui/Logo';
 
 import { toast } from "sonner"
 

@@ -44,7 +44,7 @@ export function EditProductDialog() {
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button type="submit">Save changes</Button>
+            <Button type="submit" className="bg-dark-brown">Save changes</Button>
           </DialogFooter>
         </DialogContent>
       </form>

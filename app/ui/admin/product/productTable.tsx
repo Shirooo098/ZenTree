@@ -42,8 +42,8 @@ const ProductsTable = ({
             <TableCell className="font-medium">
                 <span>{bonsai.category_id}</span>
             </TableCell>
-            <TableCell className="p-4">
-                <div className="relative size-[80px] flex items-center gap-2">
+            <TableCell className="flex justify-center p-4">
+                <div className="relative size-[80px] flex justify-center items-center gap-2">
                     <Image 
                         src={bonsai.product_img}
                         alt={bonsai.product_name}
