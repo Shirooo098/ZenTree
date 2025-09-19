@@ -16,7 +16,6 @@ const EditProfileFormSchema = z.object({
 })
 
 
-
 export async function editProfileInformation(
     prevState: EditProfileState, 
     formData: FormData
@@ -30,14 +29,17 @@ export async function editProfileInformation(
     })
 
     if (!validateFields.success) {
-        const flattened = z.flattenError(validateFields.error)
+        const { fieldErrors } = z.flattenError(validateFields.error)
         return {
             message: "Validation failed",
-            errors: flattened.fieldErrors
+            errors: fieldErrors
         };
     }
 
     const {id, name, username, phoneNumber} = validateFields.data;
+
+    
+    console.log(validateFields.data);
 
     try {
         await db.update(schema.user)
