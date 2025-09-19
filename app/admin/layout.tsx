@@ -36,7 +36,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
                 }} />
             <SidebarInset>
               <SiteHeader />
-              <div className="flex-grow p-6 md:overflow-y-auto md:p-12">{children}</div>
+              <div className="flex-grow p-4 pt-2 md:overflow-y-auto md:p-12 md:pt-6">{children}</div>
             </SidebarInset>
         </SidebarProvider>
     </div>

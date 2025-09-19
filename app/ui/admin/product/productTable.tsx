@@ -1,8 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 import TableUI from "@/components/ui/table-ui";
-import { Building2, MapPin, Users } from "lucide-react";
+import { Trash2, Pen, Users } from "lucide-react";
 import Image from 'next/image';
+import { EditProductDialog } from "./dialog/EditDialog";
+import { AlertDeleteProductDialog } from "./dialog/AlertDeleteDialog";
 
 export interface ProductProps {
     product_id: number,
@@ -32,7 +34,7 @@ const ProductsTable = ({
         "Stock",
         "Action"
     ];
-    const displayTableRow = (bonsai: ProductProps, index: number) => (
+    const displayTableRow = (bonsai: ProductProps) => (
         <TableRow key={bonsai.product_id} className="h-[100px]">
             <TableCell className="font-medium">
                 <span>{bonsai.product_id}</span>
@@ -55,7 +57,7 @@ const ProductsTable = ({
                 {bonsai.product_name}
             </TableCell>
             <TableCell className="p-4 max-w-[50px]">
-                <span className="truncate block">{bonsai.product_description}</span>
+                <span className="text-left truncate block">{bonsai.product_description}</span>
             </TableCell>
             <TableCell>
                 <span>
@@ -63,23 +65,19 @@ const ProductsTable = ({
                 </span>
             </TableCell>
             <TableCell className="p-4">
-                <div className="flex">
                     {bonsai.stock}
-                </div>
             </TableCell>
             <TableCell className="p-4">
-                <div className="flex gap-2">
-                    <Button>
-                        View
-                    </Button>
-                    <Button>Edit</Button>
+                <div className="flex justify-center items-center gap-2">
+                  <EditProductDialog />
+                  <AlertDeleteProductDialog />
                 </div>
             </TableCell>
         </TableRow>
     );
 
   return (
-    <div className="w-full">
+    <div className="w-full mt-6">
       <div className="border rounded-lg hidden lg:block">
         <TableUI 
           items={bonsaiProductsData} 
@@ -125,7 +123,7 @@ const ProductsTable = ({
               <div>
                 <p className="text-xs text-muted-foreground">Price</p>
                 <div className="flex items-center gap-1">
-                  <span className="font-medium">{bonsai.product_price}</span>
+                  <span className="font-bold">{bonsai.product_price}</span>
                 </div>
               </div>
               <div className="col-span-2">
