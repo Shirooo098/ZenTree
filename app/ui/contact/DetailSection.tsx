@@ -29,10 +29,10 @@ export default function DetailSection() {
       {/* main wrapper */}
       <div className="max-w-6xl w-full mx-auto mt-20 px-4 sm:px-6 lg:px-8 ">
         <h1 className="font-semibold tracking-wide text-2xl sm:text-3xl mb-2">
-          We're here for you.
+          We&apos;re here for you.
         </h1>
         <p className="text-gray-700 mb-8">
-          Have questions or need assistance with your Zen Tree products? We're just a message away.
+          Have questions or need assistance with your Zen Tree products? We&apos;re just a message away.
         </p>
 
         {/* Column layout pinned left */}
