@@ -1,23 +1,26 @@
+
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { headers } from "next/headers";
 import { auth } from "../lib/auth";
 import { redirect } from "next/navigation";
 import { SiteHeader } from "@/components/site-header";
+import { SessionProvider } from "@/context/session-provider";
 
  
 export default async function Layout({ children }: { children: React.ReactNode }) {
 
-      const session = await auth.api.getSession({
-          headers: await headers()
-      })
-      if(!session) redirect ("/sign-in")
-      
-      if(session.user.role !== "admin") return <h1>Unauthorized</h1>
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
+    if(!session) redirect ("/sign-in")
+    
+    if(session.user.role !== "admin") return <h1>Unauthorized</h1>
   
       
   return (
-    <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
+    <SessionProvider value={session}>
+         <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
         <SidebarProvider
             style={
                 {
@@ -40,6 +43,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
             </SidebarInset>
         </SidebarProvider>
     </div>
+    </SessionProvider>
   );
 }
 
