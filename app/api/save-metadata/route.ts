@@ -1,3 +1,4 @@
+// /api/save-metadata/route.ts
 import { auth } from "@/app/lib/auth";
 import { db } from "@/db/drizzle";
 import { imageKit_productFiles } from "@/db/schema";
@@ -7,34 +8,36 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest){
     try {
         const session = await auth.api.getSession({
-                headers: await headers()
-        })
+            headers: await headers()
+        });
 
-        if(!session) return NextResponse.redirect(new URL("/sign-in", req.url))
-
-        if (session.user.role !== "admin") return NextResponse.redirect(new URL("/", req.url));
+        if(!session) return NextResponse.redirect(new URL("/sign-in", req.url));
+        if(session.user.role !== "admin") return NextResponse.redirect(new URL("/", req.url));
        
         const userId = session.user.id;
-
         const { fileId, url } = await req.json();
 
         if (!fileId || !url) {
             throw new Error('fileId and url are required from ImageKit response');
         }
 
-        await db.insert(imageKit_productFiles)
+        const [newRecord] = await db.insert(imageKit_productFiles)
             .values({
                 product_image_id: fileId,
                 product_image_url: url,
                 user_id: userId
-        })
+            })
+            .returning({ id: imageKit_productFiles.id }); 
 
-        return NextResponse.json({success: true})
+        return NextResponse.json({
+            success: true, 
+            id: newRecord.id 
+        });
     } catch (error) {
-        console.error('Metadata Save Error:', error instanceof Error ? error.message : error)
+        console.error('Metadata Save Error:', error instanceof Error ? error.message : error);
         return NextResponse.json(
-        { success: false, error: "Failed to save metadata" },
-        { status: 500 }
+            { success: false, error: "Failed to save metadata" },
+            { status: 500 }
         );
     }
 }

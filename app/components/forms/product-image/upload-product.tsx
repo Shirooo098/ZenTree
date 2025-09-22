@@ -10,13 +10,11 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectTrigger, SelectItem, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SelectTrigger } from "@radix-ui/react-select";
 import React, { useRef } from "react";
 import { useForm } from "react-hook-form"
-import z from "zod"
 import {
     ImageKitAbortError,
     ImageKitInvalidRequestError,
@@ -25,40 +23,30 @@ import {
     upload,
 } from "@imagekit/next";
 import { imageUploadAuthenticator } from "@/app/actions/product/image-authenticator.action";
+import { ProductSchema, productSchema } from "@/app/types/schema";
+import { createProductAction } from "@/app/actions/product/create-product.action";
+import { toast } from "sonner";
 
-const formSchema = z.object({
-    id: z.number(),
-    productCategory: z.string().min(1, "Product category is required"),
-    productName: z.string().min(5, 
-        "Product name must be at least 5 characters."),
-    size: z.string().optional(),
-    bonsaiCategory: z.string().optional(),
-    bonsaiAge: z.string().optional(),
-    bonsaiCareLevel: z.string().optional(),
-    productPrice: z.number()
-        .min(1, "Price must have a value."),
-    stock: z.number()
-        .min(1, "Stock must have a value."),
-    productDescription: z.string()
-        .min(10, "Product description is required."),
-    imageProduct: z.file("Only accepts jpeg and png.")
-        .min(10_000)
-        .max(1_000_000)
-        .mime(["image/jpeg", "image/png"])
-})
 
-const styles = {
-    select:  "w-full flex items-start border-input data-[placeholder]:text-muted-foreground [&_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50  w-fit justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-
-}
 
 export default function UploadProductForm(){
     const fileInputRef = useRef<HTMLInputElement>(null);
     const abortController = new AbortController();
 
+    const fields = [
+        "productCategory",
+        "productName",
+        "size",
+        "bonsaiCategory",
+        "bonsaiAge",
+        "bonsaiCareLevel",
+        "productPrice",
+        "stock",
+        "productDescription",
+    ] as const;
 
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<ProductSchema>({
+        resolver: zodResolver(productSchema),
         defaultValues: {
             productCategory: "",
             productName: "",
@@ -73,9 +61,7 @@ export default function UploadProductForm(){
         }
     })
 
-    const onSubmit = async (values: z.infer<typeof formSchema>) => {
-
-        
+    const onSubmit = async (values: ProductSchema) => {
         console.log(values);
 
         const fileInput = fileInputRef.current;
@@ -111,9 +97,42 @@ export default function UploadProductForm(){
                 abortSignal: abortController.signal,
             });
 
+            const fileId = uploadResponse.fileId;
+            const url = uploadResponse.url;
+
             console.log("Upload response:", uploadResponse);
 
-          
+            const saveMetadataRes = await fetch("/api/save-metadata", {
+                method: "POST",
+                headers: { "Content-Type" : "application/json" },
+                body: JSON.stringify({ fileId, url })
+            })
+            const saveMetadata = await saveMetadataRes.json();
+            if (!saveMetadata.success) {
+                console.error("Failed to save metadata");
+                toast.error("Failed to save image metadata.");
+                return;
+            }
+
+            const imageRecordId = saveMetadata.id;
+            const formData = new FormData();
+
+            fields.forEach((field) => {
+                const value = values[field];
+                if (value !== undefined && value !== null) {
+                    formData.append(field, String(value));
+                }
+            });
+
+            formData.append("imageProduct", file);
+            formData.append("imageRecordId", imageRecordId);
+
+            const createProductRes = await createProductAction(formData);
+
+            if(createProductRes.message){
+                toast(createProductRes.message)
+            }
+
         } catch (error) {
             if (error instanceof ImageKitAbortError) {
                 console.error("Upload aborted:", error.reason);
@@ -162,8 +181,8 @@ export default function UploadProductForm(){
                             <Select 
                                 onValueChange={field.onChange}
                                 defaultValue={field.value}>
-                                <FormControl>
-                                    <SelectTrigger className={`${styles.select}`}>
+                                <FormControl className="w-full">
+                                    <SelectTrigger>
                                         <SelectValue placeholder="Select a Category" />
                                     </SelectTrigger>
                                 </FormControl>
@@ -201,8 +220,8 @@ export default function UploadProductForm(){
                                 <Select 
                                     onValueChange={field.onChange}
                                     defaultValue={field.value}>
-                                    <FormControl>
-                                        <SelectTrigger className={`${styles.select}`}>
+                                    <FormControl className="w-full">
+                                        <SelectTrigger>
                                             <SelectValue placeholder="Select a Bonsai Category" />
                                         </SelectTrigger>
                                     </FormControl>
@@ -228,8 +247,8 @@ export default function UploadProductForm(){
                                 <Select 
                                     onValueChange={field.onChange}
                                     defaultValue={field.value}>
-                                    <FormControl>
-                                        <SelectTrigger className={`${styles.select}`}>
+                                    <FormControl className="w-full">
+                                        <SelectTrigger>
                                             <SelectValue placeholder="Select a Bonsai Age" />
                                         </SelectTrigger>
                                     </FormControl>
@@ -254,8 +273,8 @@ export default function UploadProductForm(){
                             <Select 
                                 onValueChange={field.onChange}
                                 defaultValue={field.value}>
-                                <FormControl>
-                                    <SelectTrigger className={`${styles.select}`}>
+                                <FormControl className="w-full">
+                                    <SelectTrigger>
                                         <SelectValue placeholder="Select a Bonsai care level" />
                                     </SelectTrigger>
                                 </FormControl>

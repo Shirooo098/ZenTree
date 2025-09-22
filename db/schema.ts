@@ -68,20 +68,17 @@ export const verification = pgTable("verification", {
   ),
 }); 
 
-export const categories = pgTable('categories', {
-  category_id: serial('category_id').primaryKey(),
-  category_name: text('category_name').notNull(),
-  category_size: integer('category_size').notNull(),
-  category_age: integer('category_age').notNull(),
-  category_care_level: text('category_care_level').notNull(),
-});
 
 export const products = pgTable('products', {
   product_id: serial('product_id').primaryKey(),
   imageKit_productFiles_id: integer('imageKit_productFiles_id').references(() => imageKit_productFiles.id),
   product_name: text('product_name').notNull(),
-  category_id: integer('category_id').references(() => categories.category_id),
+  product_category: text('product_category').notNull(),
   product_price: real('product_price').notNull(),
+  bonsai_size: text('bonsai_size'),
+  bonsai_category: text('bonsai_category'),
+  bonsai_age: text('bonsai_age'),
+  bonsai_care_level: text("bonsai_care_level"),
   product_desc: text('product_desc').notNull(),
   stock: integer('stock').notNull(),
 });
@@ -94,4 +91,4 @@ export const imageKit_productFiles = pgTable('imageKit_productFiles', {
   upload_timestamp: timestamp().defaultNow()
 })
 
-export const schema = { user, session, account, verification, products, categories, imageKit_productFiles }
+export const schema = { user, session, account, verification, products, imageKit_productFiles }
