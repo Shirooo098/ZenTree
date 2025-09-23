@@ -13,18 +13,19 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectTrigger, SelectItem, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form"
-import { ImageKitAbortError, ImageKitInvalidRequestError, ImageKitServerError, ImageKitUploadNetworkError, upload } from "@imagekit/next";
+import { upload } from "@imagekit/next";
 import { catchImageKitError, imageUploadAuthenticator } from "@/app/actions/product/image-authenticator.action";
 import { ProductSchema, productSchema } from "@/app/types/schema";
 import { createProductAction } from "@/app/actions/product/create-product.action";
 import { toast } from "sonner";
-import { redirect } from "next/navigation";
-
-
+import { useRouter } from "next/navigation";
+import { Progress } from "@/components/ui/progress";
 
 export default function UploadProductForm(){
+    const router = useRouter();
+    const [progress, setProgress] = useState(0);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const abortController = new AbortController();
 
@@ -85,6 +86,9 @@ export default function UploadProductForm(){
                 file,
                 fileName: file.name, // Optionally set a custom file name
                 // Progress callback to update upload progress state       
+                onProgress: (event) => {
+                    setProgress((event.loaded / event.total) * 100);
+                },
                 // Abort signal to allow cancellation of the upload if needed.
                 abortSignal: abortController.signal,
             });
@@ -124,8 +128,7 @@ export default function UploadProductForm(){
                 toast(createProductRes.message)
             }
 
-            redirect("/admin/products");
-
+            router.push("/admin/products");
         } catch (error) {
             catchImageKitError(error as Error)
         }
@@ -332,6 +335,7 @@ export default function UploadProductForm(){
                         </FormItem>
                     )}
                 />
+                <Progress value={progress}/>
 
                 <FormField
                     control={form.control}
@@ -350,6 +354,7 @@ export default function UploadProductForm(){
                 />
 
                 <Button type="submit">Submit</Button>
+
             </form>
         </Form>
     )
