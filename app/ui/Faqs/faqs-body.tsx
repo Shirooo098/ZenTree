@@ -4,9 +4,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import questionBg from '/img/question-background.jpg';
 
 
 export default function faqsbody() {
@@ -68,7 +66,7 @@ export default function faqsbody() {
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            Bonsai is more than just growing miniature trees; it's an ancient art form that embodies harmony, patience,
+            Bonsai is more than just growing miniature trees; it&apos;s an ancient art form that embodies harmony, patience,
              and a connection with nature. At ZenTree, we believe bonsai promotes mindfulness and creates a peaceful atmosphere in any environment.
           </Typography>
         </AccordionDetails>
@@ -147,7 +145,7 @@ export default function faqsbody() {
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            Simply browse our product catalog, add items to your cart, and proceed to checkout. You'll need to create an account
+            Simply browse our product catalog, add items to your cart, and proceed to checkout. You&apos;ll need to create an account
              or log in to complete your purchase, which also allows you to track your order and view your order history.
           </Typography>
         </AccordionDetails>
@@ -165,8 +163,8 @@ export default function faqsbody() {
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            Yes, you can add products to your wishlist by clicking the 'Add to Wishlist' button on any product page.
-             You'll need to be logged in to use this feature.
+            Yes, you can add products to your wishlist by clicking the &apos;Add to Wishlist&apos; button on any product page.
+             You&apos;ll need to be logged in to use this feature.
           </Typography>
         </AccordionDetails>
       </Accordion>
@@ -224,7 +222,7 @@ export default function faqsbody() {
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            Once your order is shipped, you'll receive a tracking number via email. You can also view your order status by
+            Once your order is shipped, you&apos;ll receive a tracking number via email. You can also view your order status by
              logging into your account and visiting the Order Tracking section.
           </Typography>
         </AccordionDetails>
@@ -261,7 +259,7 @@ export default function faqsbody() {
           aria-controls="panel1-content"
           id="panel1-header"
         >
-          <Typography component="span" className="py-3"><span className='faqs-span'>I'm a beginner. Is it difficult to maintain a bonsai?</span></Typography>
+          <Typography component="span" className="py-3"><span className='faqs-span'>I&apos;m a beginner. Is it difficult to maintain a bonsai?</span></Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
@@ -361,7 +359,7 @@ export default function faqsbody() {
         <AccordionDetails>
           <Typography>
             After purchasing and receiving your product, you can leave a review by logging into your account, navigating to your order history,
-             and selecting the 'Write a Review' option next to the product.
+             and selecting the &apos;Write a Review&apos; option next to the product.
           </Typography>
         </AccordionDetails>
       </Accordion>
