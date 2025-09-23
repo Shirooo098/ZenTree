@@ -15,17 +15,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useRef } from "react";
 import { useForm } from "react-hook-form"
-import {
-    ImageKitAbortError,
-    ImageKitInvalidRequestError,
-    ImageKitServerError,
-    ImageKitUploadNetworkError,
-    upload,
-} from "@imagekit/next";
+import { upload } from "@imagekit/next";
 import { imageUploadAuthenticator } from "@/app/actions/product/image-authenticator.action";
 import { ProductSchema, productSchema } from "@/app/types/schema";
-import { createProductAction } from "@/app/actions/product/create-product.action";
+import { catchImageKitError, createProductAction } from "@/app/actions/product/create-product.action";
 import { toast } from "sonner";
+import { redirect } from "next/navigation";
 
 
 
@@ -62,8 +57,6 @@ export default function UploadProductForm(){
     })
 
     const onSubmit = async (values: ProductSchema) => {
-        console.log(values);
-
         const fileInput = fileInputRef.current;
         if(!fileInput || !fileInput.files || fileInput.files.length === 0){
             alert("Please select a file to upload.");
@@ -91,8 +84,7 @@ export default function UploadProductForm(){
                 publicKey,
                 file,
                 fileName: file.name, // Optionally set a custom file name
-                // Progress callback to update upload progress state
-               
+                // Progress callback to update upload progress state       
                 // Abort signal to allow cancellation of the upload if needed.
                 abortSignal: abortController.signal,
             });
@@ -102,7 +94,7 @@ export default function UploadProductForm(){
 
             console.log("Upload response:", uploadResponse);
 
-            const saveMetadataRes = await fetch("/api/save-metadata", {
+            const saveMetadataRes = await fetch("/api/admin/save-metadata", {
                 method: "POST",
                 headers: { "Content-Type" : "application/json" },
                 body: JSON.stringify({ fileId, url })
@@ -133,18 +125,10 @@ export default function UploadProductForm(){
                 toast(createProductRes.message)
             }
 
+            redirect("/admin/products");
+
         } catch (error) {
-            if (error instanceof ImageKitAbortError) {
-                console.error("Upload aborted:", error.reason);
-            } else if (error instanceof ImageKitInvalidRequestError) {
-                console.error("Invalid request:", error.message);
-            } else if (error instanceof ImageKitUploadNetworkError) {
-                console.error("Network error:", error.message);
-            } else if (error instanceof ImageKitServerError) {
-                console.error("Server error:", error.message);
-            } else {
-                console.error("Upload error:", error);
-            }
+            catchImageKitError(error as Error);
         }
     }
 

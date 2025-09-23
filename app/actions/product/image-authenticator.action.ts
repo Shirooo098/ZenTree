@@ -1,7 +1,7 @@
 export const imageUploadAuthenticator = async () => {
     try {
         // Perform the request to the upload authentication endpoint.
-        const response = await fetch("/api/upload-auth");
+        const response = await fetch("/api/admin/upload-auth");
         if (!response.ok) {
             // If the server response is not successful, extract the error text for debugging.
             const errorText = await response.text();
