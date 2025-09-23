@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 import { auth } from "../lib/auth";
 import { redirect } from "next/navigation";
 import { SiteHeader } from "@/components/site-header";
-import { SessionProvider } from "@/context/session-provider";
+import { TanstackProvider } from "@/context/tanstack-provider";
 
  
 export default async function Layout({ children }: { children: React.ReactNode }) {
@@ -19,7 +19,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
   
       
   return (
-    <SessionProvider value={session}>
+    <TanstackProvider value={session}>
          <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
         <SidebarProvider
             style={
@@ -43,7 +43,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
             </SidebarInset>
         </SidebarProvider>
     </div>
-    </SessionProvider>
+    </TanstackProvider>
   );
 }
 

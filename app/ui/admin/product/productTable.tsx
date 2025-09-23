@@ -1,22 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 import TableUI from "@/components/ui/table-ui";
-import { Trash2, Pen, Users } from "lucide-react";
-import Image from 'next/image';
+import {  Users } from "lucide-react";
+import { Image, ImageKitProvider } from '@imagekit/next';
 import { EditProductDialog } from "./dialog/EditDialog";
 import { AlertDeleteProductDialog } from "./dialog/AlertDeleteDialog";
-
-export interface ProductProps {
-    product_id: number,
-    category_id: number | null,
-    product_img: string,
-    product_name: string,
-    product_price: number, 
-    product_description: string,
-    stock: number,
-}
-
-
+import { ProductProps } from "@/app/types/definition";
 
 const ProductsTable = ({
     bonsaiProductsData
@@ -26,42 +15,55 @@ const ProductsTable = ({
 
     const tableHeads = [
         "Product ID", 
-        "Category_id", 
+        "Category", 
         "Image", 
         "Name", 
+        "Size",
+        "Age",
+        "Bonsai Care Level",
         "Description", 
         "Price", 
         "Stock",
         "Action"
     ];
     const displayTableRow = (bonsai: ProductProps) => (
-        <TableRow key={bonsai.product_id} className="h-[100px]">
+        <TableRow key={bonsai.id} className="h-[100px]">
             <TableCell className="font-medium">
-                <span>{bonsai.product_id}</span>
+                <span>{bonsai.id}</span>
             </TableCell>
             <TableCell className="font-medium">
-                <span>{bonsai.category_id}</span>
+                <span>{bonsai.bonsaiCategory}</span>
             </TableCell>
             <TableCell className="flex justify-center p-4">
                 <div className="relative size-[80px] flex justify-center items-center gap-2">
+                  <ImageKitProvider urlEndpoint={bonsai.image_url}>
                     <Image 
-                        src={bonsai.product_img}
-                        alt={bonsai.product_name}
-                        fill
-                        className="object-contain size-full"
-                    />
-                
+                          src={bonsai.image_url}
+                          alt={bonsai.name}
+                          fill
+                          className="object-contain"
+                      />
+                  </ImageKitProvider>
                 </div>
             </TableCell>
             <TableCell className="p-4 w-[20px]">
-                {bonsai.product_name}
+                {bonsai.name}
+            </TableCell>
+            <TableCell className="p-4 w-[20px]">
+                {bonsai.size}
+            </TableCell>
+            <TableCell className="p-4 w-[20px]">
+                {bonsai.bonsaiAge}
+            </TableCell>
+            <TableCell className="p-4 w-[20px]">
+                {bonsai.bonsaiCareLevel}
             </TableCell>
             <TableCell className="p-4 max-w-[50px]">
-                <span className="text-left truncate block">{bonsai.product_description}</span>
+                <span className="text-left truncate block">{bonsai.description}</span>
             </TableCell>
             <TableCell>
                 <span>
-                    {`₱${bonsai.product_price}`}
+                    {`₱${bonsai.price}`}
                 </span>
             </TableCell>
             <TableCell className="p-4">
@@ -89,41 +91,53 @@ const ProductsTable = ({
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 lg:hidden">
         {bonsaiProductsData.map((bonsai) => (
-          <div key={bonsai.product_id} className="border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex justify-between">
-                
-                    <div className="w-full flex items-start gap-2">
-                        <h3>Product ID:</h3>
-                        <span>{bonsai.product_id}</span>
-                    </div>
-
-
-                    <div className="w-full flex items-start gap-2">
-                        <h3>Category ID:</h3>
-                        <span>{bonsai.category_id}</span>
-                    </div>
-
-            </div>
-          
-
-            <div className="relative flex items-center gap-2 mb-3">
-                <Image 
-                    src={bonsai.product_img}
-                    alt={bonsai.product_name}
-                    fill
-                    className="object-contain"
-                />
+          <div key={bonsai.id} className="border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+            <div className="relative h-48 flex flex-col items-center mb-3">
+                <ImageKitProvider urlEndpoint={bonsai.image_url}>
+                  <Image 
+                        src={bonsai.image_url}
+                        alt={bonsai.name}
+                        fill
+                        className="object-contain"
+                    />
+                </ImageKitProvider>
             </div>
             
-            <div className="grid grid-cols-2 gap-3 mb-4">
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="w-1/2 flex items-start gap-2">
+                  <h3>Product ID:</h3>
+                  <span>{bonsai.id}</span>
+              </div>
+
+
+              <div className="w-1/2 flex items-start gap-2">
+                  <h3>Category:</h3>
+                  <span>{bonsai.category}</span>
+              </div>
+            </div>
+       
+            <div className="grid grid-cols-2 gap-3 my-4">
               <div>
                 <p className="text-xs text-muted-foreground">Name</p>
-                <p className="font-medium">{bonsai.product_name}</p>
+                <p className="font-medium">{bonsai.name}</p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground">Size</p>
+                <p className="font-medium">{bonsai.size}</p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground">Age</p>
+                <p className="font-medium">{bonsai.bonsaiAge}</p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground">Care Level</p>
+                <p className="font-medium">{bonsai.bonsaiCareLevel}</p>
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Price</p>
                 <div className="flex items-center gap-1">
-                  <span className="font-bold">{bonsai.product_price}</span>
+                  <span className="font-bold">{bonsai.price}</span>
                 </div>
               </div>
               <div className="col-span-2">

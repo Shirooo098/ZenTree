@@ -170,8 +170,8 @@ export default function UploadProductForm(){
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    <SelectItem value="bonsai">Bonsai</SelectItem>
-                                    <SelectItem value="accessories">Accessecories</SelectItem>
+                                    <SelectItem value="Bonsai">Bonsai</SelectItem>
+                                    <SelectItem value="Accessories">Accessecories</SelectItem>
                                 </SelectContent>
                             </Select>
                             <FormMessage />
@@ -209,11 +209,11 @@ export default function UploadProductForm(){
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
-                                        <SelectItem value="formal upright">Formal Upright</SelectItem>
-                                        <SelectItem value="informal upright">Inform Upright</SelectItem>
-                                        <SelectItem value="slanting">Slanting</SelectItem>
-                                        <SelectItem value="cascade">Cascade</SelectItem>
-                                        <SelectItem value="Semi-cascade">Semi-Cascade</SelectItem>
+                                        <SelectItem value="Formal Upright">Formal Upright</SelectItem>
+                                        <SelectItem value="Informal Upright">Informal Upright</SelectItem>
+                                        <SelectItem value="Slanting">Slanting</SelectItem>
+                                        <SelectItem value="Cascade">Cascade</SelectItem>
+                                        <SelectItem value="Semi-Cascade">Semi-Cascade</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />
@@ -262,9 +262,9 @@ export default function UploadProductForm(){
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    <SelectItem value="beginner">Beginner</SelectItem>
-                                    <SelectItem value="intermmediate">Intermediate</SelectItem>
-                                    <SelectItem value="advanced">Advanced</SelectItem>
+                                    <SelectItem value="Beginner">Beginner</SelectItem>
+                                    <SelectItem value="Intermmediate">Intermediate</SelectItem>
+                                    <SelectItem value="Advanced">Advanced</SelectItem>
                                 </SelectContent>
                             </Select>
                             <FormMessage />

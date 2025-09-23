@@ -67,8 +67,8 @@ export type EditProfileState = {
     message?: string | null
 }
 
-export type Products = {
-    id: string,
+export type ProductProps = {
+    id: number,
     image_id: number,
     image_url: string,
     name: string,
@@ -78,6 +78,6 @@ export type Products = {
     bonsaiCategory: string,
     bonsaiAge: string,
     bonsaiCareLevel: string,
-    stock: string, 
+    stock: number, 
     description: string,
 }

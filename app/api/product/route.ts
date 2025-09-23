@@ -18,7 +18,8 @@ export async function GET(){
                 bonsaiCareLevel: products.bonsai_care_level,
                 description: products.product_desc,
                 stock: products.stock,
-                imageUrl: imageKit_productFiles.product_image_url,
+                image_url: imageKit_productFiles.product_image_url,
+                image_id: imageKit_productFiles.id,
             })
             .from(products)
             .leftJoin(
