@@ -1,14 +1,20 @@
-Nodemailer
- - Create Template
-Verify Email
- - `emailVerification`
- - Handle Error 
- - sendVerificationEmail
- - Handle Login Page Not Verified
+Authentication 
+ - Add a Role-based access control
+ - Create a staff role that do not have an access to delete
 
-Suspense 
- - Create a skeleton
- - Handle Suspense loading for page contents
+Products 
+ - Editable/Deletable products
+ - Display products from datatable in products client page
+ - Create slug for products
+ - Add to cart 
 
- Product Catalog
-  - 
+Order History Tracking
+ - Viewable add to cart history
+ - Tracks product's purchase 
+
+Order Management 
+ - View all customer order
+ - View customer order's detail
+ - Update Order Status Process/Pending/Cancelled/Delivered
+ - Print invoices
+ - Manage return/refund
