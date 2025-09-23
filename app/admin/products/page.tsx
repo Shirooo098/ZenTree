@@ -1,5 +1,5 @@
 import ProductsTable from "@/app/ui/admin/product/productTable";
-import { bonsaiProductsProps } from "./definition";
+import { bonsaiProductsProps } from "./placeholder";
 import Button from "@/app/ui/button";
 import { Plus } from 'lucide-react';
 import { DMSans, ManRope } from "@/app/ui/fonts";
