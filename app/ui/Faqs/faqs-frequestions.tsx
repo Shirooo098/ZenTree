@@ -5,27 +5,27 @@ export default function faqsfrequestions() {
       <div className="flex flex-col text-center items-center ">
 
          <div>
-            <h1>Still Have Questions</h1>
+            <h1 className="text-2xl pb-3 ">Still Have Questions</h1>
          </div>
 
          <div>
-            <p>Our bonsai experts are here to help you with personalized advice and solutions.</p>
+            <p className="text-sm pb-5 text-gray-500">Our bonsai experts are here to help you with personalized advice and solutions.</p>
          </div>
 
       </div>
 
-      <div className="flex flex-row content-around justify-center">
+         <div className="flex justify-center items-center">
+            <div className="flex flex-row space-x-12">
+                  <button className="px-4 py-2 rounded-[10px] bg-army-brown text-white px-5 text-sm">
+                     Contact Support
+                  </button>
 
-
-         <div>
-            <button>Contact Support</button>
+                  <button className="px-4 py-2 rounded-[10px] border border-gray-300 text-sm">
+                     Browse Bonsai Collection
+                  </button>
+            </div>
          </div>
 
-         <div>
-            <button>Browse Bonsai Collection</button>
-         </div>
-      
-      </div>
  </>
 
    )
