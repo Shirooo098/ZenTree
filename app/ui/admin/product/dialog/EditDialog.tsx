@@ -16,10 +16,10 @@ import { Pen } from "lucide-react"
 export function EditProductDialog() {
   return (
     <Dialog>
-      <form>
         <DialogTrigger asChild>
-            <Button variant="outline" className="cursor-pointer">
+            <Button variant="outline" className="flex-1 cursor-pointer">
                 <Pen/>
+                Edit
             </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
@@ -47,7 +47,7 @@ export function EditProductDialog() {
             <Button type="submit" className="bg-dark-brown">Save changes</Button>
           </DialogFooter>
         </DialogContent>
-      </form>
+
     </Dialog>
   )
 }

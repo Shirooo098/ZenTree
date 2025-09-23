@@ -16,8 +16,9 @@ export function AlertDeleteProductDialog() {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-            <Button variant="destructive" className="cursor-pointer">
+            <Button variant="destructive" className="flex-1 cursor-pointer hover:bg-red-700">
                 <Trash2 />
+                Delete
             </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

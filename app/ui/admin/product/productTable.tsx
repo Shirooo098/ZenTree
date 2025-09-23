@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 import TableUI from "@/components/ui/table-ui";
-import {  Users } from "lucide-react";
+import {  ChartLine  } from "lucide-react";
 import { Image, ImageKitProvider } from '@imagekit/next';
 import { EditProductDialog } from "./dialog/EditDialog";
 import { AlertDeleteProductDialog } from "./dialog/AlertDeleteDialog";
@@ -92,7 +92,16 @@ const ProductsTable = ({
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 lg:hidden">
         {bonsaiProductsData.map((bonsai) => (
           <div key={bonsai.id} className="border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-            <div className="relative h-48 flex flex-col items-center mb-3">
+            <div className="">
+              <div className="w-1/2 flex flex-col items-start">
+                <p className="font-medium">{bonsai.name}</p>
+              </div>
+              <div className="w-1/2 flex items-start">
+                  <p className="text-sm text-muted-foreground">Product ID: {bonsai.id}</p>
+              </div>
+            </div>
+
+            <div className="relative h-48 flex flex-col items-center my-3">
                 <ImageKitProvider urlEndpoint={bonsai.image_url}>
                   <Image 
                         src={bonsai.image_url}
@@ -102,25 +111,11 @@ const ProductsTable = ({
                     />
                 </ImageKitProvider>
             </div>
-            
-
-            <div className="grid grid-cols-2 gap-3">
-              <div className="w-1/2 flex items-start gap-2">
-                  <h3>Product ID:</h3>
-                  <span>{bonsai.id}</span>
-              </div>
-
-
-              <div className="w-1/2 flex items-start gap-2">
-                  <h3>Category:</h3>
-                  <span>{bonsai.category}</span>
-              </div>
-            </div>
-       
+ 
             <div className="grid grid-cols-2 gap-3 my-4">
-              <div>
-                <p className="text-xs text-muted-foreground">Name</p>
-                <p className="font-medium">{bonsai.name}</p>
+              <div className="w-1/2 flex flex-col items-start">
+                <p className="text-xs text-muted-foreground">Category</p>
+                <span>{bonsai.category}</span>
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Size</p>
@@ -140,18 +135,18 @@ const ProductsTable = ({
                   <span className="font-bold">{bonsai.price}</span>
                 </div>
               </div>
-              <div className="col-span-2">
+              <div>
                 <p className="text-xs text-muted-foreground">Stock</p>
                 <div className="flex items-center gap-2">
-                  <Users className="h-4 w-4 text-muted-foreground" />
+                  <ChartLine  className="h-4 w-4 text-s" />
                   <span>{bonsai.stock}</span>
                 </div>
               </div>
             </div>
             
-            <div className="flex gap-2 pt-3 border-t">
-              <Button variant="outline" className="flex-1 rounded-sm">View</Button>
-              <Button variant="outline" className="flex-1 rounded-sm">Edit</Button>
+           <div className="flex gap-2">
+                  <EditProductDialog />
+                  <AlertDeleteProductDialog />
             </div>
           </div>
         ))}
