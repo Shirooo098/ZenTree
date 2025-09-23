@@ -3,7 +3,6 @@
 import { productSchema } from "@/app/types/schema";
 import { db } from "@/db/drizzle";
 import { products } from "@/db/schema";
-import { ImageKitAbortError, ImageKitInvalidRequestError, ImageKitServerError, ImageKitUploadNetworkError } from "@imagekit/next";
 import z from "zod";
 
 export async function createProductAction(formData: FormData){
@@ -62,8 +61,6 @@ export async function createProductAction(formData: FormData){
                 stock: stock
             });
 
-            
-
             return{
                 message: "Product Created Successfully."
             }
@@ -72,19 +69,5 @@ export async function createProductAction(formData: FormData){
         return{
             message: 'Database Error: Failed to upload product.'
         }
-    }
-}
-
-export const catchImageKitError = (error: Error) => {
-    if (error instanceof ImageKitAbortError) {
-        console.error("Upload aborted:", error.reason);
-    } else if (error instanceof ImageKitInvalidRequestError) {
-        console.error("Invalid request:", error.message);
-    } else if (error instanceof ImageKitUploadNetworkError) {
-        console.error("Network error:", error.message);
-    } else if (error instanceof ImageKitServerError) {
-        console.error("Server error:", error.message);
-    } else {
-        console.error("Upload error:", error);
     }
 }

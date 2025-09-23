@@ -1,3 +1,5 @@
+import { ImageKitAbortError, ImageKitInvalidRequestError, ImageKitServerError, ImageKitUploadNetworkError } from "@imagekit/next";
+
 export const imageUploadAuthenticator = async () => {
     try {
         // Perform the request to the upload authentication endpoint.
@@ -18,3 +20,17 @@ export const imageUploadAuthenticator = async () => {
         throw new Error("Authentication request failed");
     }
 };
+
+export function catchImageKitError(error: Error) {
+    if (error instanceof ImageKitAbortError) {
+        console.error("Upload aborted:", error);
+    } else if (error instanceof ImageKitInvalidRequestError) {
+        console.error("Invalid request:", error);
+    } else if (error instanceof ImageKitUploadNetworkError) {
+        console.error("Network error:", error);
+    } else if (error instanceof ImageKitServerError) {
+        console.error("Server error:", error);
+    } else {
+        console.error("Upload error:", error);
+    }
+}

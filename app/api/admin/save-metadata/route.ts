@@ -1,4 +1,4 @@
-// /api/save-metadata/route.ts
+
 import { auth } from "@/app/lib/auth";
 import { db } from "@/db/drizzle";
 import { imageKit_productFiles } from "@/db/schema";

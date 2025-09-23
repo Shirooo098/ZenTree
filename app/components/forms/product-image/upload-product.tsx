@@ -15,10 +15,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useRef } from "react";
 import { useForm } from "react-hook-form"
-import { upload } from "@imagekit/next";
-import { imageUploadAuthenticator } from "@/app/actions/product/image-authenticator.action";
+import { ImageKitAbortError, ImageKitInvalidRequestError, ImageKitServerError, ImageKitUploadNetworkError, upload } from "@imagekit/next";
+import { catchImageKitError, imageUploadAuthenticator } from "@/app/actions/product/image-authenticator.action";
 import { ProductSchema, productSchema } from "@/app/types/schema";
-import { catchImageKitError, createProductAction } from "@/app/actions/product/create-product.action";
+import { createProductAction } from "@/app/actions/product/create-product.action";
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
 
@@ -92,13 +92,12 @@ export default function UploadProductForm(){
             const fileId = uploadResponse.fileId;
             const url = uploadResponse.url;
 
-            console.log("Upload response:", uploadResponse);
-
             const saveMetadataRes = await fetch("/api/admin/save-metadata", {
                 method: "POST",
                 headers: { "Content-Type" : "application/json" },
                 body: JSON.stringify({ fileId, url })
             })
+
             const saveMetadata = await saveMetadataRes.json();
             if (!saveMetadata.success) {
                 console.error("Failed to save metadata");
@@ -128,7 +127,7 @@ export default function UploadProductForm(){
             redirect("/admin/products");
 
         } catch (error) {
-            catchImageKitError(error as Error);
+            catchImageKitError(error as Error)
         }
     }
 
