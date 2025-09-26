@@ -12,7 +12,7 @@ export const productSchema = z.object({
     productPrice: z.number().min(0, "Price must be non-negative"),
     stock: z.number().min(0, "Stock must be non-negative"),
     productDescription: z.string().min(1, "Description is required"),
-    imageProduct: z.instanceof(File).optional(), // Made optional
+    imageProduct: z.instanceof(File).optional().nullable(),
 });
 
 export type ProductSchema = z.infer<typeof productSchema>;

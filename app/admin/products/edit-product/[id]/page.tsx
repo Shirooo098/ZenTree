@@ -10,6 +10,7 @@ export default function EditProduct({params}: {params: Promise<{ id: string }>})
 
     const {data: product, isLoading} = useProductId(productId);
 
+    console.log(product)
     return(
         <div className="">
             <h3>Edit Product ID: {`${productId}`}</h3>

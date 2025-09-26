@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectTrigger, SelectItem, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Progress } from "@/components/ui/progress";
 import { useProductForm } from "@/app/hooks/useProductForm";
 import { ProductProps } from "@/app/types/definition";
@@ -32,7 +32,7 @@ export default function ProductForm({
     productId,
     isLoading = false
 }: ProductFormProps){
-    const getInitialFormData = (): ProductSchema | undefined => {
+    const getInitialFormData = useCallback((): ProductSchema | undefined => {
         if (!productData) return undefined;
         
         return {
@@ -47,7 +47,7 @@ export default function ProductForm({
             productDescription: productData.description || "",
             imageProduct: undefined,
         };
-    };
+    }, [productData]);
 
     const {
         form,
@@ -70,7 +70,7 @@ export default function ProductForm({
                 form.reset(formData);
             }
         }
-    }, [mode, productData, form]);
+    }, [form, getInitialFormData, mode, productData]);
 
     if(mode === "edit" && isLoading) {
         return (
@@ -92,7 +92,10 @@ export default function ProductForm({
                         <FormItem>
                             <FormLabel>Product Name</FormLabel>
                             <FormControl>
-                                <Input placeholder="Product Name..." {...field}/>
+                                <Input 
+                                placeholder="Product Name..." 
+                                disabled={mode === "edit"}
+                                {...field}/>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -107,7 +110,8 @@ export default function ProductForm({
                             <FormLabel>Product Category</FormLabel>
                             <Select 
                                 onValueChange={field.onChange}
-                                defaultValue={field.value}>
+                                defaultValue={productData?.category}
+                                disabled={mode === "edit"}>
                                 <FormControl className="w-full">
                                     <SelectTrigger>
                                         <SelectValue placeholder="Select a Category" />
@@ -180,9 +184,9 @@ export default function ProductForm({
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
-                                        <SelectItem value="young">Young</SelectItem>
-                                        <SelectItem value="aged">Aged</SelectItem>
-                                        <SelectItem value="mature">Mature</SelectItem>
+                                        <SelectItem value="Young">Young</SelectItem>
+                                        <SelectItem value="Aged">Aged</SelectItem>
+                                        <SelectItem value="Mature">Mature</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />
@@ -268,10 +272,16 @@ export default function ProductForm({
                                 <Input 
                                     type="file"
                                     accept="image/png, image/jpeg"
+                                    disabled={mode === "edit"}
                                     ref={fileInputRef}
                                     onChange={(e) => handleImageChange(e, field)}
                                 />
                             </FormControl>
+                            {mode === "edit" && productData?.image_url && (
+                                <span className="text-sm text-gray-500">
+                                    Current: {productData.image_url}
+                                </span>
+                            )}
                             <FormMessage />
                         </FormItem>
                     )}
@@ -294,7 +304,9 @@ export default function ProductForm({
                     )}
                 />
 
-                <Button type="submit">Submit</Button>
+                <Button disabled={isSubmitting} size="lg" type="submit" className="cursor-pointer float-right">
+                    {isSubmitting ? <Loader /> : "Submit"}
+                </Button>
 
             </form>
         </Form>

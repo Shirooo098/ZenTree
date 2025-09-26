@@ -2,7 +2,6 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import TableUI from "@/components/ui/table-ui";
 import {  ChartLine  } from "lucide-react";
 import { Image, ImageKitProvider } from '@imagekit/next';
-import { EditProductDialog } from "./dialog/EditDialog";
 import { AlertDeleteProductDialog } from "./dialog/AlertDeleteDialog";
 import { ProductProps } from "@/app/types/definition";
 import Link from "next/link";

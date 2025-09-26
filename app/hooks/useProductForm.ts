@@ -8,6 +8,7 @@ import { catchImageKitError, imageUploadAuthenticator } from "@/app/actions/prod
 import { createProductAction } from "@/app/actions/product/create-product.action";
 import { ProductSchema, productSchema } from "@/app/types/schema";
 import { ProductProps } from "../types/definition";
+import { editProductAction } from "../actions/product/edit-product.action";
 
 interface UseProductFormProps {
     mode: 'add' | 'edit';
@@ -155,7 +156,7 @@ export const useProductForm = ({ mode, productId, productData, initialData }: Us
                 // You'll need to create an updateProductAction
                 // result = await updateProductAction(formData);
                 // For now, using the same action - you may need to modify this
-                result = await createProductAction(formData);
+                result = await editProductAction(formData);
             }
 
             if (result.message) {
