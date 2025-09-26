@@ -35,7 +35,7 @@ const ProductsTable = ({
             <TableCell className="font-medium">
                 <span>{bonsai.bonsaiCategory}</span>
             </TableCell>
-            <TableCell className="flex justify-center p-4">
+            <TableCell className="flex justify-center p-2">
                 <div className="relative size-[80px] flex justify-center items-center gap-2">
                   <ImageKitProvider urlEndpoint={bonsai.image_url}>
                     <Image 
@@ -47,19 +47,19 @@ const ProductsTable = ({
                   </ImageKitProvider>
                 </div>
             </TableCell>
-            <TableCell className="p-4 w-[20px]">
+            <TableCell className="p-2 w-[20px]">
                 {bonsai.name}
             </TableCell>
-            <TableCell className="p-4 w-[20px]">
+            <TableCell className="p-2 w-[20px]">
                 {bonsai.size}
             </TableCell>
-            <TableCell className="p-4 w-[20px]">
+            <TableCell className="p-2 w-[20px]">
                 {bonsai.bonsaiAge}
             </TableCell>
-            <TableCell className="p-4 w-[20px]">
+            <TableCell className="p-2 w-[20px]">
                 {bonsai.bonsaiCareLevel}
             </TableCell>
-            <TableCell className="p-4 max-w-[50px]">
+            <TableCell className="p-2 max-w-[50px]">
                 <span className="text-left truncate block">{bonsai.description}</span>
             </TableCell>
             <TableCell>
@@ -67,17 +67,19 @@ const ProductsTable = ({
                     {`₱${bonsai.price}`}
                 </span>
             </TableCell>
-            <TableCell className="p-4">
+            <TableCell className="p-2">
                     {bonsai.stock}
             </TableCell>
-            <TableCell className="p-4">
+            <TableCell className="p-2">
                 <div className="flex justify-center items-center gap-2">
                   <Link href={`/admin/products/edit-product/${bonsai.id}`}>
-                    <Button variant='outline' className="flex-1 cursor-pointer">
+                    <Button variant='outline' className="w-auto shrink-0 cursor-pointer">
                       <Pen />Edit
                     </Button>
                   </Link>
-                  <AlertDeleteProductDialog productId={bonsai.id}/>
+                  <div className="shrink-0">
+                     <AlertDeleteProductDialog productId={bonsai.id}/>
+                  </div>
                 </div>
             </TableCell>
         </TableRow>
@@ -150,12 +152,16 @@ const ProductsTable = ({
             </div>
             
            <div className="flex gap-2">
-                  <Link href={`/admin/products/edit-product/${bonsai.id}`}>
-                    <Button variant='outline' className="flex-1 cursor-pointer">
+              <div className="flex-1">
+                 <Link href={`/admin/products/edit-product/${bonsai.id}`}>
+                    <Button variant='outline' className="w-full">
                       <Pen />Edit
                     </Button>
                   </Link>
-                  <AlertDeleteProductDialog productId={bonsai.id}/>
+              </div>
+              <div className="flex-1">
+                <AlertDeleteProductDialog productId={bonsai.id}/>
+              </div>
             </div>
           </div>
         ))}
