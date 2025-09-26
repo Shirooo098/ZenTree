@@ -1,6 +1,7 @@
 import { ProductProps } from "@/app/types/definition";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 
+
 const fetchAllProducts = async () : Promise<Array<ProductProps>> => {
     const response = await fetch('/api/admin/product');
     const result = await response.json();
@@ -33,4 +34,14 @@ export const useProductId = (
         enabled: !!productId,
         ...options
     })
+}
+
+export const deleteProduct = async(productId: number) => {
+    const response = await fetch(`/api/admin/product/${productId}`, {
+        method: "DELETE"
+    });
+
+    if(!response.ok) throw new Error("Failed to delete product.");
+
+    return response.json();
 }

@@ -1,3 +1,6 @@
+"use client"
+
+import { deleteProduct } from "@/app/lib/query/admin/product-data"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,8 +14,16 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { Trash2 } from "lucide-react"
+import { useRouter } from "next/navigation"
 
-export function AlertDeleteProductDialog() {
+export function AlertDeleteProductDialog({productId }: {productId: number}) {
+  const router = useRouter();
+
+  const handleDelete = async() => {
+    await deleteProduct(productId);
+    router.refresh()
+  }
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -31,7 +42,7 @@ export function AlertDeleteProductDialog() {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+            <AlertDialogAction onClick={handleDelete}>Continue</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

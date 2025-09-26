@@ -77,7 +77,7 @@ const ProductsTable = ({
                       <Pen />Edit
                     </Button>
                   </Link>
-                  <AlertDeleteProductDialog />
+                  <AlertDeleteProductDialog productId={bonsai.id}/>
                 </div>
             </TableCell>
         </TableRow>
@@ -155,7 +155,7 @@ const ProductsTable = ({
                       <Pen />Edit
                     </Button>
                   </Link>
-                  <AlertDeleteProductDialog />
+                  <AlertDeleteProductDialog productId={bonsai.id}/>
             </div>
           </div>
         ))}
