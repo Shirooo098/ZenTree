@@ -12,133 +12,74 @@ import {
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectTrigger, SelectItem, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useRef, useState } from "react";
-import { useForm } from "react-hook-form"
-import { upload } from "@imagekit/next";
-import { catchImageKitError, imageUploadAuthenticator } from "@/app/actions/product/image-authenticator.action";
-import { ProductSchema, productSchema } from "@/app/types/schema";
-import { createProductAction } from "@/app/actions/product/create-product.action";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
 import { Progress } from "@/components/ui/progress";
+import { useProductForm } from "@/app/hooks/useProductForm";
+import { ProductProps } from "@/app/types/definition";
+import { ProductSchema } from "@/app/types/schema";
+import { Loader } from "../../loader/loader";
 
-export default function UploadProductForm(){
-    const router = useRouter();
-    const [progress, setProgress] = useState(0);
-    const fileInputRef = useRef<HTMLInputElement>(null);
-    const abortController = new AbortController();
+interface ProductFormProps {
+    mode: 'add' | 'edit',
+    productData?: ProductProps,
+    productId?: number,
+    isLoading?: boolean
+}
 
-    const fields = [
-        "productCategory",
-        "productName",
-        "size",
-        "bonsaiCategory",
-        "bonsaiAge",
-        "bonsaiCareLevel",
-        "productPrice",
-        "stock",
-        "productDescription",
-    ] as const;
+export default function ProductForm({
+    mode,
+    productData,
+    productId,
+    isLoading = false
+}: ProductFormProps){
+    const getInitialFormData = (): ProductSchema | undefined => {
+        if (!productData) return undefined;
+        
+        return {
+            productCategory: productData.category || "",
+            productName: productData.name || "",
+            size: productData.size || "",
+            bonsaiCategory: productData.bonsaiCategory || "",
+            bonsaiAge: productData.bonsaiAge || "",
+            bonsaiCareLevel: productData.bonsaiCareLevel || "",
+            productPrice: productData.price || 0,
+            stock: productData.stock || 0,
+            productDescription: productData.description || "",
+            imageProduct: undefined,
+        };
+    };
 
-    const form = useForm<ProductSchema>({
-        resolver: zodResolver(productSchema),
-        defaultValues: {
-            productCategory: "",
-            productName: "",
-            size: "",
-            bonsaiCategory: "",
-            bonsaiAge: "",
-            bonsaiCareLevel: "",
-            productPrice: 0,
-            stock: 0, 
-            productDescription: "",
-            imageProduct: undefined
-        }
-    })
+    const {
+        form,
+        onSubmit,
+        handleImageChange,
+        fileInputRef,
+        progress,
+        isSubmitting
+    } = useProductForm({
+        mode,
+        productId,
+        initialData: getInitialFormData()
+    });
 
-    const onSubmit = async (values: ProductSchema) => {
-        const fileInput = fileInputRef.current;
-        if(!fileInput || !fileInput.files || fileInput.files.length === 0){
-            alert("Please select a file to upload.");
-            return;
-        }
 
-        const file = fileInput.files[0];
-
-        let authParams;
-        try {
-            authParams = await imageUploadAuthenticator();
-        } catch (error) {
-            console.error("Failed to authenticate for upload:", error);
-            return;
-        }
-
-        const { signature, expire, token, publicKey } = authParams;
-
-        try {
-            const uploadResponse = await upload({
-                // Authentication parameters
-                expire,
-                token,
-                signature,
-                publicKey,
-                file,
-                fileName: file.name, // Optionally set a custom file name
-                // Progress callback to update upload progress state       
-                onProgress: (event) => {
-                    setProgress((event.loaded / event.total) * 100);
-                },
-                // Abort signal to allow cancellation of the upload if needed.
-                abortSignal: abortController.signal,
-            });
-
-            const fileId = uploadResponse.fileId;
-            const url = uploadResponse.url;
-
-            const saveMetadataRes = await fetch("/api/admin/save-metadata", {
-                method: "POST",
-                headers: { "Content-Type" : "application/json" },
-                body: JSON.stringify({ fileId, url })
-            })
-
-            const saveMetadata = await saveMetadataRes.json();
-            if (!saveMetadata.success) {
-                console.error("Failed to save metadata");
-                toast.error("Failed to save image metadata.");
-                return;
+    useEffect(() => {
+       if (mode === 'edit' && productData) {
+            const formData = getInitialFormData();
+            if (formData) {
+                form.reset(formData);
             }
-
-            const imageRecordId = saveMetadata.id;
-            const formData = new FormData();
-
-            fields.forEach((field) => {
-                const value = values[field];
-                if (value !== undefined && value !== null) {
-                    formData.append(field, String(value));
-                }
-            });
-
-            formData.append("imageProduct", file);
-            formData.append("imageRecordId", imageRecordId);
-
-            const createProductRes = await createProductAction(formData);
-
-            if(createProductRes.message){
-                toast(createProductRes.message)
-            }
-
-            router.push("/admin/products");
-        } catch (error) {
-            catchImageKitError(error as Error)
         }
+    }, [mode, productData, form]);
+
+    if(mode === "edit" && isLoading) {
+        return (
+            <div className="">
+                <Loader/>
+            </div>
+        )
     }
 
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, field:any) => {
-        if(e.target.files?.[0]){
-            field.onChange(e.target.files[0])
-        }
-    }
     return(
         <Form {...form}>
             <form

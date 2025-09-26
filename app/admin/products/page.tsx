@@ -11,7 +11,7 @@ import { Suspense } from "react";
 export default function Products(){
     const { data, isPending, isError, } = useAllProducts();
 
-    if(isPending) console.log("Pending", isPending);
+    if(isPending) return <InvoicesTableSkeleton/>
     if(isError) console.log("Error", isError);
 
     return(

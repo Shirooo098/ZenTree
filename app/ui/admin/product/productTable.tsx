@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 import TableUI from "@/components/ui/table-ui";
 import {  ChartLine  } from "lucide-react";
@@ -6,6 +5,9 @@ import { Image, ImageKitProvider } from '@imagekit/next';
 import { EditProductDialog } from "./dialog/EditDialog";
 import { AlertDeleteProductDialog } from "./dialog/AlertDeleteDialog";
 import { ProductProps } from "@/app/types/definition";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Pen } from "lucide-react"
 
 const ProductsTable = ({
     bonsaiProductsData
@@ -71,7 +73,11 @@ const ProductsTable = ({
             </TableCell>
             <TableCell className="p-4">
                 <div className="flex justify-center items-center gap-2">
-                  <EditProductDialog />
+                  <Link href={`/admin/products/edit-product/${bonsai.id}`}>
+                    <Button variant='outline' className="flex-1 cursor-pointer">
+                      <Pen />Edit
+                    </Button>
+                  </Link>
                   <AlertDeleteProductDialog />
                 </div>
             </TableCell>
@@ -145,7 +151,11 @@ const ProductsTable = ({
             </div>
             
            <div className="flex gap-2">
-                  <EditProductDialog />
+                  <Link href={`/admin/products/edit-product/${bonsai.id}`}>
+                    <Button variant='outline' className="flex-1 cursor-pointer">
+                      <Pen />Edit
+                    </Button>
+                  </Link>
                   <AlertDeleteProductDialog />
             </div>
           </div>

@@ -3,7 +3,6 @@
 import { productSchema } from "@/app/types/schema";
 import { db } from "@/db/drizzle";
 import { products } from "@/db/schema";
-import { redirect } from "next/navigation";
 import z from "zod";
 
 export async function createProductAction(formData: FormData){

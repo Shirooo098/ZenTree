@@ -1,11 +1,11 @@
 "use client"
 
-import UploadProductForm from "@/app/components/forms/product-image/upload-product";
+import ProductForm from "@/app/components/forms/product-form/ProductForm";
 
 export default function AddProduct(){
     return(
         <div className="">
-            <UploadProductForm />
+            <ProductForm mode="add" />
         </div>
     )
 }
