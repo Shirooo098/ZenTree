@@ -54,7 +54,7 @@ export type BonsaiProps = {
     style: string;
     price: number;
     age: string;
-    image: string;
+    imageUrl: string;
 };
 
 export type EditProfileState = {

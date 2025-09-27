@@ -4,10 +4,12 @@ import Search from "./Search";
 import StyleFilter from "./StyleFilter";
 import { bonsaiProducts } from "@/app/types/placeholder";
 import BonsaiProduct from "./BonsaiProduct";
-
-
+import { useAllProducts } from "@/app/lib/query/product-data";
+import { CardSkeleton } from "@/components/ui/skeleton/skeleton";
 
 export default function ProductShop() {
+  const { data, isLoading, isError} = useAllProducts("/api/user");
+
   const [filters, setFilters] = useState({
       size: "",
       price: "",
@@ -18,17 +20,21 @@ export default function ProductShop() {
   const [activeStyle, setActiveStyle] = useState("All Styles");
   const [sort, setSort] = useState("Featured");
 
+  if(isLoading) return <CardSkeleton />
+  if(isError) console.log("Error", isError);
 
-  let filteredProducts = bonsaiProducts.filter((p) => {
+  const products = data ?? [];
+
+  let filteredProducts = products.filter((p) => {
     let inPriceRange = true;
     if (filters.price === "9999-18999") inPriceRange = p.price >= 9999 && p.price <= 18999;
     if (filters.price === "18999-24999") inPriceRange = p.price >= 18999 && p.price <= 24999;
     if (filters.price === "24999-34999") inPriceRange = p.price >= 24999 && p.price <= 34999;
 
     return (
-      (filters.care ? p.care === filters.care : true) &&
-      (filters.age ? p.age === filters.age : true) &&
-      (activeStyle !== "All Styles" ? p.style === activeStyle : true) &&
+      (filters.care ? p.bonsaiCareLevel === filters.care : true) &&
+      (filters.age ? p.bonsaiAge === filters.age : true) &&
+      (activeStyle !== "All Styles" ? p.bonsaiCategory === activeStyle : true) &&
       inPriceRange &&
       (filters.query ? p.name.toLowerCase().includes(filters.query.toLowerCase()) : true)
     );
@@ -60,7 +66,7 @@ export default function ProductShop() {
 
         <div className="card-wrapper">
           <BonsaiProduct
-            products={filteredProducts}
+            productsData={filteredProducts}
           />
         </div>
       </div>

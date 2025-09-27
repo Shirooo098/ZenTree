@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import ProductsTable from "@/app/ui/admin/product/productTable";
 import Button from "@/app/ui/button";
@@ -9,9 +9,9 @@ import { InvoicesTableSkeleton } from "@/components/ui/skeleton/skeleton";
 import { Suspense } from "react";
 
 export default function Products(){
-    const { data, isPending, isError, } = useAllProducts("/api/admin");
+    const { data, isLoading, isError, } = useAllProducts("/api/admin");
 
-    if(isPending) return <InvoicesTableSkeleton/>
+    if(isLoading) return <InvoicesTableSkeleton/>
     if(isError) console.log("Error", isError);
 
     return(

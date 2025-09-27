@@ -15,22 +15,43 @@ export const useAllProducts = (urlPath: "/api/user" | "/api/admin") => {
     })
 }
 
-const fetchProductId = async(urlPath: string, productId: number): Promise<ProductProps> => {
-    const response = await fetch(`${urlPath}/product/${productId}`);
+
+const fetchAdminProductId = async(productId: number): Promise<ProductProps> => {
+    const response = await fetch(`/api/admin/product/${productId}`);
 
     if(!response) throw new Error(`Product with ${productId} not found.`);
+
 
     return response.json();
 }
 
 
-export const useProductId = (
-    urlPath: "/api/user" | "/api/admin",
+const fetchUserProductId = async(productId: number): Promise<ProductProps> => {
+    const response = await fetch(`/api/user/product/${productId}`);
+
+    if(!response) throw new Error(`Product with ${productId} not found.`);
+    const result = await response.json();
+    return result.productsData[0] as ProductProps;
+}
+
+export const useAdminProductId = (
     productId: number,
     options?: Partial<UseQueryOptions<ProductProps, Error>>) => {
     return useQuery({
         queryKey: ['product', productId],
-        queryFn: async () => await fetchProductId(urlPath, productId),
+        queryFn: async () => await fetchAdminProductId(productId),
+        enabled: !!productId,
+        ...options
+    })
+}
+
+
+export const useUserProductId = (
+    productId: number,
+    options?: Partial<UseQueryOptions<ProductProps, Error>>) => {
+    return useQuery({
+        queryKey: ['product', productId],
+        queryFn: async () => await fetchUserProductId(productId),
         enabled: !!productId,
         ...options
     })
