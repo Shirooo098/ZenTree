@@ -1,14 +1,12 @@
 "use client";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Search from "./Search";
 import StyleFilter from "./StyleFilter";
-import { bonsaiProducts } from "@/app/types/placeholder";
 import BonsaiProduct from "./BonsaiProduct";
 import { useAllProducts } from "@/app/lib/query/product-data";
 import { CardSkeleton } from "@/components/ui/skeleton/skeleton";
-
 export default function ProductShop() {
-  const { data, isLoading, isError} = useAllProducts("/api/user");
+  const { data, isError} = useAllProducts("/api/user");
 
   const [filters, setFilters] = useState({
       size: "",
@@ -20,7 +18,6 @@ export default function ProductShop() {
   const [activeStyle, setActiveStyle] = useState("All Styles");
   const [sort, setSort] = useState("Featured");
 
-  if(isLoading) return <CardSkeleton />
   if(isError) console.log("Error", isError);
 
   const products = data ?? [];
@@ -55,7 +52,7 @@ export default function ProductShop() {
         setActiveStyle={setActiveStyle}
         sort={sort}
         setSort={setSort}
-        total={bonsaiProducts.length}
+        total={products.length}
         showing={filteredProducts.length}
       />
 
@@ -65,9 +62,9 @@ export default function ProductShop() {
         </div>
 
         <div className="card-wrapper">
-          <BonsaiProduct
-            productsData={filteredProducts}
-          />
+            <Suspense fallback={<CardSkeleton/>}>
+              <BonsaiProduct productsData={filteredProducts}/>
+            </Suspense>
         </div>
       </div>
     </div>
