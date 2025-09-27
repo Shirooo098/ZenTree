@@ -1,7 +1,7 @@
 import { headers } from "next/headers";
 import { auth } from "../../../lib/auth";
 import { redirect } from "next/navigation";
-import EditProfile from "@/app/components/forms/edit-profile";
+import EditProfile from "@/app/components/forms/profile/edit-profile";
 import { Suspense } from "react";
 import { SkeletonProfile } from "@/components/ui/skeleton/skeleton";
 

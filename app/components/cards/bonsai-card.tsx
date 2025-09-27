@@ -1,8 +1,11 @@
+"use client";
+
 import { BonsaiProps } from "@/app/types/definition";
 import Image from 'next/image';
 import { Dot, Heart } from 'lucide-react'
 import { ManRope } from "@/app/ui/fonts";
 import Button from "@/app/ui/button";
+import { toast } from "sonner";
 
 const toggleHeart = (id: number) => {
     const heart = document.getElementById(`heart-${id}`) as HTMLElement;
@@ -18,6 +21,10 @@ const toggleHeart = (id: number) => {
         path.setAttribute("stroke", "red");
     }
 };
+
+    const addToCartNotif = () => {
+        toast('Product Added To Cart.');
+    }
 
 
 export default function BonsaiCard({
@@ -50,9 +57,9 @@ export default function BonsaiCard({
                 <Heart/>
             </span>
 
-            <div className={`${ManRope.className} p-4 capitalize `}>
+            <div className={`${ManRope.className} p-4 capitalize`}>
                 <div className="flex justify-between text-lg text-dark-brown">
-                    <h3>{name}</h3>
+                    <h3 className="truncate">{name}</h3>
                     <h3>₱{price.toLocaleString()}</h3>
                 </div>
 
@@ -65,7 +72,7 @@ export default function BonsaiCard({
                         <p>{age}</p>
                     </div>
 
-                    <Button variant="primary" size="md"  className="capitalize rounded-xs">Add to Cart</Button>
+                    <Button variant="primary" size="md"  className="capitalize rounded-xs" onClick={addToCartNotif}>Add to Cart</Button>
                 </div>
             </div>
         </div>

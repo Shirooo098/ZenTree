@@ -66,3 +66,18 @@ export type EditProfileState = {
     };
     message?: string | null
 }
+
+export type ProductProps = {
+    id: number,
+    image_id: number,
+    image_url: string,
+    name: string,
+    category: string,
+    price: number,
+    size: string,
+    bonsaiCategory: string,
+    bonsaiAge: string,
+    bonsaiCareLevel: string,
+    stock: number, 
+    description: string,
+}

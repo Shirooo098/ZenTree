@@ -2,7 +2,7 @@
 
 export default function ContactForm() {
   return (
-    <form className="bg-white p-6 rounded-lg shadow-md w-full max-w-md border border-purple-400 absolute top-1/2 right-100 -translate-y-1/2 z-15">
+    <form className="bg-white p-6 rounded-lg shadow-md w-full max-w-md border absolute  right-100 mt-48 z-15 h-1/2">
       <h3 className="text-lg font-semibold mb-4 text-center">
         Need help with your bonsai?
       </h3>
@@ -12,12 +12,12 @@ export default function ContactForm() {
         <input
           type="text"
           placeholder="First Name"
-          className="border-b border-gray-400 focus:outline-none p-2 text-sm"
+          className="border-b border-gray-400 focus:outline-none p-2 text-lg"
         />
         <input
           type="text"
           placeholder="Last Name"
-          className="border-b border-gray-400 focus:outline-none p-2 text-sm"
+          className="border-b border-gray-400 focus:outline-none p-2 text-lg"
         />
       </div>
 
@@ -26,12 +26,12 @@ export default function ContactForm() {
         <input
           type="email"
           placeholder="Email"
-          className="border-b border-gray-400 focus:outline-none p-2 text-sm"
+          className="border-b border-gray-400 focus:outline-none p-2 text-lg"
         />
         <input
           type="text"
           placeholder="Contact Number"
-          className="border-b border-gray-400 focus:outline-none p-2 text-sm"
+          className="border-b border-gray-400 focus:outline-none p-2 text-lg"
         />
       </div>
 
@@ -40,7 +40,7 @@ export default function ContactForm() {
         <textarea
           placeholder="Message"
           rows={5}
-          className="border-b border-gray-400 focus:outline-none p-2 w-full text-sm resize-none"
+          className="border-b border-gray-400 focus:outline-none p-2 w-full text-lg resize-none"
         />
       </div>
 

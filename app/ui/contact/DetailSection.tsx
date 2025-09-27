@@ -1,60 +1,58 @@
-import { MapPin } from 'lucide-react';
-import { PhoneCall } from 'lucide-react';
-import { Mail } from 'lucide-react';
+import { MapPin, PhoneCall, Mail } from "lucide-react";
 
 export default function DetailSection() {
-    return(
-        <main className="relative flex h-screen bg-[#FaF8F8]">
-            <div className="max-w-3x1 mx-auto mt-21">
-                <h1 className="text2 font-semibold tracking-wide p-20">We&apos;re here for you.</h1>
+  const items = [
+    {
+      icon: MapPin,
+      title: "Location",
+      text: (
+        <>
+          938 Aurora Boulevard, <br />
+          Cubao, Quezon City 1109
+        </>
+      ),
+    },
+    {
+      icon: PhoneCall,
+      title: "Contact Number",
+      text: "123 (456) 789",
+    },
+    {
+      icon: Mail,
+      title: "Email",
+      text: "zentree_support@gmail.com",
+    },
+  ];
 
-                {/* First row Location and Contact*/}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-20 mb-6">
-                    {/* location */}
-                    <div className="flex items-start gap-4 bg-white shadow-sm rounded-md p-4">
+  return (
+    <main className="relative flex h-[38vh] sm:h-[45vh] md:h-[80vh] bg-[#FAF8F8]">
+      {/* main wrapper */}
+      <div className="max-w-6xl w-full mx-auto mt-20 px-4 sm:px-6 lg:px-8 ">
+        <h1 className="font-semibold tracking-wide text-2xl sm:text-3xl mb-2">
+          We&apos;re here for you.
+        </h1>
+        <p className="text-gray-700 mb-8">
+          Have questions or need assistance with your Zen Tree products? We&apos;re just a message away.
+        </p>
 
-                        <div className="w-20 h-20 flex items-center justify-center rounded-full border-4 mt-6 ml-3 border-[#675d50]">
-                            <MapPin color='#675d50' size={50} />
-                        </div>
-                        <div className="text-left">
-                            <p className="font-normal text-2xl p-3">Location</p>
-                            <p className="text2 font-bold text-2xl p-3">
-                                938 Aurora Boulevard, <br />
-                                Cubao, Quezon City 1109
-                            </p>
-                        </div>
-                    </div>
-                    
-                    {/* contact */}
-                    <div className="flex items-start gap-4 bg-white shadow-sm rounded-md p-4">
-                        <div className="w-20 h-20 flex items-center justify-center rounded-full border-4 mt-6 ml-3 border-[#675d50]">
-                            <PhoneCall color='#675d50' size={50} />
-                        </div>
-                        <div className="text-left">
-                            <p className="font-normal text-2xl p-3">Contact Number</p>
-                            <p className="text2 font-bold text-2xl p-3">
-                                123(456)789
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Email row */}
-                <div className="flex justify-center mt-20">
-                    <div className="flex items-start gap-4 bg-white shadow-sm rounded-md p-4">
-
-                        <div className="w-20 h-20 flex items-center justify-center rounded-full border-4 mt-6 ml-3 border-[#675d50]">
-                            <Mail color='#675d50' size={50} />
-                        </div>
-                        <div className="text-left">
-                            <p className="font-normal text-2xl p-3">Email</p>
-                            <p className="text2 font-bold text-2xl p-3">
-                                zentree_support@gmail.com
-                            </p>
-                        </div>
-                    </div>
-                </div>
+        {/* Column layout pinned left */}
+        <div className="flex flex-col gap-8 items-start mt-15">
+          {items.map(({ icon: Icon, title, text }) => (
+            <div
+              key={title}
+              className="flex items-start gap-4 bg-white shadow-sm rounded-md p-6 w-full max-w-md"
+            >
+              <div className="w-13 h-13 sm:w-20 sm:h-20 flex items-center justify-center rounded-full border-4 border-[#675d50]">
+                <Icon color="#675d50" size={20} className="sm:size-13" />
+              </div>
+              <div className="text-left">
+                <p className="font-medium text-lg sm:text-xl">{title}</p>
+                <p className="font-light text-base sm:text-lg mt-1">{text}</p>
+              </div>
             </div>
-        </main>
-    );
+          ))}
+        </div>
+      </div>
+    </main>
+  );
 }

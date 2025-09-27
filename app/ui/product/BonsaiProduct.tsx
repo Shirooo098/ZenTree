@@ -8,6 +8,7 @@ type BonsaiProductProps = {
 export default function BonsaiProduct({products}: BonsaiProductProps){
     return(
         <>
+        
             {products.map((bons) => {
                 return(
                     <BonsaiCard 
