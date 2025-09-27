@@ -6,8 +6,8 @@ import { ImageKitProvider,Image } from "@imagekit/next";
 import { useParams } from "next/navigation";
 
 
-export default function ProductId({params}: {params: { id: string}}){
-    const {id} = useParams();
+export default function ProductId(){
+    const {id} = useParams<{ id: string }>();
     const productId = Number(id)
 
     const {data: product, isLoading, isError } = useUserProductId(productId)
