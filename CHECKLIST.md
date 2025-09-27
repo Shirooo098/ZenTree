@@ -2,6 +2,10 @@ Authentication
  - Add a Role-based access control
  - Create a staff role that do not have an access to delete
 
+Admin 
+ - Create Breadcrumbs for page navigation
+ - Or create a sub navigation on sidebar
+
 Products 
  - Editable/Deletable products
  - Display products from datatable in products client page

@@ -7,7 +7,7 @@ import BonsaiProduct from "./BonsaiProduct";
 
 
 
-export default function BonsaiShop() {
+export default function ProductShop() {
   const [filters, setFilters] = useState({
       size: "",
       price: "",

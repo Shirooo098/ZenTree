@@ -1,22 +1,22 @@
 import { ProductProps } from "@/app/types/definition";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 
-const fetchAllProducts = async () : Promise<Array<ProductProps>> => {
-    const response = await fetch('/api/admin/product');
+const fetchAllProducts = async (urlPath: string) : Promise<Array<ProductProps>> => {
+    const response = await fetch(`${urlPath}/product`);
     const result = await response.json();
 
     return result.productsData as ProductProps[]
 }
 
-export const useAllProducts = () => {
+export const useAllProducts = (urlPath: "/api/user" | "/api/admin") => {
     return useQuery({
         queryKey: ['products'],
-        queryFn: () => fetchAllProducts()
+        queryFn: () => fetchAllProducts(urlPath)
     })
 }
 
-const fetchProductId = async(productId: number): Promise<ProductProps> => {
-    const response = await fetch(`/api/admin/product/${productId}`);
+const fetchProductId = async(urlPath: string, productId: number): Promise<ProductProps> => {
+    const response = await fetch(`${urlPath}/product/${productId}`);
 
     if(!response) throw new Error(`Product with ${productId} not found.`);
 
@@ -25,11 +25,12 @@ const fetchProductId = async(productId: number): Promise<ProductProps> => {
 
 
 export const useProductId = (
+    urlPath: "/api/user" | "/api/admin",
     productId: number,
     options?: Partial<UseQueryOptions<ProductProps, Error>>) => {
     return useQuery({
         queryKey: ['product', productId],
-        queryFn: async () => await fetchProductId(productId),
+        queryFn: async () => await fetchProductId(urlPath, productId),
         enabled: !!productId,
         ...options
     })
