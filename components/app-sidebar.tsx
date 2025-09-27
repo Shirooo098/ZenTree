@@ -33,6 +33,8 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { User } from "@/app/types/definition"
+import Link from "next/link"
+import Logo from "@/app/ui/Logo"
 
 
 
@@ -49,27 +51,27 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      href: "/admin",
       icon: IconDashboard,
     },
     {
-      title: "Lifecycle",
-      url: "#",
+      title: "Products",
+      href: "/admin/products",
       icon: IconListDetails,
     },
     {
       title: "Analytics",
-      url: "#",
+      href: "/admin/analytics",
       icon: IconChartBar,
     },
     {
       title: "Projects",
-      url: "#",
+      href: "/admin/projects",
       icon: IconFolder,
     },
     {
       title: "Team",
-      url: "#",
+      href: "/admin/team",
       icon: IconUsers,
     },
   ],
@@ -78,45 +80,45 @@ const data = {
       title: "Capture",
       icon: IconCamera,
       isActive: true,
-      url: "#",
+      href: "#",
       items: [
         {
           title: "Active Proposals",
-          url: "#",
+          href: "#",
         },
         {
           title: "Archived",
-          url: "#",
+          href: "#",
         },
       ],
     },
     {
       title: "Proposal",
       icon: IconFileDescription,
-      url: "#",
+      href: "#",
       items: [
         {
           title: "Active Proposals",
-          url: "#",
+          href: "#",
         },
         {
           title: "Archived",
-          url: "#",
+          href: "#",
         },
       ],
     },
     {
       title: "Prompts",
       icon: IconFileAi,
-      url: "#",
+      href: "#",
       items: [
         {
           title: "Active Proposals",
-          url: "#",
+          href: "#",
         },
         {
           title: "Archived",
-          url: "#",
+          href: "#",
         },
       ],
     },
@@ -124,34 +126,34 @@ const data = {
   navSecondary: [
     {
       title: "Settings",
-      url: "#",
+      href: "#",
       icon: IconSettings,
     },
     {
       title: "Get Help",
-      url: "#",
+      href: "#",
       icon: IconHelp,
     },
     {
       title: "Search",
-      url: "#",
+      href: "#",
       icon: IconSearch,
     },
   ],
   documents: [
     {
       name: "Data Library",
-      url: "#",
+      href: "#",
       icon: IconDatabase,
     },
     {
       name: "Reports",
-      url: "#",
+      href: "#",
       icon: IconReport,
     },
     {
       name: "Word Assistant",
-      url: "#",
+      href: "#",
       icon: IconFileWord,
     },
   ],
@@ -167,11 +169,10 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
+              className="data-[slot=sidebar-menu-button]:!p-1.5 "
             >
-              <a href="#">
-                <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
+              <a href="/admin" className="flex h-full justify-start">
+                <Logo size="nav"/>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>

@@ -1,11 +1,11 @@
-import BonsaiShop from "@/app/ui/product/BonsaiShop";
-import TopBanner from "@/app/ui/product/TopBanner";
+import TopBanner from "./../../ui/product/TopBanner";
+import BonsaiShop from "./../../ui/product/BonsaiShop";
 
-export default function Shop(){
-    return(
-        <h1>
-            <TopBanner/>
-            <BonsaiShop/>
-        </h1>
-    )
+export default function Product() {
+  return (
+    <>
+      <TopBanner />
+      <BonsaiShop />
+    </>
+  );
 }

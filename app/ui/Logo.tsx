@@ -4,7 +4,7 @@ import cn from "../util/cn";
 
 import ZenTreeLogo from './../../public/img/Logo.png';
 
-const logoVariants = cva("", {
+const logoVariants = cva("p-0", {
     variants: {
         size: {
             sm: "size-[60px] md:size-[80px]",
@@ -29,9 +29,11 @@ const logoVariants = cva("", {
   },
 })
 
-type LogoProps = VariantProps<typeof logoVariants>
+type LogoProps = VariantProps<typeof logoVariants> & {
+  className?: string;
+}
 
-export default function Logo({ size, align }: LogoProps){
+export default function Logo({ size, align, className }: LogoProps){
     return(
         <Image
             loading='eager'
@@ -40,7 +42,7 @@ export default function Logo({ size, align }: LogoProps){
             alt="ZenTree Logo"
             width={120}
             height={120}
-            className={cn(logoVariants({size, align}))}
+            className={cn(logoVariants({size, align}), className)}
         />
     )
 }

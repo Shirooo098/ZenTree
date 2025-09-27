@@ -31,8 +31,8 @@ export default function TopBanner() {
           className="banner"
           src="/img/banner.png"
           alt="Banner"
-          width={5100}
-          height={100}
+          width={383}
+          height={550}
         />
       </div>
     </div>
