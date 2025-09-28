@@ -1,6 +1,7 @@
 import Image from "next/image"
 import { DMSans } from "../fonts"
 import Button from "../button"
+import Link from "next/link";
 
 export default function CheckNow(){
     return(
@@ -13,7 +14,10 @@ export default function CheckNow(){
             />
             <div className="flex-col justify-center text-center  z-1">
                 <h1 className={`${DMSans.className} capitalize font-semibold text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-calm-green z-1`}>Check Our Bonzai</h1>
+                 
+                 <Link href="/product">
                 <Button variant="secondary" size="lg" className={`${DMSans.className} capitalize text-calm-green px-6 py-4 sm:w-[140px] md:w-[160px] lg:w-[200px] mt-5`} >Check Now</Button>
+                </Link>
             </div>
         </section>
     )

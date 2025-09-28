@@ -9,12 +9,12 @@ export default function ProductShop() {
   const { data, isError} = useAllProducts("/api/user");
 
   const [filters, setFilters] = useState({
-      size: "",
-      price: "",
-      age: "", 
-      care: "", 
-      query: "" 
-    });
+    size: "",
+    price: "",
+    age: "",
+    care: "",
+    query: "",
+  });
   const [activeStyle, setActiveStyle] = useState("All Styles");
   const [sort, setSort] = useState("Featured");
 
@@ -24,19 +24,23 @@ export default function ProductShop() {
 
   let filteredProducts = products.filter((p) => {
     let inPriceRange = true;
-    if (filters.price === "9999-18999") inPriceRange = p.price >= 9999 && p.price <= 18999;
-    if (filters.price === "18999-24999") inPriceRange = p.price >= 18999 && p.price <= 24999;
-    if (filters.price === "24999-34999") inPriceRange = p.price >= 24999 && p.price <= 34999;
+    if (filters.price === "9999-18999")
+      inPriceRange = p.price >= 9999 && p.price <= 18999;
+    if (filters.price === "18999-24999")
+      inPriceRange = p.price >= 18999 && p.price <= 24999;
+    if (filters.price === "24999-34999")
+      inPriceRange = p.price >= 24999 && p.price <= 34999;
 
     return (
       (filters.care ? p.bonsaiCareLevel === filters.care : true) &&
       (filters.age ? p.bonsaiAge === filters.age : true) &&
       (activeStyle !== "All Styles" ? p.bonsaiCategory === activeStyle : true) &&
       inPriceRange &&
-      (filters.query ? p.name.toLowerCase().includes(filters.query.toLowerCase()) : true)
+      (filters.query
+        ? p.name.toLowerCase().includes(filters.query.toLowerCase())
+        : true)
     );
   });
-
 
   if (sort === "PriceLowHigh") {
     filteredProducts = [...filteredProducts].sort((a, b) => a.price - b.price);
@@ -44,9 +48,8 @@ export default function ProductShop() {
     filteredProducts = [...filteredProducts].sort((a, b) => b.price - a.price);
   }
 
-
   return (
-    <div className="product-container">
+    <section id="shop-section" className="product-container">
       <StyleFilter
         activeStyle={activeStyle}
         setActiveStyle={setActiveStyle}
@@ -67,6 +70,6 @@ export default function ProductShop() {
             </Suspense>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
