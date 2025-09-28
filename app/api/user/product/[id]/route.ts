@@ -1,9 +1,12 @@
 import { db } from "@/db/drizzle";
 import { imageKit_productFiles, products } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(){
+export async function GET(req: NextRequest,
+    { params } : { params: Promise<{id: string}>}    
+){
+    const id  = Number((await params).id)
     try {
         const productsData = await db
             .select({
@@ -25,6 +28,13 @@ export async function GET(){
                 imageKit_productFiles,
                 eq(products.imageKit_productFiles_id, imageKit_productFiles.id)
             )
+            .where(eq(products.product_id, id));
+
+            if(productsData.length === 0){
+                return NextResponse.json({
+                    error: "Product not found"
+                }, { status: 404 })
+            }
 
             return NextResponse.json({productsData})
     } catch (error) {

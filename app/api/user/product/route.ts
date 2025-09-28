@@ -27,6 +27,12 @@ export async function GET(){
                 eq(products.imageKit_productFiles_id, imageKit_productFiles.id)
             )
 
+            if(productsData.length === 0){
+                return NextResponse.json({
+                    error: "Product not found"
+                }, { status: 404 })
+            }
+
             return NextResponse.json({productsData})
     } catch (error) {
         console.error('Database error:', error);
