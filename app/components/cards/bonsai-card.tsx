@@ -47,7 +47,7 @@ export default function BonsaiCard({
                     height={1333}
                     src={imageUrl}
                     alt={name}
-                    className="object-cover rounded-[2px] mx-auto mb-2 h-80"
+                    className="object-cover rounded-[2px] mx-auto mb-2 h-100"
                 />
             </ImageKitProvider>
             
