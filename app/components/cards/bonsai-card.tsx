@@ -26,7 +26,6 @@ const toggleHeart = (id: number) => {
         toast('Product Added To Cart.');
     }
 
-
 export default function BonsaiCard({
     id,
     name,
@@ -36,6 +35,7 @@ export default function BonsaiCard({
     age,
     imageUrl
 }: BonsaiProps){
+
     return(
         <div className="card">
             <p className="hidden">{id}</p>
@@ -44,10 +44,10 @@ export default function BonsaiCard({
                     loading="eager"
                     priority
                     width={1000}
-                    height={1333}
-                    src={imageUrl}
+                    height={1000}
+                    src={`${imageUrl}/?tr=e-bgremove`}
                     alt={name}
-                    className="object-cover rounded-[2px] mx-auto mb-2 h-80"
+                    className="object-contain rounded-[2px] mx-auto mb-2 h-80"
                 />
             </ImageKitProvider>
             

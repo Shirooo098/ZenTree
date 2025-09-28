@@ -20,7 +20,7 @@ export async function POST(req: NextRequest){
         if (!fileId || !url) {
             throw new Error('fileId and url are required from ImageKit response');
         }
-
+        
         const [newRecord] = await db.insert(imageKit_productFiles)
             .values({
                 product_image_id: fileId,

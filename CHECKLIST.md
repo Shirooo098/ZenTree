@@ -2,6 +2,9 @@ Authentication
  - Add a Role-based access control
  - Create a staff role that do not have an access to delete
 
+Profile 
+ - Edit or Create a User Address
+
 Admin 
  - Create Breadcrumbs for page navigation
  - Or create a sub navigation on sidebar

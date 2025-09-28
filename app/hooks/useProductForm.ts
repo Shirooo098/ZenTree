@@ -99,7 +99,9 @@ export const useProductForm = ({ mode, productId, productData, initialData }: Us
             });
 
             const saveMetadata = await saveMetadataRes.json();
-            
+            console.log("Save Meta Data:", saveMetadata)
+
+
             if (!saveMetadata.success) {
                 console.error("Failed to save metadata");
                 toast.error("Failed to save image metadata.");

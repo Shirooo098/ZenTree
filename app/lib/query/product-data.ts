@@ -5,6 +5,7 @@ const fetchAllProducts = async (urlPath: string) : Promise<Array<ProductProps>> 
     const response = await fetch(`${urlPath}/product`);
     const result = await response.json();
 
+    console.log("Products Data", result)
     return result.productsData as ProductProps[]
 }
 
