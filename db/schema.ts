@@ -71,7 +71,8 @@ export const verification = pgTable("verification", {
 
 export const products = pgTable('products', {
   product_id: serial('product_id').primaryKey(),
-  imageKit_productFiles_id: integer('imageKit_productFiles_id').references(() => imageKit_productFiles.id),
+   imageKit_productFiles_id: integer("imageKit_productFiles_id")
+    .references(() => imageKit_productFiles.id, { onDelete: "cascade" }),
   product_name: text('product_name').notNull(),
   product_category: text('product_category').notNull(),
   product_price: real('product_price').notNull(),

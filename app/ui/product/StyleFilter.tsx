@@ -26,13 +26,27 @@ export default function StyleFilters({
   setSort,
 
 }: StyleFiltersProps) {
+  
+ const scrollToProducts = () => {
+  const section = document.getElementById("shop-section");
+  if (section) {
+    const yOffset = -100; // 👈 adjust this (negative moves up, positive moves down)
+    const y =
+      section.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+    window.scrollTo({ top: y, behavior: "smooth" });
+  }
+};
   return (
     <>
       <div className="style-filters flex gap-3 flex-wrap pb-5">
         {styles.map((style) => (
           <button
             key={style}
-            onClick={() => setActiveStyle(style)}
+             onClick={() => {
+              setActiveStyle(style);
+              scrollToProducts(); 
+            }}
             className={`px-5 py-2 rounded-lg border lg:w-[180px] h-[50px] mt-4 flex items-center justify-center gap-2 text-lg 
               ${activeStyle === style ? "bg-[#675D50] text-white" : "bg-gray-10 text-black"}
             `}
@@ -60,7 +74,10 @@ export default function StyleFilters({
           <select
             aria-label="Sort by"
             value={sort}
-            onChange={(e) => setSort(e.target.value)}
+             onChange={(e) => {
+              setSort(e.target.value);
+              scrollToProducts(); 
+            }}
             className="border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-black"
           >
             <option value="Featured">Featured</option>

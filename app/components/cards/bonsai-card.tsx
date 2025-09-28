@@ -1,11 +1,11 @@
 "use client";
 
 import { BonsaiProps } from "@/app/types/definition";
-import Image from 'next/image';
 import { Dot, Heart } from 'lucide-react'
 import { ManRope } from "@/app/ui/fonts";
 import Button from "@/app/ui/button";
 import { toast } from "sonner";
+import { Image, ImageKitProvider } from "@imagekit/next";
 
 const toggleHeart = (id: number) => {
     const heart = document.getElementById(`heart-${id}`) as HTMLElement;
@@ -34,20 +34,22 @@ export default function BonsaiCard({
     style,
     price,
     age,
-    image
+    imageUrl
 }: BonsaiProps){
     return(
         <div className="card">
             <p className="hidden">{id}</p>
-            <Image
-                loading="eager"
-                priority
-                width={1000}
-                height={1333}
-                src={image}
-                alt={name}
-                className="object-cover rounded-[2px] mx-auto mb-2 h-80"
-            />
+            <ImageKitProvider urlEndpoint={imageUrl}>
+                <Image
+                    loading="eager"
+                    priority
+                    width={1000}
+                    height={1333}
+                    src={imageUrl}
+                    alt={name}
+                    className="object-cover rounded-[2px] mx-auto mb-2 h-80"
+                />
+            </ImageKitProvider>
             
             <span 
                 id={`heart-${id}`}

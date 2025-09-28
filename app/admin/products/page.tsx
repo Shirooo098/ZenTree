@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
 import ProductsTable from "@/app/ui/admin/product/productTable";
 import Button from "@/app/ui/button";
 import { Plus } from 'lucide-react';
 import { DMSans, ManRope } from "@/app/ui/fonts";
-import { useAllProducts } from "@/app/lib/query/admin/product-data";
+import { useAllProducts } from "@/app/lib/query/product-data";
 import { InvoicesTableSkeleton } from "@/components/ui/skeleton/skeleton";
 import { Suspense } from "react";
 
 export default function Products(){
-    const { data, isPending, isError, } = useAllProducts();
+    const { data, isLoading, isError, } = useAllProducts("/api/admin");
 
-    if(isPending) return <InvoicesTableSkeleton/>
+    if(isLoading) return <InvoicesTableSkeleton/>
     if(isError) console.log("Error", isError);
 
     return(

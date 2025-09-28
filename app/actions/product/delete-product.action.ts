@@ -1,4 +1,4 @@
-// app/lib/actions/deleteProduct.ts
+
 "use server"
 
 import { db } from "@/db/drizzle"

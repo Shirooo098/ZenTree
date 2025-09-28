@@ -2,7 +2,7 @@ import * as React from 'react';
 import FaqsHero from "@/app/ui/Faqs/faqs-hero";
 import FaqsBody from "@/app/ui/Faqs/faqs-body";
 import FaqsFrequestions from "@/app/ui/Faqs/faqs-frequestions";
-import PersonalInfromation from "@/app/ui/Faqs/perosnal-information";
+// import PersonalInfromation from "@/app/ui/Faqs/perosnal-information";
 
 
 export default function FAQs() {
@@ -20,9 +20,9 @@ export default function FAQs() {
         <FaqsFrequestions />
       </div>
 
-      <div>
+      {/* <div>
         <PersonalInfromation />
-      </div>
+      </div> */}
     </>
    );
 }
