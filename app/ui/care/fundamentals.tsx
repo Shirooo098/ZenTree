@@ -23,7 +23,7 @@ export default function Carefundamentals() {
 
                 <p className="text-[20px] pt-6 flex flex-row ">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-scissors-icon lucide-scissors mr-2"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></svg>                   
-                     <b>Pruning & Training</b>: Regular maintenance pruning and periodic structural pruning help maintain the tree's shape and health.
+                     <b>Pruning & Training</b>: Regular maintenance pruning and periodic structural pruning help maintain the tree&apos;s shape and health.
                 </p>
 
                  <p className="text-[20px] pt-6 flex flex-row ">
@@ -46,7 +46,7 @@ export default function Carefundamentals() {
             <div className="flex flex-row mt-10">
                 <div className="flex text-start flex-col mw-10%">
                     <p className="text-[20px] font-bold">Indoor Bonsai</p>
-                    <p className="text-[20px]">Typically tropical/subtropical species that don't require winter dormancy. Need bright light, consistent temperatures, and higher humidity.</p>
+                    <p className="text-[20px]">Typically tropical/subtropical species that don&apos;t require winter dormancy. Need bright light, consistent temperatures, and higher humidity.</p>
 
                 </div>
 

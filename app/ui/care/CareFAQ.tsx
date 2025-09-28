@@ -65,7 +65,7 @@ export default function CareFAQ () {
                         </AccordionSummary>
                         <AccordionDetails>
                             <Typography>
-                                Yellowing leaves can indicate several issues: overwatering, underwatering, insufficient light, nutrient deficiency, pest infestation, or natural seasonal changes. Check the soil moisture first - it should be moist but not soggy. Ensure your tree is receiving adequate light and nutrients. Inspect for pests on the underside of leaves. Consider if it's autumn and your tree is deciduous, as seasonal yellowing is normal.
+                                Yellowing leaves can indicate several issues: overwatering, underwatering, insufficient light, nutrient deficiency, pest infestation, or natural seasonal changes. Check the soil moisture first - it should be moist but not soggy. Ensure your tree is receiving adequate light and nutrients. Inspect for pests on the underside of leaves. Consider if it&apos;s autumn and your tree is deciduous, as seasonal yellowing is normal.
                             </Typography>
                         </AccordionDetails>
                     </Accordion>
