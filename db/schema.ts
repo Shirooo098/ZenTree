@@ -92,4 +92,80 @@ export const imageKit_productFiles = pgTable('imageKit_productFiles', {
   upload_timestamp: timestamp().defaultNow()
 })
 
-export const schema = { user, session, account, verification, products, imageKit_productFiles }
+export const cart_status = pgTable('cart_status', {
+  cart_status_id: serial('cart_status_id').primaryKey(),
+  cart_status_name: text('cart_status_name')
+    .notNull()
+    .default('new')
+})
+
+export const carts = pgTable('carts', {
+  cart_id: serial('cart_id').primaryKey(),
+  user_id: text('user_id')
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' }),
+  cart_status_id: integer('cart_status_id')
+    .notNull()
+    .references(() => cart_status.cart_status_id, { onDelete: 'cascade' })
+})
+
+export const cart_products = pgTable('cart_products', {
+  cart_products_id: serial('cart_products_id').primaryKey(),
+  cart_id: integer('cart_id')
+    .notNull()
+    .references(() => carts.cart_id, { onDelete: 'cascade' }),
+  product_id: integer('product_id')
+    .notNull()
+    .references(() => products.product_id, { onDelete: 'cascade' }),
+  quantity: integer('quantity').notNull()
+})
+
+export const order_status = pgTable('order_status', {
+  order_status_id: serial('order_status_id').primaryKey(),
+  order_status_name: text('order_status_name')
+    .notNull()
+    .default('new')
+})
+
+export const orders = pgTable('orders', {
+  order_id: serial('order_id').primaryKey(),
+  user_id: text('user_id')
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' }),
+  order_status_id: integer('order_status_id')
+    .notNull()
+    .references(() => order_status.order_status_id, { onDelete: 'cascade' }),
+  created_at: timestamp('created_at')
+    .notNull()
+    .defaultNow(),
+  updated_at: timestamp('updated_at')
+    .notNull()
+    .defaultNow()
+})
+
+export const order_products = pgTable('order_products', {
+  order_products_id: serial('order_products_id').primaryKey(),
+  order_id: integer('order_id')
+    .notNull()
+    .references(() => orders.order_id, { onDelete: 'cascade' }),
+  product_id: integer('product_id')
+    .notNull()
+    .references(() => products.product_id, { onDelete: 'cascade' }),
+  quantity: real('quantity').notNull(),
+  price_at_purchase: real('price_at_purchase').notNull()
+})
+
+export const schema = { 
+  user,
+  session, 
+  account, 
+  verification, 
+  products, 
+  imageKit_productFiles,
+  cart_status,
+  carts,
+  cart_products,
+  order_status,
+  orders,
+  order_products
+}

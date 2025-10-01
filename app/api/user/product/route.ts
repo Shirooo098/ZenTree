@@ -3,7 +3,6 @@ import { imageKit_productFiles, products } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
-
 export async function GET(){
     try {
         const productsData = await db

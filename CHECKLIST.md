@@ -14,6 +14,8 @@ Products
  - Display products from datatable in products client page
  - Create slug for products
  - Add to cart 
+    1. Fetch ID thru url
+    2. Pass Props to cart
 
 Order History Tracking
  - Viewable add to cart history
