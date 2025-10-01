@@ -2,6 +2,7 @@
 
 import { Loader } from "@/app/components/loader/loader";
 import { useUserProductId } from "@/app/lib/query/product-data";
+import Button from "@/app/ui/button";
 import { ImageKitProvider,Image } from "@imagekit/next";
 import { useParams } from "next/navigation";
 
@@ -41,6 +42,7 @@ export default function ProductId(){
                     />
                 </ImageKitProvider>
             </div>
+            <Button variant='primary'>Add To Cart</Button>
         </div>
     )
 }

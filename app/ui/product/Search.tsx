@@ -24,7 +24,7 @@ type SearchProps = {
 
 export default function Search({ filters, setFilters }: SearchProps) {
   return (
-    <div className="p-4">
+    <div className=" bg-gray-100 rounded-md p-4">
       <h2 className="font-bold">Search Product    
 
       <button
@@ -34,14 +34,8 @@ export default function Search({ filters, setFilters }: SearchProps) {
         Reset
       </button>
       </h2>
-
-      
-      <br />
-
     <SearchBar filters={filters} setFilters={setFilters} />
-      <br />
-      <span className="price1">Price Range</span>
-
+      <span className="price1 ">Price Range</span>
       <label className="flex items-center space-x-2 mb-2 cursor-pointer">
         <input
           type="radio"

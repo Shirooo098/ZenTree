@@ -1,6 +1,5 @@
 import BonsaiCard from "@/app/components/cards/bonsai-card";
 import { ProductProps } from "@/app/types/definition";
-import Link from "next/link";
 
 type BonsaiProductProps = {
     productsData: ProductProps[]
@@ -10,8 +9,7 @@ export default function BonsaiProduct({productsData}: BonsaiProductProps){
     return(
         <>
             {productsData.map((prod) => {
-                return(
-                   <Link key={prod.id} href={`/product/${prod.id}`}>
+                return( 
                     <BonsaiCard 
                         key={prod.id}
                         id={prod.id}
@@ -22,7 +20,6 @@ export default function BonsaiProduct({productsData}: BonsaiProductProps){
                         age={prod.bonsaiAge}
                         imageUrl={prod.image_url}
                     />
-                    </Link>
                 )
             })}
         </>

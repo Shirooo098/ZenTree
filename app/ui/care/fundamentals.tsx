@@ -21,7 +21,7 @@ export default function Carefundamentals() {
                 <p className="text-[30px] text-black font-bold italic">
                     The Five Pillars of Bonsai Care
                 </p>
-                <p className="text-[20px] pt-6 flex flex-col ">
+                <div className="text-[20px] pt-6 flex flex-col ">
                     <div className="flex justify-start items-center">
                         <Droplet strokeWidth={1}/>
                         <p className="ml-2 font-semibold">Watering</p>
@@ -29,7 +29,7 @@ export default function Carefundamentals() {
                     <div className="ml-2 sm:ml-4 md:ml-6 lg:ml-10 text-justify">
                         <p>- The most critical and frequent care task. Bonsai soil drains quickly, requiring regular monitoring and watering.</p>
                     </div>
-                </p>
+                </div>
 
                  <p className="text-[20px] pt-6 flex flex-col ">
                     <div className="flex justify-start items-center">

@@ -51,7 +51,7 @@ export default function ProductShop() {
   }
 
   return (
-    <section id="shop-section" className="product-container">
+    <section id="shop-section" className="product-container p-8">
       <StyleFilter
         activeStyle={activeStyle}
         setActiveStyle={setActiveStyle}
@@ -61,12 +61,14 @@ export default function ProductShop() {
         showing={filteredProducts.length}
       />
 
-      <div className="flex">
-        <div className="filter">
+      <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] xl:grid-cols-[320px_1fr] gap-6">
+        <div>
           <Search filters={filters} setFilters={setFilters} />
         </div>
 
-        <div className="card-wrapper">
+        <div className="grid place-items-center
+        grid-cols-1 sm:grid-cols-2 
+        md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             <Suspense fallback={<CardSkeleton/>}>
               <BonsaiProduct productsData={filteredProducts}/>
             </Suspense>
