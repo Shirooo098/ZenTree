@@ -1,6 +1,7 @@
 "use client";
 
 import { Loader } from "@/app/components/loader/loader";
+import { useAddToCart } from "@/app/lib/query/cart/cart-data";
 import { useUserProductId } from "@/app/lib/query/product-data";
 import Button from "@/app/ui/button";
 import { ImageKitProvider,Image } from "@imagekit/next";
@@ -9,9 +10,10 @@ import { useParams } from "next/navigation";
 
 export default function ProductId(){
     const {id} = useParams<{ id: string }>();
-    const productId = Number(id)
+    const prodId = Number(id)
 
-    const {data: product, isLoading, isError } = useUserProductId(productId)
+    const {data: product, isLoading, isError } = useUserProductId(prodId)
+    const addToCartMutation = useAddToCart();
 
     if(isLoading) return <div className="size-screen flex justify-center items-center"><Loader/></div>
     if(isError) return console.log("Error", isError)
@@ -28,6 +30,7 @@ export default function ProductId(){
         <div className="h-[1000px] flex flex-col justify-center items-center">
             <p>Product Id: {product.id}</p>
             <p>Product Name: {product.name}</p>
+            <p>Product Stock: {product.stock}</p>
             <div>
                 Image:
                   <ImageKitProvider urlEndpoint={product.image_url}>
@@ -42,7 +45,13 @@ export default function ProductId(){
                     />
                 </ImageKitProvider>
             </div>
-            <Button variant='primary'>Add To Cart</Button>
+            <Button 
+                variant='primary'
+                disabled={addToCartMutation.isPending}
+                onClick={() => addToCartMutation.mutate({ productId: prodId, quantity: 1 })}    
+            >
+                Add To Cart
+            </Button>
         </div>
     )
 }
