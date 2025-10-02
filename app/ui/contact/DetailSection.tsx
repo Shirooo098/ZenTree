@@ -36,7 +36,7 @@ export default function DetailSection() {
         </p>
 
         {/* Column layout pinned left */}
-        <div className="flex flex-col gap-8 items-start mt-15">
+        <div className="flex flex-col gap-10 items-start mt-15">
           {items.map(({ icon: Icon, title, text }) => (
             <div
               key={title}
