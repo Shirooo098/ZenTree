@@ -94,12 +94,9 @@
 
 
 .card {
-<<<<<<< HEAD
-=======
   width: 390px;
   height: 545px;
   background: #ffffff;
->>>>>>> faedfe743e5c6b05dcb88f7d3966029dd23dc285
   border-radius: 8px;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
