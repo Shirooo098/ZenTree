@@ -32,11 +32,11 @@ export interface NavLink {
 export interface User{
     id: string,
     name: string,
-    username: string | null | undefined,
+    username?: string | null,
     phoneNumber?: string | null | undefined,
     email: string,
-    avater?: string,
-    role?: string,
+    avater?: string | null,
+    role?: string | null,
 }
 
 export type ProductFilters = {
