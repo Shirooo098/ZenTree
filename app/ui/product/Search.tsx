@@ -21,9 +21,10 @@ type SearchProps = {
   >;
 };
 
+
 export default function Search({ filters, setFilters }: SearchProps) {
   return (
-    <div className="p-4">
+    <div className=" bg-gray-100 rounded-md p-4">
       <h2 className="font-bold">Search Product    
 
       <button
@@ -33,14 +34,8 @@ export default function Search({ filters, setFilters }: SearchProps) {
         Reset
       </button>
       </h2>
-
-      
-      <br />
-
     <SearchBar filters={filters} setFilters={setFilters} />
-      <br />
-      <span className="price1">Price Range</span>
-
+      <span className="price1 ">Price Range</span>
       <label className="flex items-center space-x-2 mb-2 cursor-pointer">
         <input
           type="radio"
@@ -49,7 +44,7 @@ export default function Search({ filters, setFilters }: SearchProps) {
           checked={filters.price === "9999-18999"}
           onChange={(e) => setFilters((f) => ({ ...f, price: e.target.value }))}
         />
-        <span>9,999 - 18,999</span>
+        <span>₱ 9,999 - 18,999</span>
       </label>
 
       <label className="flex items-center space-x-2 mb-2 cursor-pointer">
@@ -60,20 +55,20 @@ export default function Search({ filters, setFilters }: SearchProps) {
           checked={filters.price === "18999-24999"}
           onChange={(e) => setFilters((f) => ({ ...f, price: e.target.value }))}
         />
-        <span>18,999 - 24,999</span>
+        <span>₱ 18,999 - 24,999</span>
       </label>
 
       <label className="flex items-center space-x-2 mb-2 cursor-pointer">
         <input
           type="radio"
           name="price"
-          value="24999-34999"
-          checked={filters.price === "24999-34999"}
+          value="24999-Infinity"
+          checked={filters.price === "24999-Infinity"}
           onChange={(e) => setFilters((f) => ({ ...f, price: e.target.value }))}
         />
-        <span>24,999 - 34,999</span>
+        <span>₱ 24,999 and above</span>
       </label>
-
+      
       <br />
 
       <span className="age1">Age</span>

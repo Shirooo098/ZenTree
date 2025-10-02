@@ -1,8 +1,6 @@
 "use client"
 
-import { IconMail, type Icon } from "@tabler/icons-react"
-
-import { Button } from "@/components/ui/button"
+import {  type Icon } from "@tabler/icons-react"
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -26,14 +24,14 @@ export function NavMain({
       <SidebarGroupContent className="flex flex-col gap-2">
         <SidebarMenu>
           {items.map((item, index) => (
-            <a key={index} href={item.href}>
+            <Link key={index} href={item.href}>
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton tooltip={item.title} className="cursor-pointer">
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-            </a>
+            </Link>
           ))}
         </SidebarMenu>
       </SidebarGroupContent>

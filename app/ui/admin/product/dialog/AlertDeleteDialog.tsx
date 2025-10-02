@@ -1,3 +1,4 @@
+import { deleteProduct } from "@/app/actions/product/delete-product.action"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,12 +13,15 @@ import {
 import { Button } from "@/components/ui/button"
 import { Trash2 } from "lucide-react"
 
-export function AlertDeleteProductDialog() {
+export function AlertDeleteProductDialog({productId }: {productId: number}) {
+  
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-            <Button variant="destructive" className="cursor-pointer">
+            <Button variant="destructive" className="flex-1 w-full cursor-pointer hover:bg-red-700">
                 <Trash2 />
+                Delete
             </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
@@ -30,7 +34,9 @@ export function AlertDeleteProductDialog() {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <form action={deleteProduct.bind(null, productId)}>
+            <AlertDialogAction type="submit">Continue</AlertDialogAction>
+          </form>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

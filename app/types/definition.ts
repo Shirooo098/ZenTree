@@ -32,11 +32,11 @@ export interface NavLink {
 export interface User{
     id: string,
     name: string,
-    username: string | null | undefined,
+    username?: string | null,
     phoneNumber?: string | null | undefined,
     email: string,
-    avater?: string,
-    role?: string,
+    avater?: string | null,
+    role?: string | null,
 }
 
 export type ProductFilters = {
@@ -54,7 +54,7 @@ export type BonsaiProps = {
     style: string;
     price: number;
     age: string;
-    image: string;
+    imageUrl: string;
 };
 
 export type EditProfileState = {
@@ -65,4 +65,19 @@ export type EditProfileState = {
         image?: string[]
     };
     message?: string | null
+}
+
+export type ProductProps = {
+    id: number,
+    image_id: number,
+    image_url: string,
+    name: string,
+    category: string,
+    price: number,
+    size: string,
+    bonsaiCategory: string,
+    bonsaiAge: string,
+    bonsaiCareLevel: string,
+    stock: number, 
+    description: string,
 }

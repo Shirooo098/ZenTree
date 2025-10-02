@@ -1,24 +1,29 @@
-Nodemailer
- - Create Template
-Verify Email
- - `emailVerification`
- - Handle Error 
- - sendVerificationEmail
- - Handle Login Page Not Verified
-
-Suspense 
- - Create a skeleton
- - Handle Suspense loading for page contents
-
- Product Catalog
- - Integrate Marven's Work
- - Refactor Card
- - Make Componenents
- - Types for product
+Authentication 
+ - Add a Role-based access control
+ - Create a staff role that do not have an access to delete
 
 Profile 
- - Fetch User's Information
- - Edit User's Information
- - Update User's Information
+ - Edit or Create a User Address
 
- - Fix Error handling, specify that number is already used.
+Admin 
+ - Create Breadcrumbs for page navigation
+ - Or create a sub navigation on sidebar
+
+Products 
+ - Editable/Deletable products
+ - Display products from datatable in products client page
+ - Create slug for products
+ - Add to cart 
+    1. Fetch ID thru url
+    2. Pass Props to cart
+
+Order History Tracking
+ - Viewable add to cart history
+ - Tracks product's purchase 
+
+Order Management 
+ - View all customer order
+ - View customer order's detail
+ - Update Order Status Process/Pending/Cancelled/Delivered
+ - Print invoices
+ - Manage return/refund

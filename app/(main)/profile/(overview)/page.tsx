@@ -14,19 +14,24 @@ export default async function Profile() {
     redirect("/sign-in");
   }
 
+  const userData = {
+    id: session.user.id,
+    name: session.user.name,
+    username: session.user.username,
+    email: session.user.email,
+    phoneNumber: session.user.phoneNumber,
+  }
+
   return (
     <>
-      <div className="w-full flex flex-col justify-center items-center">
-        <h1>Profile</h1>
+      <div className="w-full flex flex-col ">
+        <div className="flex justify-between items-center w-full px-3 font-sans border-b border-black pb-5">
+          <h1 className="text-2xl font-bold">Profile</h1>
+          <h1 className="text-2xl font-bold">Edit Profile</h1>
+        </div>
         <Suspense fallback={<SkeletonProfile />}>
           <EditProfile
-            userData={{
-              id: session.user.id,
-              name: session.user.name,
-              username: session.user.username,
-              email: session.user.email,
-              phoneNumber: session.user.phoneNumber,
-            }}
+            userData={userData}
           />
         </Suspense>
       </div>

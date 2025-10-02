@@ -1,24 +1,24 @@
 import BonsaiCard from "@/app/components/cards/bonsai-card";
-import { BonsaiProps } from "@/app/types/definition";
+import { ProductProps } from "@/app/types/definition";
 
 type BonsaiProductProps = {
-  products: BonsaiProps[];
-};
+    productsData: ProductProps[]
+}
 
-export default function BonsaiProduct({products}: BonsaiProductProps){
+export default function BonsaiProduct({productsData}: BonsaiProductProps){
     return(
         <>
-            {products.map((bons) => {
-                return(
+            {productsData.map((prod) => {
+                return( 
                     <BonsaiCard 
-                        key={bons.id}
-                        id={bons.id}
-                        name={bons.name}
-                        care={bons.care}
-                        style={bons.style}
-                        price={bons.price}
-                        age={bons.age}
-                        image={bons.image}
+                        key={prod.id}
+                        id={prod.id}
+                        name={prod.name}
+                        care={prod.bonsaiCareLevel}
+                        style={prod.bonsaiCategory}
+                        price={prod.price}
+                        age={prod.bonsaiAge}
+                        imageUrl={prod.image_url}
                     />
                 )
             })}
