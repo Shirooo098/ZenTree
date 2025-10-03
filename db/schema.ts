@@ -117,7 +117,7 @@ export const cart_products = pgTable('cart_products', {
   product_id: integer('product_id')
     .notNull()
     .references(() => products.product_id, { onDelete: 'cascade' }),
-  quantity: integer('quantity').notNull()
+  quantity: integer('quantity').notNull(),
 })
 
 export const order_status = pgTable('order_status', {
