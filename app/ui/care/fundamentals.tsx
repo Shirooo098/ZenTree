@@ -28,10 +28,10 @@ export default function Carefundamentals() {
                     </div>
                     <div className="ml-2 sm:ml-4 md:ml-6 lg:ml-10 text-justify">
                         <p>- The most critical and frequent care task. Bonsai soil drains quickly, requiring regular monitoring and watering.</p>
-                    </div>
+                    </div>Pruning & Training
                 </div>
 
-                 <p className="text-[20px] pt-6 flex flex-col ">
+                 <div className="text-[20px] pt-6 flex flex-col ">
                     <div className="flex justify-start items-center">
                         <Sun strokeWidth={1}/>
                         <p className="ml-2 font-semibold">Light</p>
@@ -40,9 +40,9 @@ export default function Carefundamentals() {
                     <div className="ml-2 sm:ml-4 md:ml-6 lg:ml-10 text-justify">
                         <p>-  Most bonsai require abundant light. Position according to species needs (full sun, partial shade, etc.).</p>
                     </div>
-                </p>
+                </div>
 
-                <p className="text-[20px] pt-6 flex flex-col ">
+                <div className="text-[20px] pt-6 flex flex-col ">
                     <div className="flex justify-start items-center">
                         <Scissors strokeWidth={1}/>
                         <p className="ml-2 font-semibold">Pruning & Training</p>    
@@ -50,9 +50,9 @@ export default function Carefundamentals() {
                     <div className="ml-2 sm:ml-4 md:ml-6 lg:ml-10 text-justify">
                         <p>- Regular maintenance pruning and periodic structural pruning help maintain the tree&apos;s shape and health.</p>
                     </div>
-                </p>
+                </div>
 
-                 <p className="text-[20px] pt-6 flex flex-col ">
+                 <div className="text-[20px] pt-6 flex flex-col ">
                     <div className="flex justify-start items-center">
                         <Package strokeWidth={1}/>
                         <p className="ml-2 font-semibold">Soil & Repotting</p>
@@ -60,9 +60,9 @@ export default function Carefundamentals() {
                     <div className="ml-2 sm:ml-4 md:ml-6 lg:ml-10 text-justify">
                         <p>- Specialized bonsai soil and periodic repotting (every 1-5 years) ensure root health and nutrient availability.</p>
                     </div>
-                </p>
+                </div>
 
-                <p className="text-[20px] pt-6 flex flex-col">
+                <div className="text-[20px] pt-6 flex flex-col">
                     <div className="flex justify-start items-center">
                         <Leaf strokeWidth={1}/>
                         <p className="ml-2 font-semibold">Fertilization</p>
@@ -70,7 +70,7 @@ export default function Carefundamentals() {
                     <div className="ml-2 sm:ml-4 md:ml-6 lg:ml-10 text-justify">
                         <p>- Regular feeding during growing season provides necessary nutrients for healthy growth.</p>
                     </div>
-                </p>
+                </div>
 
             </div>
 

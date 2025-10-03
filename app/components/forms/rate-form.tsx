@@ -15,9 +15,8 @@ export default function RateForm() {
           <FaLeaf
             key={i}
             onClick={() => setRating(i + 1)}
-            className={`cursor-pointer text-2xl ${
-              i < rating ? "text-green-600" : "text-gray-300"
-            }`}
+            className="cursor-pointer text-2xl"
+            style={{ color: i < rating ? "#675d50" : "#d1d5db" }}
           />
         ))}
       </div>
@@ -25,7 +24,7 @@ export default function RateForm() {
   };
 
   return (
-    <div className="max-w-lg mx-auto border border-purple-400 p-6 rounded-md shadow-md">
+    <div className="max-w-lg mx-auto border p-6 rounded-md shadow-md">
       <h2 className="text-center text-lg font-bold mb-6">Rate our Product</h2>
 
       {/* Product Info */}
@@ -50,10 +49,10 @@ export default function RateForm() {
             {productRating >= 5
               ? "Excellent"
               : productRating >= 4
-              ? "Good"
-              : productRating >= 3
-              ? "Fair"
-              : "Poor"}
+                ? "Good"
+                : productRating >= 3
+                  ? "Fair"
+                  : "Poor"}
           </span>
         </div>
       </div>
@@ -67,9 +66,6 @@ export default function RateForm() {
           placeholder="Share your thoughts about our product."
           className="w-full h-28 border rounded-md p-3 text-sm focus:ring-2 focus:ring-green-500 focus:outline-none"
         />
-        <button className="flex items-center gap-2 text-green-600 mt-2 text-sm hover:underline">
-          <FaRegImage /> Add Photo
-        </button>
       </div>
 
       {/* About Service */}
@@ -84,10 +80,10 @@ export default function RateForm() {
             {sellerRating >= 5
               ? "Excellent"
               : sellerRating >= 4
-              ? "Good"
-              : sellerRating >= 3
-              ? "Fair"
-              : "Poor"}
+                ? "Good"
+                : sellerRating >= 3
+                  ? "Fair"
+                  : "Poor"}
           </span>
         </div>
 
@@ -99,10 +95,10 @@ export default function RateForm() {
             {deliveryRating >= 5
               ? "Excellent"
               : deliveryRating >= 4
-              ? "Good"
-              : deliveryRating >= 3
-              ? "Fair"
-              : "Poor"}
+                ? "Good"
+                : deliveryRating >= 3
+                  ? "Fair"
+                  : "Poor"}
           </span>
         </div>
       </div>
@@ -110,7 +106,7 @@ export default function RateForm() {
       {/* Buttons */}
       <div className="flex justify-end gap-4">
         <button className="text-gray-600 hover:underline">Cancel</button>
-        <button className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">
+        <button className="px-6 py-2 bg-[#675d50] text-white rounded-md hover:bg-[#53493f] transition">
           Submit
         </button>
       </div>
