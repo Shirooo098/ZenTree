@@ -1,6 +1,6 @@
 import { auth } from "@/app/lib/auth";
 import { db } from "@/db/drizzle";
-import { eq, and, sql } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { cart_products, cart_status, carts, products } from "@/db/schema";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -20,6 +20,9 @@ export async function POST(req: NextRequest){
 
         const userId = session.user.id;
         const body = await req.json();
+
+        console.log("Session exists:", !!session); 
+        console.log("Request body:", body);
         let { productId } = body;
         const { quantity = 1 } = body;
 
@@ -82,7 +85,6 @@ export async function POST(req: NextRequest){
             }
 
             await updateCartProductQuantity(existingCartProduct.cart_products_id, newQuantity)
-            await reduceProductStock(productId, quantity)
 
             return NextResponse.json({
                 success: true,
@@ -94,7 +96,6 @@ export async function POST(req: NextRequest){
             });    
         } else {
             const newCartProduct = await addProductToCart(activeCart.cart_id, productId, quantity)
-            await reduceProductStock(productId, quantity)
             
             return NextResponse.json({
                 success: true,
@@ -179,14 +180,4 @@ async function addProductToCart(cartId: number, productId: number, quantity:numb
         .returning();
     
     return newCartProduct;
-}
-
-async function reduceProductStock(productId: number, quantity: number){
-    await db
-        .update(products)
-        .set({
-            stock: sql`${products.stock} - ${quantity}`
-
-        })
-        .where(eq(products.product_id, productId))
 }

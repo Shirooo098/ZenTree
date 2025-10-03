@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 async function addToCart(productId: number, quantity: number = 1){
+    console.log("Sending to API:", { productId, quantity });
+
     const res = await fetch("/api/cart/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

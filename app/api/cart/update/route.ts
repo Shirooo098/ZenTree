@@ -71,8 +71,7 @@ export async function PATCH(request: Request) {
         await db
             .update(cart_products)
             .set({ 
-                quantity,
-                updated_at: new Date()
+                quantity
             })
             .where(eq(cart_products.cart_products_id, cartProductId));
 
