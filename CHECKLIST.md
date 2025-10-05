@@ -1,6 +1,7 @@
 Authentication 
  - Add a Role-based access control
  - Create a staff role that do not have an access to delete
+ - Viewable Password
 
 Profile 
  - Edit or Create a User Address
