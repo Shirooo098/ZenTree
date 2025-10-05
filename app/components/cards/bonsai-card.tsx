@@ -3,28 +3,9 @@
 import { BonsaiProps } from "@/app/types/definition";
 import { Dot } from 'lucide-react'
 import { ManRope } from "@/app/ui/fonts";
-import { toast } from "sonner";
 import { Image, ImageKitProvider } from "@imagekit/next";
 import Link from "next/link";
 
-const toggleHeart = (id: number) => {
-    const heart = document.getElementById(`heart-${id}`) as HTMLElement;
-
-    if (!heart) return;
-
-    const path = heart.querySelector("path") as SVGPathElement;
-    if (path.getAttribute("fill") === "red") {
-        path.setAttribute("fill", "none");
-        path.setAttribute("stroke", "#6b7280");
-    } else {
-        path.setAttribute("fill", "red");
-        path.setAttribute("stroke", "red");
-    }
-};
-
-const addToCartNotif = () => {
-    toast('Product Added To Cart.');
-}
 
 export default function BonsaiCard({
     id,
