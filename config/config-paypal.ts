@@ -72,8 +72,8 @@ export async function createPayPalOrder(cartItems: CartItem[]) {
         },
       ],
       application_context: {
-        return_url: `${process.env.BASE_URL}/checkout/complete-order`,
-        cancel_url: `${process.env.BASE_URL}/checkout/cancel-order`,
+        return_url: `${process.env.PROD_URL}/checkout/complete-order`,
+        cancel_url: `${process.env.PROD_URL}/checkout/cancel-order`,
         shipping_preference: "NO_SHIPPING",
         user_action: "PAY_NOW",
         brand_name: "ZenTree",
