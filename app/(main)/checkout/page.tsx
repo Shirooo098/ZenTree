@@ -128,7 +128,7 @@ export default function Checkout() {
                   )}
                 </div>
               </div>
-              {/* Shipping Info */}
+          
               <div className="bg-white rounded-lg border border-gray-300 p-6 shadow-sm mt-5">
                 <h3 className="text-xl font-semibold mb-4">Shipping Address</h3>
                 <div className="space-y-4">
@@ -190,7 +190,7 @@ export default function Checkout() {
                       </div>
                     </div>
                   ))}
-                  {/* Totals */}
+                  
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-gray-500">Subtotal</span>
