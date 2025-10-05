@@ -11,6 +11,7 @@ import {
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { eq, and, inArray } from "drizzle-orm";
+import { createPayPalOrder } from "@/config/config-paypal";
 
 export async function POST(req: NextRequest) {
     try {
@@ -60,27 +61,48 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        const newOrderStatus = await getOrderStatus('new');
-        if (!newOrderStatus) {
+        const paypalOrder = await createPayPalOrder(
+            selectedCartItems.map(item => ({
+                product_id: item.product_id,
+                product_name: item.product_name,
+                quantity: item.quantity,
+                product_price: item.product_price
+            }))
+        )
+
+        const pendingOrderStatus = await getOrderStatus('pending');
+        if (!pendingOrderStatus) {
             return NextResponse.json(
                 { error: "Order status configuration error" },
                 { status: 500 }
             );
         }
 
-        const newOrder = await createOrder(userId, newOrderStatus.order_status_id);
+        const newOrder = await createOrder(
+            userId,
+            pendingOrderStatus.order_status_id,
+            paypalOrder.orderId
+        );
 
         await processOrderItems(newOrder.order_id, selectedCartItems);
 
-        await removeCartItems(cartProductIds);
+        // await removeCartItems(cartProductIds);
+        await db
+            .update(orders)
+            .set({ 
+                payment_status: 'awaiting_payment'
+            })
+            .where(eq(orders.order_id, newOrder.order_id));
 
         const total = calculateTotal(selectedCartItems);
 
         return NextResponse.json({
             success: true,
-            message: "Order placed successfully",
+            message: "Order placed, awaiting payment",
             order: {
                 order_id: newOrder.order_id,
+                paypal_order_id: paypalOrder.orderId,
+                approval_url: paypalOrder.approvalUrl,
                 total,
                 itemCount: selectedCartItems.length,
                 items: selectedCartItems.map(item => ({
@@ -88,7 +110,8 @@ export async function POST(req: NextRequest) {
                     product_name: item.product_name,
                     quantity: item.quantity,
                     price: Number(item.product_price)
-                }))
+                })),
+                cart_product_ids: cartProductIds
             }
         });
 
@@ -101,7 +124,6 @@ export async function POST(req: NextRequest) {
     }
 }
 
-// Helper functions
 async function getSelectedCartItems(cartProductIds: number[], userId: string) {
     return await db
         .select({
@@ -154,12 +176,18 @@ async function getOrderStatus(statusName: string) {
     return status;
 }
 
-async function createOrder(userId: string, orderStatusId: number) {
+async function createOrder(
+    userId: string, 
+    orderStatusId: number, 
+    paypalOrderId: string
+) {
     const [newOrder] = await db
         .insert(orders)
         .values({
             user_id: userId,
             order_status_id: orderStatusId,
+            paypal_order_id: paypalOrderId, // Store PayPal order ID
+            payment_status: 'pending'
         })
         .returning();
 
@@ -175,21 +203,9 @@ async function processOrderItems(orderId: number, items: any[]) {
             price_at_purchase: Number(item.product_price)
         });
 
-        await db
-            .update(products)
-            .set({
-                stock: item.stock - item.quantity
-            })
-            .where(eq(products.product_id, item.product_id));
     });
 
     await Promise.all(promises);
-}
-
-async function removeCartItems(cartProductIds: number[]) {
-    await db
-        .delete(cart_products)
-        .where(inArray(cart_products.cart_products_id, cartProductIds));
 }
 
 function calculateTotal(items: any[]): number {
