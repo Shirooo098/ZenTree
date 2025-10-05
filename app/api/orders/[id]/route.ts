@@ -3,11 +3,11 @@ import { db } from "@/db/drizzle";
 import { eq, and } from "drizzle-orm";
 import { orders, order_products, order_status, products, imageKit_productFiles } from "@/db/schema";
 import { headers } from "next/headers";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-    req: Request,
-    { params }: { params: { id: string } }
+    req: NextRequest,
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await auth.api.getSession({
