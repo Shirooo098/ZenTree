@@ -1,4 +1,14 @@
 import { DMSans } from "../fonts";
+import { 
+    Droplet, 
+    Sun, 
+    Scissors,
+    Package,
+    TriangleAlert,
+    Leaf
+} from 'lucide-react';
+
+
 
 export default function Carefundamentals() {
   return (
@@ -11,29 +21,55 @@ export default function Carefundamentals() {
                 <p className="text-[30px] text-black font-bold italic">
                     The Five Pillars of Bonsai Care
                 </p>
-                <p className="text-[20px] pt-6 flex flex-row ">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-droplet-icon lucide-droplet mr-2"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>
-                    <b>Watering</b>: The most critical and frequent care task. Bonsai soil drains quickly, requiring regular monitoring and watering.
+                <p className="text-[20px] pt-6 flex flex-col ">
+                    <div className="flex justify-start items-center">
+                        <Droplet strokeWidth={1}/>
+                        <p className="ml-2 font-semibold">Watering</p>
+                    </div>
+                    <div className="ml-2 sm:ml-4 md:ml-6 lg:ml-10 text-justify">
+                        <p>- The most critical and frequent care task. Bonsai soil drains quickly, requiring regular monitoring and watering.</p>
+                    </div>
                 </p>
 
-                 <p className="text-[20px] pt-6 flex flex-row ">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-sun-icon lucide-sun mr-2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
-                    <b>Light</b>:  Most bonsai require abundant light. Position according to species needs (full sun, partial shade, etc.).
+                 <p className="text-[20px] pt-6 flex flex-col ">
+                    <div className="flex justify-start items-center">
+                        <Sun strokeWidth={1}/>
+                        <p className="ml-2 font-semibold">Light</p>
+                    </div>
+
+                    <div className="ml-2 sm:ml-4 md:ml-6 lg:ml-10 text-justify">
+                        <p>-  Most bonsai require abundant light. Position according to species needs (full sun, partial shade, etc.).</p>
+                    </div>
                 </p>
 
-                <p className="text-[20px] pt-6 flex flex-row ">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-scissors-icon lucide-scissors mr-2"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></svg>                   
-                     <b>Pruning & Training</b>: Regular maintenance pruning and periodic structural pruning help maintain the tree&apos;s shape and health.
+                <p className="text-[20px] pt-6 flex flex-col ">
+                    <div className="flex justify-start items-center">
+                        <Scissors strokeWidth={1}/>
+                        <p className="ml-2 font-semibold">Pruning & Training</p>    
+                    </div>
+                    <div className="ml-2 sm:ml-4 md:ml-6 lg:ml-10 text-justify">
+                        <p>- Regular maintenance pruning and periodic structural pruning help maintain the tree&apos;s shape and health.</p>
+                    </div>
                 </p>
 
-                 <p className="text-[20px] pt-6 flex flex-row ">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-package-icon lucide-package mr-2"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><polyline points="3.29 7 12 12 20.71 7"/><path d="m7.5 4.27 9 5.15"/></svg>                    
-                    <b>Soil & Repotting</b>: Specialized bonsai soil and periodic repotting (every 1-5 years) ensure root health and nutrient availability.
+                 <p className="text-[20px] pt-6 flex flex-col ">
+                    <div className="flex justify-start items-center">
+                        <Package strokeWidth={1}/>
+                        <p className="ml-2 font-semibold">Soil & Repotting</p>
+                    </div>
+                    <div className="ml-2 sm:ml-4 md:ml-6 lg:ml-10 text-justify">
+                        <p>- Specialized bonsai soil and periodic repotting (every 1-5 years) ensure root health and nutrient availability.</p>
+                    </div>
                 </p>
 
-                 <p className="text-[20px] pt-6 flex flex-row">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-leaf-icon lucide-leaf mr-2"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>                   
-                     <b>Fertilization</b>: Regular feeding during growing season provides necessary nutrients for healthy growth.
+                <p className="text-[20px] pt-6 flex flex-col">
+                    <div className="flex justify-start items-center">
+                        <Leaf strokeWidth={1}/>
+                        <p className="ml-2 font-semibold">Fertilization</p>
+                    </div>
+                    <div className="ml-2 sm:ml-4 md:ml-6 lg:ml-10 text-justify">
+                        <p>- Regular feeding during growing season provides necessary nutrients for healthy growth.</p>
+                    </div>
                 </p>
 
             </div>
@@ -43,7 +79,7 @@ export default function Carefundamentals() {
                 <p className="text-[20px] pt-5 flex text-start">When you first bring home a bonsai, take time to understand its specific needs. Identify the species, as this determines most care requirements. Place it in an appropriate location based on light needs, and establish a regular inspection routine.</p>
             </div>
 
-            <div className="flex flex-row mt-10">
+            <div className="flex mt-10">
                 <div className="flex text-start flex-col mw-10%">
                     <p className="text-[20px] font-bold">Indoor Bonsai</p>
                     <p className="text-[20px]">Typically tropical/subtropical species that don&apos;t require winter dormancy. Need bright light, consistent temperatures, and higher humidity.</p>
@@ -124,7 +160,7 @@ export default function Carefundamentals() {
                 <p className="text-3xl font-serif">Recommended Tools</p>
             </div>
 
-            <div className="flex  mt-[2vw] gap-[4vw] justify-center xs:flex-col sm:flex-row">
+            <div className="flex  mt-[2vw] gap-[4vw] justify-center xs:flex-col sm">
                 <div className="border rounded-[10px] bg-white w-80 h-40 text-center justify-center items-center flex flex-col text-[15px] p-10">
                     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-scissors-icon lucide-scissors mb-[10px]"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></svg>
                     <p>Prunning Shears</p>
