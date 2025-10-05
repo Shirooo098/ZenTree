@@ -1,6 +1,6 @@
 
 
-export default function BillingDetails(){
+export default function OrderHistory(){
     return(
         <div>Billing Details</div>
     )

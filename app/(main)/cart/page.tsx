@@ -1,4 +1,4 @@
-// app/cart/page.tsx
+
 'use client';
 
 import Image from 'next/image';
@@ -67,7 +67,7 @@ export default function Cart() {
           <h2 className="text-2xl font-semibold text-gray-700 mb-2">Your cart is empty</h2>
           <p className="text-gray-500 mb-6">Start adding some bonsai trees to your cart!</p>
           <Link 
-            href="/products" 
+            href="/product" 
             className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition"
           >
             Browse Products
@@ -81,14 +81,13 @@ export default function Cart() {
     <div className="flex justify-center items-center min-h-screen py-40">
       <div className="flex gap-5 w-full max-w-6xl px-5">
         
-        {/* Shopping Cart Section */}
+
         <div className="bg-main-white rounded-sm basis-[60%]">
           <div className="m-10">
             <span className="flex justify-start items-center gap-3 font-bold text-2xl mb-6">
               <ShoppingCart /> Your Shopping Cart
             </span>
 
-            {/* Select All */}
             <div className='border-t-2 border-b-2 border-black py-3 mb-4'>
               <label className="flex items-center gap-3 cursor-pointer">
                 <input 
@@ -160,7 +159,7 @@ export default function Cart() {
                     </div>
 
                     <div className="flex items-center justify-between mt-4">
-                      {/* Quantity Controls */}
+                    
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => handleQuantityChange(item.cart_products_id, item.quantity, -1)}
@@ -196,7 +195,7 @@ export default function Cart() {
           </div>
         </div>
 
-        {/* Order Summary Section */}
+
         <div className="bg-main-white rounded-sm basis-[40%] sticky top-5 h-fit">
           <div className="m-10">
             <span className="flex justify-start items-center gap-3 font-bold text-2xl mb-6">
@@ -204,13 +203,13 @@ export default function Cart() {
             </span>
 
             <div className="space-y-4">
-              {/* Selected Items Header */}
+
               <div className="flex justify-between items-center font-semibold border-b pb-2">
                 <div>Product</div>
                 <div className='pr-10'>Price</div>
               </div>
 
-              {/* Selected Items List */}
+
               <div className='border-b-2 border-black pb-4 max-h-64 overflow-y-auto'>
                 {selectedCount === 0 ? (
                   <p className="text-gray-500 text-center py-4">No items selected</p>
@@ -236,7 +235,7 @@ export default function Cart() {
                 )}
               </div>
 
-              {/* Totals */}
+            
               <div className="space-y-2">
                 <div className="flex justify-between text-gray-600">
                   <span>Subtotal ({selectedCount} items)</span>
@@ -269,7 +268,7 @@ export default function Cart() {
                 </button>
               )}
               <Link 
-                href="/products"
+                href="/product"
                 className="block text-center text-green-600 hover:text-green-700 text-sm mt-2"
               >
                 Continue Shopping
@@ -282,3 +281,5 @@ export default function Cart() {
     </div>
   );
 }
+
+

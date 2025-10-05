@@ -22,10 +22,10 @@ export default function SideProfile() {
           Profile Information
         </Link>
 
-        <Link href="/profile/shipping-address"
+        <Link href="/profile/order-history"
           className="text-left text-lg font-dmSans flex items-center gap-3" >
           <FaLocationDot />
-          Shipping Addresses
+          Order History
         </Link>
 
         <Link href='/profile/billing-details'
