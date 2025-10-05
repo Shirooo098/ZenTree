@@ -3,19 +3,22 @@
 import { useAddToCart } from "@/app/lib/query/cart/cart-data";
 import { useUserProductId } from "@/app/lib/query/product-data";
 import { ImageKitProvider, Image } from "@imagekit/next";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { MoveLeft } from "lucide-react";
 import Link from "next/link";
 import Button from "@/app/ui/button";
 import { useState } from "react";
+import { toast } from "sonner";
+import { useDirectCheckout } from "@/app/lib/query/checkout/direct-checkout";
+
 
 export default function ProductId() {
     const { id } = useParams<{ id: string }>();
-    const router = useRouter();
     const prodId = Number(id)
 
     const {data: product, isLoading, isError } = useUserProductId(prodId)
     const addToCartMutation = useAddToCart();
+    const directCheckout = useDirectCheckout();
     const [quantity, setQuantity] = useState<number>(1);
 
     if (!product) return <div>Product not found</div>
@@ -29,16 +32,27 @@ export default function ProductId() {
     };
 
     const handleCheckout = () => {
-        // Add to cart first, then navigate to checkout
-        addToCartMutation.mutate(
-            { productId: prodId, quantity },
-            {
-                onSuccess: () => {
-                    // Navigate to checkout page after successfully adding to cart
-                    router.push('/checkout');
-                }
-            }
-        );
+        if( quantity > product.stock ){
+            toast.error("Insufficient stock")
+            return;
+        }
+
+        directCheckout.mutate([{
+            productId: product.id,
+            quantity
+        }])
+    };
+
+    const handleAddToCart = () => {
+        if (quantity > product.stock) {
+            toast.error("Insufficient stock");
+            return;
+        }
+
+        addToCartMutation.mutate({ 
+            productId: prodId, 
+            quantity 
+        });
     };
 
     if (isError) return <div>Error loading product!</div>
@@ -89,6 +103,7 @@ export default function ProductId() {
                         <div className="flex items-center border rounded overflow-hidden w-24">
                             <button
                                 onClick={decrease}
+                                disabled={quantity <= 1}
                                 className="px-1.5 py-1 text-lg font-bold border-r hover:bg-gray-200"
                             >
                                 -
@@ -96,6 +111,7 @@ export default function ProductId() {
                             <span className="flex-1 text-center">{quantity}</span>
                             <button
                                 onClick={increase}
+                                disabled={quantity >= product.stock}
                                 className="px-1.5 py-1 text-lg font-bold border-l hover:bg-gray-200"
                             >
                                 +
@@ -104,11 +120,11 @@ export default function ProductId() {
                         <Button
                             variant="secondary"
                             size="lg"
-                            disabled={addToCartMutation.isPending}
-                            onClick={() => addToCartMutation.mutate({ productId: prodId, quantity})} 
+                            disabled={addToCartMutation.isPending || product.stock === 0}
+                            onClick={handleAddToCart}
                             className="capitalize rounded-xs w-1/2"
                         >
-                            Add to Cart
+                            {addToCartMutation.isPending ? 'Adding...' : 'Add to Cart'}
                         </Button>
                         <Button
                             variant="primary"

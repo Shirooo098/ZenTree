@@ -112,3 +112,26 @@ export interface CartResponse {
     cart: CartProps;
     error?: string;
 }
+
+export interface OrderProduct {
+    product_id: number;
+    product_name: string;
+    product_image_url: string
+    quantity: number;
+    price: number;
+    subtotal?: number;
+    price_at_purchase?: number;
+}
+
+export interface Order {
+    order_id: number;
+    user_id: string;
+    order_status_name: string;
+    created_at: string;
+    updated_at?: string;
+    tax?: number;
+    discount?: number;
+    shippingFee?: number;
+    total: number;
+    products: OrderProduct[]
+}

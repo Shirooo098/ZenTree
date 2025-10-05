@@ -124,7 +124,7 @@ export const order_status = pgTable('order_status', {
   order_status_id: serial('order_status_id').primaryKey(),
   order_status_name: text('order_status_name')
     .notNull()
-    .default('new')
+    .default('pending')
 })
 
 export const orders = pgTable('orders', {
