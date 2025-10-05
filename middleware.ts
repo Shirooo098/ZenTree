@@ -4,7 +4,8 @@ import { headers } from "next/headers";
 
 const protectedRoute = {
 	admin: ["/admin"],
-	user: ["/profile", "/cart"]
+	user: ["/profile","/cart"],
+	product: ["/product/"]
 }
 
 export async function middleware(request: NextRequest) {
@@ -26,7 +27,11 @@ export async function middleware(request: NextRequest) {
     	currentPath.startsWith(route)
   	);
 
-    if(!isLoggedIn && (isAdminRoute || isUserRoute)) {
+	const isProductRoute = protectedRoute.product.some((route) => 
+		currentPath.startsWith(route)
+	)
+
+    if(!isLoggedIn && (isAdminRoute || isUserRoute || isProductRoute)) {
         return NextResponse.redirect(new URL("/sign-in", request.url));
     }
 
@@ -50,7 +55,7 @@ export async function middleware(request: NextRequest) {
  
 export const config = {
 	runtime: "nodejs",
-	matcher: ["/profile", "/cart", "/admin",
+	matcher: ["/profile", "/cart", "/admin", "/product/:path*",
 		'/((?!api|_next/static|_next/image|.*\\.png$).*)'
 	], 
 };

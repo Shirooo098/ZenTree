@@ -1,8 +1,7 @@
 import { db } from "@/db/drizzle";
 import { imageKit_productFiles, products } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, gt } from "drizzle-orm";
 import { NextResponse } from "next/server";
-
 
 export async function GET(){
     try {
@@ -26,7 +25,7 @@ export async function GET(){
                 imageKit_productFiles,
                 eq(products.imageKit_productFiles_id, imageKit_productFiles.id)
             )
-
+            .where(gt(products.stock, 0))
             if(productsData.length === 0){
                 return NextResponse.json({
                     error: "Product not found"

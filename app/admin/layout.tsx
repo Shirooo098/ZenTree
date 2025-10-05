@@ -19,7 +19,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
   
       
   return (
-    <TanstackProvider value={session}>
+    <TanstackProvider user={session.user}>
          <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
         <SidebarProvider
             style={

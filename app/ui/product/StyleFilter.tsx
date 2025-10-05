@@ -39,7 +39,7 @@ export default function StyleFilters({
 };
   return (
     <>
-      <div className="style-filters flex gap-3 flex-wrap pb-5">
+      <div className="flex gap-3 flex-wrap pl-5 pb-5">
         {styles.map((style) => (
           <button
             key={style}

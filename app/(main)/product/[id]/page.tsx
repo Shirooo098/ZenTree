@@ -1,52 +1,38 @@
 "use client";
 
-import { Loader } from "@/app/components/loader/loader";
+import { useAddToCart } from "@/app/lib/query/cart/cart-data";
 import { useUserProductId } from "@/app/lib/query/product-data";
 import { ImageKitProvider, Image } from "@imagekit/next";
 import { useParams } from "next/navigation";
 import { MoveLeft } from "lucide-react";
 import Link from "next/link";
 import Button from "@/app/ui/button";
-import { toast } from "sonner";
 import { useState } from "react";
 
-import RelatedProducts from "../../../ui/product/[id]/RelatedProducts";
-
 export default function ProductId() {
-  const { id } = useParams<{ id: string }>();
-  const productId = Number(id);
+    const { id } = useParams<{ id: string }>();
+    const prodId = Number(id)
 
-  const { data: product, isLoading, isError } = useUserProductId(productId);
+    const {data: product, isLoading, isError } = useUserProductId(prodId)
+    const addToCartMutation = useAddToCart();
+    const [quantity, setQuantity] = useState<number>(1);
 
-  const [quantity, setQuantity] = useState(1);
-  const addToCartNotif = () => {
-    toast("Product Added To Cart.");
-  };
+    if (!product) return <div>Product not found</div>
+       
+    const decrease = () => {
+        if (quantity > 1) setQuantity(prev => prev - 1);
+    };
 
-  const decrease = () => {
-    if (quantity > 1) setQuantity(quantity - 1);
-  };
+    const increase = () => {
+    setQuantity(prev => prev + 1);
+    };
 
-  const increase = () => {
-    setQuantity(quantity + 1);
-  };
+    if (isError) return <div>Error loading product!</div>
 
-  if (isError) return <div>Error loading product!</div>;
   return (
-    <>
       <div className="h-[100vh] flex flex-col justify-center items-center size-screen pt-40">
-        {isLoading ? (
-          <div className="size-screen flex justify-center items-center">
-            <Loader />
-          </div>
-        ) : !product ? (
-          <div className="size-screen flex justify-center items-center">
-            <p>Product not found</p>
-          </div>
-        ) : (
-          <>
             <div className="w-2/3 flex justify-center gap-20 ">
-              <ImageKitProvider urlEndpoint="https://ik.imagekit.io/your_id">
+              <ImageKitProvider urlEndpoint={product.image_url}>
                 <Image
                   loading="eager"
                   priority
@@ -104,7 +90,8 @@ export default function ProductId() {
                   <Button
                     variant="secondary"
                     size="lg"
-                    onClick={addToCartNotif}
+                    disabled={addToCartMutation.isPending}
+                    onClick={() => addToCartMutation.mutate({ productId: prodId, quantity})} 
                     className="capitalize rounded-xs w-1/2"
                   >
                     Add to Cart
@@ -119,12 +106,6 @@ export default function ProductId() {
                 </div>
               </div>
             </div>
-          </>
-        )}
-        <div className="self-start w-full">
-          <RelatedProducts />
         </div>
-      </div>
-    </>
-  );
+    )
 }

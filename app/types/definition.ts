@@ -32,11 +32,11 @@ export interface NavLink {
 export interface User{
     id: string,
     name: string,
-    username: string | null | undefined,
+    username?: string | null,
     phoneNumber?: string | null | undefined,
     email: string,
-    avater?: string,
-    role?: string,
+    avater?: string | null,
+    role?: string | null,
 }
 
 export type ProductFilters = {
@@ -80,4 +80,35 @@ export type ProductProps = {
     bonsaiCareLevel: string,
     stock: number, 
     description: string,
+}
+
+export type CartItemProps = {
+    cart_products_id: number;
+    cart_id: number;
+    product_id: number;
+    quantity: number;
+    product_name: string;
+    product_price: number;
+    product_category: string;
+    product_desc: string;
+    stock: number;
+    bonsai_size: string | null;
+    bonsai_category: string | null;
+    bonsai_age: string | null;
+    bonsai_care_level: string | null;
+    product_image_url: string | null;
+    product_image_id: string | null;
+}
+
+export interface CartProps {
+    cart_id: number | null;
+    items: CartItemProps[];
+    totalItems: number;
+    totalPrice: number;
+}
+
+export interface CartResponse {
+    success: boolean;
+    cart: CartProps;
+    error?: string;
 }
