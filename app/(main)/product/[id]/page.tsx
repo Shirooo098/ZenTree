@@ -12,8 +12,6 @@ import { toast } from "sonner";
 import { useDirectCheckout } from "@/app/lib/query/checkout/checkout-data";
 import { Loader } from "@/app/components/loader/loader";
 
-import Reviews from "@/app/ui/product/Review/reviews";
-import RateForm from "@/app/components/forms/rate-form";
 
 export default function ProductId() {
   const { id } = useParams<{ id: string }>();
