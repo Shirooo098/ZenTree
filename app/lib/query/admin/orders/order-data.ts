@@ -1,5 +1,6 @@
 import { AdminOrder } from "@/app/types/definition";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { redirect } from "next/navigation";
 import { toast } from "sonner";
 
 
@@ -66,7 +67,6 @@ export const useUpdateOrderStatus = () => {
       toast.success(`Order status updated to ${data.new_status}`);
       console.log(`Order ${data.order_id} updated:`, data);
       
-      // Invalidate and refetch orders
       queryClient.invalidateQueries({ queryKey: ["admin-orders"] });
     },
     onError: (error) => {
