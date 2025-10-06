@@ -11,14 +11,16 @@ interface SubmitReviewParams {
 
 interface Review {
   review_id: number;
-  user_id: string;
+  user_name: string;
+  product_name: string;
   rating: number;
   comment: string | null;
   created_at: string;
 }
 
+
 async function submitReview(params: SubmitReviewParams) {
-  const res = await fetch("/api/reviews/add-review", {
+  const res = await fetch("/api/reviews/get-review", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(params),
@@ -33,13 +35,17 @@ async function submitReview(params: SubmitReviewParams) {
   return res.json();
 }
 
-async function fetchProductReviews(productId: number): Promise<Review[]> {
-  const res = await fetch(`/api/review/productId=${productId}`, {
+async function fetchReviews(productId?: number): Promise<Review[]> {
+  const url = productId
+    ? `/api/reviews/get-review?product_id=${productId}`
+    : `/api/reviews/get-review`; // 👈 if no productId, fetch all
+
+  const res = await fetch(url, {
     credentials: "include",
   });
 
   if (!res.ok) {
-    throw new Error("Failed to fetch review");
+    throw new Error("Failed to fetch reviews");
   }
 
   const data = await res.json();
@@ -47,13 +53,26 @@ async function fetchProductReviews(productId: number): Promise<Review[]> {
 }
 
 export function useSubmitReview() {
-  return useMutation({ mutationFn: submitReview });
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: submitReview,
+    onSuccess: (data) => {
+      toast.success("Review submitted successfully!");
+      // Invalidate relevant queries
+      queryClient.invalidateQueries({ queryKey: ["reviews"] });
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Failed to submit review");
+    },
+  });
 }
 
-export function useProductReviews(productId: number) {
+// ✅ Consolidated into one function
+export function useGetReviews(productId?: number) {
   return useQuery({
-    queryKey: ["review", productId],
-    queryFn: () => fetchProductReviews(productId),
-    enabled: !!productId,
+    queryKey: ["reviews", productId ?? "all"],
+    queryFn: () => fetchReviews(productId),
+    enabled: true, // 👈 always fetch, even if no productId
   });
 }

@@ -2,7 +2,7 @@
 "use client";
 
 import { useSubmitReview } from "@/app/lib/query/review/review-data";
-import { Star } from "lucide-react";
+import { Leaf } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -25,7 +25,7 @@ export default function RateForm({
 
   const { mutate: submitReview, isPending } = useSubmitReview();
 
-   const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (rating === 0) {
@@ -53,25 +53,25 @@ export default function RateForm({
         Review: {productName}
       </h3>
 
-      {/* Star Rating */}
+      {/* Leaf Rating */}
       <div className="mb-6">
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Rating <span className="text-red-500">*</span>
         </label>
         <div className="flex gap-2">
-          {[1, 2, 3, 4, 5].map((star) => (
+          {[1, 2, 3, 4, 5].map((leaf) => (
             <button
-              key={star}
+              key={leaf}
               type="button"
-              onClick={() => setRating(star)}
-              onMouseEnter={() => setHoveredRating(star)}
+              onClick={() => setRating(leaf)}
+              onMouseEnter={() => setHoveredRating(leaf)}
               onMouseLeave={() => setHoveredRating(0)}
               className="transition-transform hover:scale-110"
             >
-              <Star
+              <Leaf
                 className={`w-8 h-8 ${
-                  star <= (hoveredRating || rating)
-                    ? "fill-yellow-400 text-yellow-400"
+                  leaf <= (hoveredRating || rating)
+                    ? "fill-[#675d50] text-[#675d50]"
                     : "text-gray-300"
                 }`}
               />
@@ -80,7 +80,7 @@ export default function RateForm({
         </div>
         {rating > 0 && (
           <p className="text-sm text-gray-600 mt-1">
-            {rating} out of 5 stars
+            {rating} out of 5 leaves
           </p>
         )}
       </div>
@@ -98,7 +98,7 @@ export default function RateForm({
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           rows={4}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#675d50] focus:border-transparent resize-none"
           placeholder="Share your thoughts about this product..."
           maxLength={500}
         />
@@ -111,7 +111,7 @@ export default function RateForm({
       <button
         type="submit"
         disabled={rating === 0 || isPending}
-        className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+        className="w-full bg-[#675d50] text-white py-3 rounded-lg font-semibold hover:bg-[#594f45] transition disabled:bg-gray-400 disabled:cursor-not-allowed"
       >
         {isPending ? "Submitting..." : "Submit Review"}
       </button>

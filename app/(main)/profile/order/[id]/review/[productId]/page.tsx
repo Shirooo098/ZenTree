@@ -1,6 +1,6 @@
 "use client";
 
-import RateForm from "@/app/components/forms/rate-form";
+import RateForm from "@/app/components/forms/reviews/rate-form";
 import { useOrder } from "@/app/lib/query/order/order-data";
 import { Image, ImageKitProvider } from "@imagekit/next";
 import { ArrowLeft } from "lucide-react";
