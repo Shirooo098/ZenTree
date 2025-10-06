@@ -22,10 +22,16 @@ export default function SideProfile() {
           Profile Information
         </Link>
 
+<<<<<<< HEAD
         <Link href="/profile/order-history"
           className="text-left text-lg font-dmSans flex items-center gap-3" >
             
             <Clock10 strokeWidth={1} />
+=======
+        <Link href="/profile/order"
+          className="text-left text-lg font-dmSans flex items-center gap-3" >
+          <FaLocationDot />
+>>>>>>> c1e3ceb65f10aaf228b041d53a1873c2df2facdd
           Order History
         </Link>
 

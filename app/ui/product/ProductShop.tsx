@@ -61,16 +61,16 @@ export default function ProductShop() {
         showing={filteredProducts.length}
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] xl:grid-cols-[320px_1fr] gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-[180px_1fr] xl:grid-cols-[235px_1fr] gap-8 ">
         <div>
           <Search filters={filters} setFilters={setFilters} />
         </div>
 
         <div className="grid place-items-center
         grid-cols-1 sm:grid-cols-2 
-         lg:grid-cols-3 gap-4">
+         lg:grid-cols-3 gap-6 mb-5">
             <Suspense fallback={<CardSkeleton/>}>
-              <BonsaiProduct productsData={filteredProducts}/>
+              <BonsaiProduct productsData={filteredProducts} />
             </Suspense>
         </div>
       </div>

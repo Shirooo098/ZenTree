@@ -24,7 +24,7 @@ type SearchProps = {
 
 export default function Search({ filters, setFilters }: SearchProps) {
   return (
-    <div className=" bg-gray-100 rounded-md p-4">
+    <div className=" bg-gray-100 rounded-md p-5">
       <h2 className="font-bold">Search Product    
 
       <button

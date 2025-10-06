@@ -30,7 +30,7 @@ export default function StyleFilters({
  const scrollToProducts = () => {
   const section = document.getElementById("shop-section");
   if (section) {
-    const yOffset = -100; // 👈 adjust this (negative moves up, positive moves down)
+    const yOffset = -100;
     const y =
       section.getBoundingClientRect().top + window.pageYOffset + yOffset;
 
