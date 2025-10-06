@@ -16,7 +16,7 @@ export default function ReviewsList({ productId }: ReviewsListProps) {
   if (!reviews || reviews.length === 0) return <p>No reviews yet.</p>;
 
   return (
-    <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
+    <div className="mt-8 bg-white p-6 rounded-lg shadow-md text-center">
       <h3 className="text-lg font-bold text-gray-900 mb-6 text-center">
         {productId ? `Reviews for Product ${productId}` : "All Reviews"}
       </h3>
@@ -25,7 +25,7 @@ export default function ReviewsList({ productId }: ReviewsListProps) {
         {reviews.map((review: any) => (
           <div
             key={review.review_id}
-            className="w-full sm:w-[45%] lg:w-[30%] bg-[#faf9f6] border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow duration-200"
+            className="w-full sm:w-[45%] lg:w-[30%] bg-[#ffffff] border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow duration-200 "
           >
             <p className="font-semibold text-[#675d50] mb-1">
               {review.user_name || "Anonymous"}
@@ -35,14 +35,14 @@ export default function ReviewsList({ productId }: ReviewsListProps) {
             </p>
 
             {/* Rating with leaves */}
-            <div className="flex items-center space-x-1 mb-2">
+            <div className="flex justify-center items-center space-x-1 mb-2">
               {[...Array(5)].map((_, i) => (
                 <Leaf
                   key={i}
                   size={18}
                   className={
                     i < review.rating
-                      ? "text-green-600 fill-green-600"
+                      ? "text-green-600 fill-[#675d50] "
                       : "text-gray-300"
                   }
                 />
