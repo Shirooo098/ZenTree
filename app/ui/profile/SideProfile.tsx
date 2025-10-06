@@ -28,11 +28,11 @@ export default function SideProfile() {
           Order History
         </Link>
 
-        <Link href='/profile/billing-details'
+        {/* <Link href='/profile/billing-details'
          className="text-left text-lg font-dmSans flex items-center gap-3" >
           <FaIdCard />
           Billing Details
-        </Link>
+        </Link> */}
 
         <Link href='/profile/shipping-address'
          className="text-left text-lg font-dmSans flex items-center gap-3" >
