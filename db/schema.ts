@@ -172,7 +172,7 @@ export const address = pgTable("address", {
 
 export const reviews = pgTable("reviews", {
   review_id: serial("review_id").primaryKey(),
-  user_id: integer("integer_id")
+  user_id: integer("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
   product_id: integer("product_id")
