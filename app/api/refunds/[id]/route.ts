@@ -5,9 +5,10 @@ import { eq } from "drizzle-orm"; // ✅ import eq helper
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const refundId = Number(params.id);
+  const { id } = await params;
+  const refundId = Number(id);
   const body = await req.json();
   const { status } = body;
 

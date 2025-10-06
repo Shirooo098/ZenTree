@@ -177,3 +177,23 @@ export interface CompleteOrderRequest {
     orderId: number;
     paypalOrderId: string;
 }
+export interface Review {
+    id: number;
+    product_id: number;
+    order_id: number;
+    user_id: string;
+    user_name: string;
+    product_name: string;  
+    rating: number;
+    title: string;
+    comment: string;
+    created_at: string;
+    user_avatar?: string | null;
+}
+
+export interface SubmitReviewParams {
+    productId: number;
+    orderId: number;
+    rating: number;
+    comment: string;
+}

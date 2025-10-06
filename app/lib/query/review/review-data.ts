@@ -1,27 +1,17 @@
-// app/lib/query/review/review-data.ts
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-
-interface SubmitReviewParams {
-  product_id: number;
-  order_id: number;
-  rating: number;
-  comment?: string;
-}
-
-interface Review {
-  review_id: number;
-  user_id: string;
-  rating: number;
-  comment: string | null;
-  created_at: string;
-}
+import { Review, SubmitReviewParams } from "@/app/types/definition";
 
 async function submitReview(params: SubmitReviewParams) {
-  const res = await fetch("/api/reviews/add-review", {
+  const res = await fetch(`/api/reviews/add-review`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(params),
+    body: JSON.stringify({
+      product_id: params.productId,  
+      order_id: params.orderId,
+      rating: params.rating,
+      comment: params.comment,
+    }),
     credentials: "include",
   });
 
@@ -33,13 +23,13 @@ async function submitReview(params: SubmitReviewParams) {
   return res.json();
 }
 
-async function fetchProductReviews(productId: number): Promise<Review[]> {
-  const res = await fetch(`/api/review/productId=${productId}`, {
+async function fetchReviews(productId: number): Promise<Review[]> {
+  const res = await fetch(`/api/reviews/${productId}`, {
     credentials: "include",
   });
 
   if (!res.ok) {
-    throw new Error("Failed to fetch review");
+    throw new Error("Failed to fetch reviews");
   }
 
   const data = await res.json();
@@ -47,13 +37,27 @@ async function fetchProductReviews(productId: number): Promise<Review[]> {
 }
 
 export function useSubmitReview() {
-  return useMutation({ mutationFn: submitReview });
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: submitReview,
+    onSuccess: (data, variables) => {
+      toast.success("Review submitted successfully!");
+      // Invalidate reviews for the specific product
+      queryClient.invalidateQueries({ 
+        queryKey: ["reviews", variables.productId] 
+      });
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Failed to submit review");
+    },
+  });
 }
 
-export function useProductReviews(productId: number) {
+export function useGetReviews(productId: number) {
   return useQuery({
-    queryKey: ["review", productId],
-    queryFn: () => fetchProductReviews(productId),
-    enabled: !!productId,
+    queryKey: ["reviews", productId],
+    queryFn: () => fetchReviews(productId),
+    enabled: !!productId, // Only fetch when productId exists
   });
 }

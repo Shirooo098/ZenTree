@@ -3,8 +3,10 @@ import { db } from "@/db/drizzle";
 import { refund } from "@/db/schema";
 
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
-  const orderId = Number(params.id);
+export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const orderId = Number(id);
+
   const body = await req.json();
   const { user_id, email, reason, comments } = body;
 

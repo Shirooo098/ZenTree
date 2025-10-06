@@ -1,14 +1,18 @@
 // app/api/reviews/route.ts
 import { db } from "@/db/drizzle";
 import { eq } from "drizzle-orm";
-import { reviews} from "@/db/schema";
+import { products, reviews, user} from "@/db/schema";
 import { NextRequest, NextResponse } from "next/server";
  
 // GET reviews for a specific product
-export async function GET(req: NextRequest) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{id: string}>}
+) {
   try {
-    const { searchParams } = new URL(req.url);
-    const productId = searchParams.get("productId");
+    const { id } = await params
+
+    const productId = Number(id);
 
     if (!productId) {
       return NextResponse.json(
@@ -17,17 +21,23 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const productReviews = await db
+   const productReviews = await db
       .select({
         review_id: reviews.review_id,
         user_id: reviews.user_id,
+        user_name: user.name,
+        product_id: reviews.product_id,
+        product_name: products.product_name,
         rating: reviews.rating,
         comment: reviews.comment,
         created_at: reviews.created_at,
       })
       .from(reviews)
-      .where(eq(reviews.product_id, parseInt(productId)))
+      .innerJoin(user, eq(reviews.user_id, user.id))
+      .innerJoin(products, eq(reviews.product_id, products.product_id))
+      .where(eq(reviews.product_id, productId))
       .orderBy(reviews.created_at);
+
 
     return NextResponse.json({
       success: true,

@@ -1,41 +1,82 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useOrder } from "@/app/lib/query/order/order-data";
 import { ImageKitProvider, Image } from "@imagekit/next";
 import { ArrowLeft, CheckCircle, Package, X } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { sendReceiptAction } from "@/app/actions/send-receipt.action";
+import { useUser } from "@/context/user-context";
 
 export default function OrderPage() {
   const { id } = useParams<{ id: string }>();
   const orderId = Number(id);
   const { data: order, isLoading, isError } = useOrder(orderId);
+  const { user } = useUser();
 
   const [showRefundForm, setShowRefundForm] = useState(false);
   const [reason, setReason] = useState("");
   const [comments, setComments] = useState("");
-  const [email, setEmail] = useState(""); // Fetched from user table
-  const [submitted, setSubmitted] = useState(false);
+  const [isSendingReceipt, setIsSendingReceipt] = useState(false);
 
-  // Fetch user email once order is available
-  useEffect(() => {
-  async function fetchUserEmail() {
-    if (!order?.user_id) return; // Exit if no order yet
+  const handleSendReceipt = async () => {
+    if (!order || !user.email) {
+      alert("Unable to send receipt. Missing order or email information.");
+      return;
+    }
+
+    setIsSendingReceipt(true);
 
     try {
-      const res = await fetch(`/api/users/${order.user_id}`);
-      if (!res.ok) throw new Error("Failed to fetch user");
+      const result = await sendReceiptAction({
+        to: user.email,
+        orderDetails: order,
+        userName: user.name,
+      });
 
-      const userData = await res.json();
-      setEmail(userData.email || "");
+      if (result.success) {
+        alert("Receipt sent successfully to your email!");
+      } else {
+        alert("Failed to send receipt. Please try again.");
+      }
     } catch (err) {
-      console.error("Failed to fetch user email", err);
+      console.error("Error sending receipt:", err);
+      alert("Something went wrong while sending the receipt.");
+    } finally {
+      setIsSendingReceipt(false);
     }
-  }
+  };
 
-  fetchUserEmail();
-}, [order?.user_id]);
+  const handleRefundSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!reason || !user.email) return alert("Please fill in all required fields.");
+
+    try {
+      const res = await fetch(`/api/orders/${orderId}/refund`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: order?.user_id,
+          email: user.email,
+          reason,
+          comments,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        return alert(`Error: ${data.error}`);
+      }
+
+      setShowRefundForm(false);
+      alert("Refund request submitted successfully!");
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong. Please try again.");
+    }
+  };
 
 
 
@@ -63,64 +104,6 @@ export default function OrderPage() {
     console.error(err);
     alert("Failed to send receipt email. Try again.");
   }
-};
-
-
-  const handleRefundSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!reason || !email) return alert("Please fill in all required fields.");
-    if (!order?.user_id) return alert("Order not found");
-
-    try {
-      const res = await fetch(`/api/orders/${orderId}/refund`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: order.user_id,
-          email,
-          reason,
-          comments,
-        }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        return alert(`Error: ${data.error}`);
-      }
-
-      setSubmitted(true);
-      setShowRefundForm(false);
-      alert("Refund request submitted successfully!");
-    } catch (err) {
-      console.error(err);
-      alert("Something went wrong. Please try again.");
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
-      </div>
-    );
-  }
-
-  if (isError || !order) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-700 mb-2">Order not found</h2>
-          <p className="text-gray-500 mb-6">We couldn&apos;t find this order.</p>
-          <Link
-            href="/product"
-            className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition"
-          >
-            Continue Shopping
-          </Link>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen py-12 px-6">
@@ -144,26 +127,22 @@ export default function OrderPage() {
               <h2 className="text-2xl font-bold text-gray-900">Order Details</h2>
             </div>
 
-            {/* Refund / Receipt Buttons only for Delivered */}
-            {order?.order_status_name.toLowerCase() === "delivered" && (
-              <div className="flex gap-3">
-                {!email ? (
-      <span>Loading email...</span>
-    ) : (
-      <button
-        className="bg-green-600 hover:bg-green-900 text-white font-medium px-4 py-2 rounded-lg transition"
-        onClick={handleSendReceipt}
-      >
-        Receipt
-      </button>
-    )}
-
-                <button
-                  className="bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded-lg transition"
+            {/* Action Buttons for Delivered orders */}
+            {order.order_status_name.toLowerCase() === "delivered" && (
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  onClick={handleSendReceipt}
+                  disabled={isSendingReceipt || !user.email}
+                >
+                  {isSendingReceipt ? "Sending..." : "Get Receipt"}
+                </Button>
+                <Button
+                  variant="destructive"
                   onClick={() => setShowRefundForm(true)}
                 >
                   Request Refund
-                </button>
+                </Button>
               </div>
             )}
           </div>
@@ -232,8 +211,17 @@ export default function OrderPage() {
                       </p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="font-bold text-gray-900">₱{item.subtotal?.toFixed(2)}</p>
+                  <div className="flex flex-col ">
+                    <div className="text-right">
+                      <p className="font-bold text-gray-900">₱{item.subtotal?.toFixed(2)}</p>
+                    </div>
+                    {order.order_status_name.toLowerCase() === "delivered" && (
+                      <Link href={`/profile/order/${order.order_id}/review/${item.product_id}`}>
+                        <Button variant="outline" className="mt-3">
+                          Review
+                        </Button>
+                      </Link>
+                    )}
                   </div>
                 </div>
               ))}
@@ -290,10 +278,9 @@ export default function OrderPage() {
                 <input
                   type="email"
                   required
-                  placeholder="Enter your email address"
-                  className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-army-brown outline-none"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full border rounded-lg px-3 py-2 bg-gray-50 text-gray-700"
+                  value={user.email}
+                  readOnly
                 />
               </div>
 
@@ -312,7 +299,7 @@ export default function OrderPage() {
                   <option value="">Select a reason</option>
                   <option value="Wrong item received">Wrong item received</option>
                   <option value="Item arrived damaged">Item arrived damaged</option>
-                  <option value="Order didn’t arrive">Order didn’t arrive</option>
+                  <option value="Order didn't arrive">Order didn&apos;t arrive</option>
                   <option value="Changed my mind">Changed my mind</option>
                   <option value="Other">Other</option>
                 </select>
