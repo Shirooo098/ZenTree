@@ -10,7 +10,7 @@ export async function getUserAddresses(userId: string) {
     .from(schema.address)
     .where(eq(schema.address.user_id, userId));
 
-  // Convert null → undefined for optional fields
+  
   return results.map((addr) => ({
     ...addr,
     postal_code: addr.postal_code ?? undefined,

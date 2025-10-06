@@ -4,9 +4,9 @@ import Link from 'next/link'
 import { useState } from "react";
 
 
-import { FaUser } from "react-icons/fa6";
-import { FaLocationDot } from "react-icons/fa6";
-import { FaIdCard } from "react-icons/fa6";
+import { User } from 'lucide-react';
+import { History } from 'lucide-react';
+import { MapPinHouse } from 'lucide-react';
 import Logout from '../logout';
 
 
@@ -18,13 +18,13 @@ export default function SideProfile() {
        <div className="space-y-4 ">
          <Link href="/profile"
           className="text-left text-lg font-dmSans flex items-center gap-3" >
-          <FaUser />
+          <User />
           Profile Information
         </Link>
 
         <Link href="/profile/order"
           className="text-left text-lg font-dmSans flex items-center gap-3" >
-          <FaLocationDot />
+          <History />
           Order History
         </Link>
 
@@ -36,7 +36,7 @@ export default function SideProfile() {
 
         <Link href='/profile/shipping-address'
          className="text-left text-lg font-dmSans flex items-center gap-3" >
-          <FaIdCard />
+          <MapPinHouse />
           Shipping Address
         </Link>
 
