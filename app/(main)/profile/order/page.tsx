@@ -24,16 +24,16 @@ export default function OrdersPage() {
     );
 
   return (
-    <div className="max-w-4xl mx-auto py-10 px-6">
-      <h1 className="text-3xl font-bold text-dark-brown mb-8 text-center">
+    <div className="w-full py-10 px-4 sm:px-8">
+      {/* <h1 className="text-3xl font-bold text-dark-brown mb-8 text-center">
         My Orders
-      </h1>
+      </h1> */}
 
       <div className="space-y-6">
         {orders.map((order) => (
           <div
             key={order.order_id}
-            className="bg-white shadow-md rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition"
+            className="bg-white shadow-md rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition w-full"
           >
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b pb-3 mb-4">
@@ -82,17 +82,25 @@ export default function OrdersPage() {
                       />
                     </ImageKitProvider>
                   </div>
-                  <div className="flex-1 text-center sm:text-left">
-                    <p className="font-semibold text-dark-brown">{p.product_name}</p>
-                    <p className="text-sm text-gray-600">
-                      Quantity: {p.quantity}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      Price: ₱{p.price_at_purchase!.toFixed(2)}
-                    </p>
-                    <p className="text-md font-semibold text-army-brown mt-1">
-                      Total: ₱{(p.price_at_purchase! * p.quantity).toFixed(2)}
-                    </p>
+
+                  {/* Product Info */}
+                  <div className="flex-1 w-full flex justify-between items-center text-center sm:text-left">
+                    <div className="text-left">
+                      <p className="font-semibold text-dark-brown">{p.product_name}</p>
+                      <p className="text-sm text-gray-600">
+                        Quantity: {p.quantity}
+                      </p>
+                    </div>
+
+                    {/* Price Section (Right Side) */}
+                    <div className="text-right">
+                      <p className="text-sm text-gray-600">
+                        Price: ₱{p.price_at_purchase!.toFixed(2)}
+                      </p>
+                      <p className="text-md font-semibold text-army-brown mt-1">
+                        Total: ₱{(p.price_at_purchase! * p.quantity).toFixed(2)}
+                      </p>
+                    </div>
                   </div>
                 </div>
               ))}
