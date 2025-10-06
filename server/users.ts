@@ -3,7 +3,8 @@
 import { auth } from "@/app/lib/auth"
 import { getUserRole } from "@/app/util/user-role.action"
 import { db } from "@/db/drizzle"
-import { user } from "@/db/schema";
+import { order_status, orders, user } from "@/db/schema";
+import { sql } from "drizzle-orm";
 
 
 export const signIn = async (email: string, password: string) => {
@@ -56,13 +57,42 @@ export const signUp = async (email: string, password: string, username: string, 
 }
 
 export const getAllUsers = async () => {
-    try {
-        const users = await db.query.user.findMany()
+  try {
+    const dateThreshold = new Date();
+    dateThreshold.setDate(dateThreshold.getDate() - 1); 
 
+    const users = await db
+      .select({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        emailVerified: user.emailVerified,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        username: user.username,
+        displayUsername: user.displayUsername,
+        role: user.role,
+        banned: user.banned,
+        banReason: user.banReason,
+        banExpires: user.banExpires,
+        phoneNumber: user.phoneNumber,
+        cancellationCount: sql<number>`
+          COALESCE(
+            (SELECT COUNT(*) 
+             FROM ${orders} o
+             INNER JOIN ${order_status} os ON o.order_status_id = os.order_status_id
+             WHERE o.user_id = ${user.id}
+             AND os.order_status_name = 'Cancelled'
+             AND o.created_at >= ${dateThreshold}
+            ), 0
+          )
+        `.as('cancellation_count')
+      })
+      .from(user);
 
-        return users;
-    } catch (error) {
-        console.error(error)
-        return [];
-    }
-}
+    return users;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};

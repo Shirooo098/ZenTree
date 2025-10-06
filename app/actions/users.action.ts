@@ -3,8 +3,8 @@
 import { auth } from "@/app/lib/auth";
 import { headers } from "next/headers";
 import { db } from "@/db/drizzle";
-import { user } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { order_status, orders, user } from "@/db/schema";
+import { eq, and, gte, count, sql } from "drizzle-orm";
 
 export const banUser = async (
   userId: string, 
