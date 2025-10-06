@@ -2,6 +2,9 @@
 
 import { auth } from "@/app/lib/auth"
 import { getUserRole } from "@/app/util/user-role.action"
+import { db } from "@/db/drizzle"
+import { user } from "@/db/schema";
+
 
 export const signIn = async (email: string, password: string) => {
     try {
@@ -49,5 +52,17 @@ export const signUp = async (email: string, password: string, username: string, 
             success: false,
             message: e.message || "An unknown error occured."
         }
+    }
+}
+
+export const getAllUsers = async () => {
+    try {
+        const users = await db.query.user.findMany()
+
+
+        return users;
+    } catch (error) {
+        console.error(error)
+        return [];
     }
 }
