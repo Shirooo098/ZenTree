@@ -35,12 +35,8 @@ async function submitReview(params: SubmitReviewParams) {
   return res.json();
 }
 
-async function fetchReviews(productId?: number): Promise<Review[]> {
-  const url = productId
-    ? `/api/reviews/get-review?product_id=${productId}`
-    : `/api/reviews/get-review`; // 👈 if no productId, fetch all
-
-  const res = await fetch(url, {
+async function fetchReviews(productId: number): Promise<Review[]> {
+  const res = await fetch(`/api/reviews/${productId}`, {
     credentials: "include",
   });
 
@@ -57,7 +53,7 @@ export function useSubmitReview() {
 
   return useMutation({
     mutationFn: submitReview,
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success("Review submitted successfully!");
       // Invalidate relevant queries
       queryClient.invalidateQueries({ queryKey: ["reviews"] });
@@ -69,9 +65,9 @@ export function useSubmitReview() {
 }
 
 // ✅ Consolidated into one function
-export function useGetReviews(productId?: number) {
+export function useGetReviews(productId: number) {
   return useQuery({
-    queryKey: ["reviews", productId ?? "all"],
+    queryKey: ["reviews"],
     queryFn: () => fetchReviews(productId),
     enabled: true, // 👈 always fetch, even if no productId
   });

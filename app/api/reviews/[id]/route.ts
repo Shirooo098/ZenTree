@@ -5,10 +5,14 @@ import { reviews} from "@/db/schema";
 import { NextRequest, NextResponse } from "next/server";
  
 // GET reviews for a specific product
-export async function GET(req: NextRequest) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{id: string}>}
+) {
   try {
-    const { searchParams } = new URL(req.url);
-    const productId = searchParams.get("productId");
+    const { id } = await params
+
+    const productId = Number(id);
 
     if (!productId) {
       return NextResponse.json(
@@ -26,7 +30,7 @@ export async function GET(req: NextRequest) {
         created_at: reviews.created_at,
       })
       .from(reviews)
-      .where(eq(reviews.product_id, parseInt(productId)))
+      .where(eq(reviews.product_id, productId))
       .orderBy(reviews.created_at);
 
     return NextResponse.json({

@@ -11,9 +11,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useDirectCheckout } from "@/app/lib/query/checkout/checkout-data";
 import { Loader } from "@/app/components/loader/loader";
-
-import Reviews from "@/app/ui/product/Review/reviews";
-import RateForm from "@/app/components/forms/reviews/rate-form";
+import ReviewsList from "@/app/components/forms/reviews/ReviewsList";
 
 export default function ProductId() {
   const { id } = useParams<{ id: string }>();
@@ -63,7 +61,8 @@ export default function ProductId() {
     const isInsufficientStock = quantity > product.stock;
 
     return (
-        <div className="h-[100vh] flex flex-col justify-center items-center size-screen pt-40">
+       <div className="">
+         <div className="h-[100vh] flex flex-col justify-center items-center size-screen pt-40">
             <div className="w-2/3 flex justify-center gap-20 ">
                 <ImageKitProvider urlEndpoint={product.image_url}>
                     <Image
@@ -164,6 +163,11 @@ export default function ProductId() {
 
                 </div>
             </div>
+
+            <div className="">
+                <ReviewsList productId={prodId} />
+            </div>
+       </div>
 
     )
 }

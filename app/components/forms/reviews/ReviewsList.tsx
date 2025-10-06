@@ -5,20 +5,19 @@ import { Leaf } from "lucide-react";
 import { useGetReviews } from "@/app/lib/query/review/review-data";
 
 interface ReviewsListProps {
-  productId?: number;
+  productId: number;
 }
 
 export default function ReviewsList({ productId }: ReviewsListProps) {
-  const { data: reviews, isLoading, isError } = useGetReviews(productId);
+  const { data: reviews, isLoading } = useGetReviews(productId);
 
   if (isLoading) return <p>Loading reviews...</p>;
-  if (isError) return <p>Failed to load reviews.</p>;
   if (!reviews || reviews.length === 0) return <p>No reviews yet.</p>;
 
   return (
     <div className="mt-8 bg-white p-6 rounded-lg shadow-md text-center">
       <h3 className="text-lg font-bold text-gray-900 mb-6 text-center">
-        {productId ? `Reviews for Product ${productId}` : "All Reviews"}
+        Reviews:
       </h3>
 
       <div className="flex flex-wrap gap-6 justify-center">
