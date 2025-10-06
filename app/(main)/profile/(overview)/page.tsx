@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import EditProfile from "@/app/components/forms/profile/edit-profile";
 import { Suspense } from "react";
 import { SkeletonProfile } from "@/components/ui/skeleton/skeleton";
+import RateForm from "@/app/components/forms/rate-form";
 
 export default async function Profile() {
   const session = await auth.api.getSession({
@@ -35,6 +36,8 @@ export default async function Profile() {
           />
         </Suspense>
       </div>
+
+
     </>
   );
 }

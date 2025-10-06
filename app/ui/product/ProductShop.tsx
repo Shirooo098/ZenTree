@@ -6,6 +6,7 @@ import BonsaiProduct from "./BonsaiProduct";
 import { useAllProducts } from "@/app/lib/query/product-data";
 import { CardSkeleton } from "@/components/ui/skeleton/skeleton";
 
+
 export default function ProductShop() {
 
   const { data, isError } = useAllProducts("/api/user");

@@ -82,6 +82,7 @@ export const products = pgTable('products', {
   bonsai_care_level: text("bonsai_care_level"),
   product_desc: text('product_desc').notNull(),
   stock: integer('stock').notNull(),
+  rating: integer('rating')
 });
 
 export const imageKit_productFiles = pgTable('imageKit_productFiles', {
