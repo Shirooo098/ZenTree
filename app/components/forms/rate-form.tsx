@@ -4,6 +4,7 @@
 import { useSubmitReview } from "@/app/lib/query/review/review-data";
 import { Star } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface RateFormProps {
   productId: number;
@@ -24,25 +25,23 @@ export default function RateForm({
 
   const { mutate: submitReview, isPending } = useSubmitReview();
 
-  const handleSubmit = (e: React.FormEvent) => {
+   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (rating === 0) {
+      toast.error("Please select a rating before submitting.");
       return;
     }
 
     submitReview(
-      {
-        product_id: productId,
-        order_id: orderId,
-        rating,
-        comment: comment.trim() || undefined,
-      },
+      { product_id: productId, order_id: orderId, rating, comment },
       {
         onSuccess: () => {
-          setRating(0);
-          setComment("");
-          onSuccess?.();
+          toast.success("Review submitted successfully!");
+          if (onSuccess) onSuccess();
+        },
+        onError: (error: any) => {
+          toast.error(error.message || "Failed to submit review.");
         },
       }
     );

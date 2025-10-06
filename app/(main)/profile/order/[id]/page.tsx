@@ -118,13 +118,14 @@ export default function OrderPage() {
                     </p>
                   </div>
                   <div>
-                    <Link href={`/profile/order/${orderId}/review?product_id=${item.product_id}`}>
-                    <button>
-                      Review
-                    </button>
-
-                    </Link>
-                  
+                    {order.order_status_name?.toLowerCase() === "paid" && (
+                      <Link
+                        href={`/profile/order/${orderId}/review/${item.product_id}`}
+                        className="inline-block mt-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition text-sm font-medium"
+                      >
+                        Review
+                      </Link>
+                    )}
                   </div>
                 </div>
               ))}
@@ -158,20 +159,6 @@ export default function OrderPage() {
             View All Orders
           </Link>
         </div>
-
-        {/* ✅ Review Section */}
-        {!showReviewForm ? (
-          <button
-            onClick={() => setShowReviewForm(true)}
-            className="px-8 py-3 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 transition mb-6"
-          >
-            Leave a Review
-          </button>
-        ) : (
-          <div className="w-full max-w-md mb-8">
-            <RateForm />
-          </div>
-        )}
       </div>
     </div>
   );

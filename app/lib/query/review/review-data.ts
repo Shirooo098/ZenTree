@@ -18,7 +18,7 @@ interface Review {
 }
 
 async function submitReview(params: SubmitReviewParams) {
-  const res = await fetch("/api/review/add-review", {
+  const res = await fetch("/api/reviews/add-review", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(params),
@@ -34,7 +34,7 @@ async function submitReview(params: SubmitReviewParams) {
 }
 
 async function fetchProductReviews(productId: number): Promise<Review[]> {
-  const res = await fetch(`/api/review?product_id=${productId}`, {
+  const res = await fetch(`/api/review/productId=${productId}`, {
     credentials: "include",
   });
 
@@ -47,19 +47,7 @@ async function fetchProductReviews(productId: number): Promise<Review[]> {
 }
 
 export function useSubmitReview() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: submitReview,
-    onSuccess: (data) => {
-      toast.success("Review submitted successfully!");
-      // Invalidate relevant queries
-      queryClient.invalidateQueries({ queryKey: ["review"] });
-    },
-    onError: (error: any) => {
-      toast.error(error.message || "Failed to submit review");
-    },
-  });
+  return useMutation({ mutationFn: submitReview });
 }
 
 export function useProductReviews(productId: number) {

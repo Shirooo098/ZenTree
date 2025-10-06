@@ -1,16 +1,14 @@
 // app/api/reviews/route.ts
-import { auth } from "@/app/lib/auth";
 import { db } from "@/db/drizzle";
-import { eq, and } from "drizzle-orm";
-import { reviews, orders, order_products } from "@/db/schema";
-import { headers } from "next/headers";
+import { eq } from "drizzle-orm";
+import { reviews} from "@/db/schema";
 import { NextRequest, NextResponse } from "next/server";
  
 // GET reviews for a specific product
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const productId = searchParams.get("product_id");
+    const productId = searchParams.get("productId");
 
     if (!productId) {
       return NextResponse.json(
