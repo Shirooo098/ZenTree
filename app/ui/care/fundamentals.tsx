@@ -28,7 +28,7 @@ export default function Carefundamentals() {
                     </div>
                     <div className="ml-2 sm:ml-4 md:ml-6 lg:ml-10 text-justify">
                         <p>- The most critical and frequent care task. Bonsai soil drains quickly, requiring regular monitoring and watering.</p>
-                    </div>
+                    </div>Pruning & Training
                 </div>
 
                  <div className="text-[20px] pt-6 flex flex-col ">
@@ -42,7 +42,7 @@ export default function Carefundamentals() {
                     </div>
                 </div>
 
-                <p className="text-[20px] pt-6 flex flex-col ">
+                <div className="text-[20px] pt-6 flex flex-col ">
                     <div className="flex justify-start items-center">
                         <Scissors strokeWidth={1}/>
                         <p className="ml-2 font-semibold">Pruning & Training</p>    
@@ -50,9 +50,9 @@ export default function Carefundamentals() {
                     <div className="ml-2 sm:ml-4 md:ml-6 lg:ml-10 text-justify">
                         <p>- Regular maintenance pruning and periodic structural pruning help maintain the tree&apos;s shape and health.</p>
                     </div>
-                </p>
+                </div>
 
-                 <p className="text-[20px] pt-6 flex flex-col ">
+                 <div className="text-[20px] pt-6 flex flex-col ">
                     <div className="flex justify-start items-center">
                         <Package strokeWidth={1}/>
                         <p className="ml-2 font-semibold">Soil & Repotting</p>
@@ -60,9 +60,9 @@ export default function Carefundamentals() {
                     <div className="ml-2 sm:ml-4 md:ml-6 lg:ml-10 text-justify">
                         <p>- Specialized bonsai soil and periodic repotting (every 1-5 years) ensure root health and nutrient availability.</p>
                     </div>
-                </p>
+                </div>
 
-                <p className="text-[20px] pt-6 flex flex-col">
+                <div className="text-[20px] pt-6 flex flex-col">
                     <div className="flex justify-start items-center">
                         <Leaf strokeWidth={1}/>
                         <p className="ml-2 font-semibold">Fertilization</p>
@@ -70,7 +70,7 @@ export default function Carefundamentals() {
                     <div className="ml-2 sm:ml-4 md:ml-6 lg:ml-10 text-justify">
                         <p>- Regular feeding during growing season provides necessary nutrients for healthy growth.</p>
                     </div>
-                </p>
+                </div>
 
             </div>
 
@@ -144,9 +144,8 @@ export default function Carefundamentals() {
                                     <li>Monitor for fungal diseases and apply preventative treatments</li>
                                     <li>Prune for shape as growth accelerates</li>
                                     <li>Protect from strong winds and typhoons</li>
-                                    <li>Apply fertilizer more sparingly due to faster nutrient leaching
+                                    <li>Apply fertilizer more sparingly due to faster nutrient leaching</li>
                                     <li>Recommended Tools</li>
-                                    </li>
                                 </ul>
                             </th>
                         </tr>
@@ -162,18 +161,18 @@ export default function Carefundamentals() {
 
             <div className="flex  mt-[2vw] gap-[4vw] justify-center xs:flex-col sm">
                 <div className="border rounded-[10px] bg-white w-80 h-40 text-center justify-center items-center flex flex-col text-[15px] p-10">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-scissors-icon lucide-scissors mb-[10px]"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-scissors-icon lucide-scissors mb-[10px]"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></svg>
                     <p>Prunning Shears</p>
                 </div>
 
                 <div className="border rounded-[10px] bg-white w-80 h-40 text-center justify-center items-center flex flex-col text-[15px] p-10">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-droplet-icon lucide-droplet mb-[10px]"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-droplet-icon lucide-droplet mb-[10px]"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>
                     <p>Watering Can</p>
 
                 </div>
 
                 <div className="border rounded-[10px] bg-white w-80 h-40 text-center justify-center items-center flex flex-col text-[15px] p-10">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-shovel-icon lucide-shovel mb-[10px]"><path d="M21.56 4.56a1.5 1.5 0 0 1 0 2.122l-.47.47a3 3 0 0 1-4.212-.03 3 3 0 0 1 0-4.243l.44-.44a1.5 1.5 0 0 1 2.121 0z"/><path d="M3 22a1 1 0 0 1-1-1v-3.586a1 1 0 0 1 .293-.707l3.355-3.355a1.205 1.205 0 0 1 1.704 0l3.296 3.296a1.205 1.205 0 0 1 0 1.704l-3.355 3.355a1 1 0 0 1-.707.293z"/><path d="m9 15 7.879-7.878"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-shovel-icon lucide-shovel mb-[10px]"><path d="M21.56 4.56a1.5 1.5 0 0 1 0 2.122l-.47.47a3 3 0 0 1-4.212-.03 3 3 0 0 1 0-4.243l.44-.44a1.5 1.5 0 0 1 2.121 0z"/><path d="M3 22a1 1 0 0 1-1-1v-3.586a1 1 0 0 1 .293-.707l3.355-3.355a1.205 1.205 0 0 1 1.704 0l3.296 3.296a1.205 1.205 0 0 1 0 1.704l-3.355 3.355a1 1 0 0 1-.707.293z"/><path d="m9 15 7.879-7.878"/></svg>
                     <p>Root Hook</p>                    
                 </div>
 

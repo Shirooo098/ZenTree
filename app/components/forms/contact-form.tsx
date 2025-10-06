@@ -2,7 +2,7 @@
 
 export default function ContactForm() {
   return (
-    <form className="bg-white p-6 rounded-lg shadow-md w-full max-w-md border absolute  right-100 mt-48 z-15 h-1/2">
+    <form className="bg-white p-6 rounded-lg shadow-sm w-full max-w-md absolute right-100 mt-51 z-15 h-1/2">
       <h3 className="text-lg font-semibold mb-4 text-center">
         Need help with your bonsai?
       </h3>

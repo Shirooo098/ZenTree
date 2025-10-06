@@ -12,10 +12,12 @@ import { toast } from "sonner";
 import { useDirectCheckout } from "@/app/lib/query/checkout/checkout-data";
 import { Loader } from "@/app/components/loader/loader";
 
+import Reviews from "@/app/ui/product/Review/reviews";
+import RateForm from "@/app/components/forms/rate-form";
 
 export default function ProductId() {
-    const { id } = useParams<{ id: string }>();
-    const prodId = Number(id)
+  const { id } = useParams<{ id: string }>();
+  const prodId = Number(id);
 
     const {data: product, isLoading, isError } = useUserProductId(prodId)
     const addToCartMutation = useAddToCart();
@@ -158,6 +160,16 @@ export default function ProductId() {
                             Only {product.stock} item(s) available
                         </p>
                     )}
+                    </div>
+                    <div className="w-2/3 mt-16 flex flex-col md:flex-row gap-6">
+                      <div className="flex-1 p-4 bg-gray-50 rounded shadow">
+                        <h2 className="text-2xl font-bold mb-4">Customer Reviews</h2>
+                        <Reviews />
+                      </div>
+                      <div className="flex-1 p-4 bg-gray-50 rounded shadow">
+                        <h2 className="text-2xl font-bold mb-4">Write a Review</h2>
+                        <RateForm />
+                      </div>
                     </div>
                 </div>
             </div>

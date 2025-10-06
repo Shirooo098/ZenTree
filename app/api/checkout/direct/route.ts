@@ -55,9 +55,15 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // Get order status
-        const newOrderStatus = await getOrderStatus('pending');
-        if (!newOrderStatus) {
+        // Get pending order status
+        const pendingOrderStatus = await getOrderStatus('pending');
+        if (!pendingOrderStatus) {
+            return NextResponse.json(
+                { error: "Order status configuration error" },
+                { status: 500 }
+            );
+        }
+
         // Prepare items for PayPal
         const paypalItems = items.map((item: DirectCheckoutItem) => {
             const product = productMap.get(item.productId)!;
@@ -71,15 +77,6 @@ export async function POST(req: NextRequest) {
 
         // Create PayPal order
         const paypalOrder = await createPayPalOrder(paypalItems);
-
-        // Get pending order status
-        const pendingOrderStatus = await getOrderStatus('pending');
-        if (!pendingOrderStatus) {
-            return NextResponse.json(
-                { error: "Order status configuration error" },
-                { status: 500 }
-            );
-        }
 
         // Create order with pending status
         const newOrder = await createOrder(
@@ -201,7 +198,6 @@ async function processOrderItems(
 ) {
     let totalAmount = 0;
     const orderItems = [];
-    decrementStock = false;
 
     for (const item of items) {
         const product = productMap.get(item.productId)!;
