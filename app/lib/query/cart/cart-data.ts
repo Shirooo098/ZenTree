@@ -126,3 +126,30 @@ export function useUpdateCartQuantity() {
         },
     });
 }
+
+export const useCancelOrder = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (orderId: number) => {
+      const res = await fetch(`/api/order/cancel/${orderId}`, {
+        method: "PATCH",
+        credentials: "include"
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || "Failed to cancel order");
+      }
+
+      return res.json();
+    },
+    onSuccess: (data) => {
+      toast.success(data.message || "Order cancelled successfully");
+      queryClient.invalidateQueries({ queryKey: ["allOrders"] });
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to cancel order");
+    },
+  });
+};

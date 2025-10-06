@@ -1,7 +1,7 @@
 "use client";
 
 import { Loader } from "@/app/components/loader/loader";
-import { useAllOrders } from "@/app/lib/query/order/order-data";
+import { useAllOrders, useCancelOrder } from "@/app/lib/query/order/order-data";
 import { Button } from "@/components/ui/button";
 import { ImageKitProvider, Image } from "@imagekit/next";
 import Link from "next/link";
@@ -9,9 +9,11 @@ import Link from "next/link";
 export default function OrdersPage() {
   const { data: orders, isLoading, isError } = useAllOrders();
 
+  const cancelOrder = useCancelOrder();
+
   if (isLoading) return <Loader />;
-  if (isError)
-    return <p className="text-center text-red-600">Error loading orders</p>;
+  if (isError) return <p className="text-center text-red-600">Error loading orders</p>;
+
   if (!orders || orders.length === 0)
     return (
       <div className="flex flex-col justify-center items-center min-h-[60vh] text-gray-600">
@@ -23,6 +25,28 @@ export default function OrdersPage() {
         </Link>
       </div>
     );
+
+    const getStatusClasses = (status: string) => {
+      switch (status.toLowerCase()) {
+        case "pending":
+          return "bg-yellow-300 text-yellow-900";
+        case "processing":
+          return "bg-sky-300 text-sky-900";
+        case "shipped":
+          return "bg-teal-300 text-teal-900";
+        case "delivered":
+          return "bg-emerald-400 text-emerald-900";
+        case "completed":
+          return "bg-green-400 text-green-900";
+        case "cancelled":
+          return "bg-red-300 text-red-900";
+        case "refunded":
+          return "bg-rose-300 text-rose-900";
+        default:
+          return "bg-gray-300 text-gray-900";
+      }
+    };
+
 
   return (
     <div className="w-full  px-4 sm:px-8">
@@ -51,25 +75,10 @@ export default function OrdersPage() {
                   })}
                 </p>
               </div>
-              <span
-                className={`mt-2 sm:mt-0 px-3 py-1 text-sm font-semibold rounded-full
-  ${
-    order.order_status_name.toLowerCase().includes("pending")
-      ? "bg-yellow-300 text-yellow-900"
-      : order.order_status_name.toLowerCase().includes("process")
-        ? "bg-sky-300 text-sky-900"
-        : order.order_status_name.toLowerCase().includes("shipped")
-          ? "bg-teal-300 text-teal-900"
-          : order.order_status_name.toLowerCase().includes("delivered")
-            ? "bg-emerald-400 text-emerald-900"
-            : order.order_status_name.toLowerCase().includes("completed")
-              ? "bg-green-400 text-green-900"
-              : order.order_status_name.toLowerCase().includes("cancelled")
-                ? "bg-red-300 text-red-900"
-                : order.order_status_name.toLowerCase().includes("refunded")
-                  ? "bg-rose-300 text-rose-900"
-                  : "bg-gray-300 text-gray-900"
-  }`}
+             <span
+                className={`mt-2 sm:mt-0 px-3 py-1 text-sm font-semibold rounded-full ${getStatusClasses(
+                  order.order_status_name
+                )}`}
               >
                 {order.order_status_name}
               </span>
@@ -117,7 +126,17 @@ export default function OrdersPage() {
               ))}
             </div>
 
-            <div className="pt-6 flex justify-end">
+             <div className="pt-6 flex flex-col sm:flex-row justify-end gap-3">
+              {order.order_status_name.toLowerCase() === "pending" && (
+               <Button
+                  onClick={() => cancelOrder.mutate(String(order.order_id))}
+                  className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg transition"
+                  disabled={cancelOrder.isPending}
+                >
+                  {cancelOrder.isPending ? "Cancelling..." : "Cancel Order"}
+                </Button>
+              )}
+
               <Link href={`/profile/order/${order.order_id}`}>
                 <Button className="bg-dark-brown hover:bg-hover-dark-brown text-main-white px-5 py-2 rounded-lg transition">
                   View Details
