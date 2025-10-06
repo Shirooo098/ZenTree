@@ -7,9 +7,7 @@ import { AddressState } from "@/app/types/address";
 import { updateAddress } from "@/app/actions/address/update-address.action";
 import { deleteAddress } from "@/app/actions/address/delete-address.action";
 import Button from "@/app/ui/button";
-import { useFormState } from "react-dom";
-
-
+import { useActionState } from "react";
 
 
 interface Address {
@@ -27,7 +25,10 @@ interface ShippingAddressProps {
   initialAddresses: Address[];
 }
 
-export default function ShippingAddress({ userId, initialAddresses }: ShippingAddressProps) {
+export default function ShippingAddress({
+  userId,
+  initialAddresses,
+}: ShippingAddressProps) {
   const [addresses, setAddresses] = useState<Address[]>(initialAddresses || []);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [addingNew, setAddingNew] = useState(false);
@@ -40,19 +41,26 @@ export default function ShippingAddress({ userId, initialAddresses }: ShippingAd
     special_instructions: "",
   });
 
-  const [state, formAction] = useFormState(addAddress, {
+  const [state, formAction] = useActionState(addAddress, {
   message: "",
   errors: {},
 });
 
-
   const resetForm = () => {
-    setFormState({ address: "", city: "", province: "", postal_code: "", special_instructions: "" });
+    setFormState({
+      address: "",
+      city: "",
+      province: "",
+      postal_code: "",
+      special_instructions: "",
+    });
     setEditingId(null);
     setAddingNew(false);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormState((prev) => ({ ...prev, [name]: value }));
   };
@@ -62,7 +70,10 @@ export default function ShippingAddress({ userId, initialAddresses }: ShippingAd
     data.append("user_id", userId);
     Object.entries(formState).forEach(([k, v]) => data.append(k, v));
 
-    const result: AddressState = await addAddress({ errors: {}, message: null }, data);
+    const result: AddressState = await addAddress(
+      { errors: {}, message: null },
+      data
+    );
 
     if (result.message) {
       alert(result.message);
@@ -122,58 +133,61 @@ export default function ShippingAddress({ userId, initialAddresses }: ShippingAd
 
       {/* Add New Address Form */}
       {addingNew && (
-  <form action={formAction}
-    className="rounded-xl mt-4 p-5 bg-gray-100 shadow-sm space-y-2"
-  >
-    <h3 className="font-semibold mb-3">Add New Address</h3>
+        <form
+          action={formAction}
+          className="rounded-xl mt-4 p-5 bg-gray-100 shadow-sm space-y-2"
+        >
+          <h3 className="font-semibold mb-3">Add New Address</h3>
 
-    {/* Hidden field for user ID */}
-    <input type="hidden" name="user_id" value={userId} />
+          {/* Hidden field for user ID */}
+          <input type="hidden" name="user_id" value={userId} />
 
-    <input
-      name="address"
-      placeholder="Street/Address"
-      className="w-full p-2 border rounded"
-      required
-    />
-    <input
-      name="city"
-      placeholder="City"
-      className="w-full p-2 border rounded"
-      required
-    />
-    <input
-      name="province"
-      placeholder="Province"
-      className="w-full p-2 border rounded"
-      required
-    />
-    <input
-      name="postal_code"
-      placeholder="Postal Code"
-      className="w-full p-2 border rounded"
-    />
-    <textarea
-      name="special_instructions"
-      placeholder="Special Instructions"
-      className="w-full p-2 border rounded"
-    />
+          <input
+            name="address"
+            placeholder="Street/Address"
+            className="w-full p-2 border rounded"
+            required
+          />
+          <input
+            name="city"
+            placeholder="City"
+            className="w-full p-2 border rounded"
+            required
+          />
+          <input
+            name="province"
+            placeholder="Province"
+            className="w-full p-2 border rounded"
+            required
+          />
+          <input
+            name="postal_code"
+            placeholder="Postal Code"
+            className="w-full p-2 border rounded"
+          />
+          <textarea
+            name="special_instructions"
+            placeholder="Special Instructions"
+            className="w-full p-2 border rounded"
+          />
 
-    <div className="flex justify-end gap-2 mt-3">
-      <Button type="button" variant="secondary" onClick={resetForm}>
-        Cancel
-      </Button>
-      <Button type="submit" variant="primary">
-        Add Address
-      </Button>
-    </div>
-  </form>
-)}
-
+          <div className="flex justify-end gap-2 mt-3">
+            <Button type="button" variant="secondary"  onClick={resetForm} className="px-3 py-2">
+              Cancel
+            </Button>
+            <Button type="submit" variant="primary" className="px-3 py-2">
+              Add Address
+            </Button>
+          </div>
+        </form>
+      )}
 
       {/* Address List */}
       {addresses.map((addr) => (
-        <div key={addr.address_id} className="rounded-xl mt-5 p-5 bg-gray-100 shadow-sm">
+        <div
+          key={addr.address_id}
+          className="rounded-xl mt-5 p-5 bg-gray-100 shadow-sm"
+        >
           {editingId === addr.address_id ? (
             <div className="space-y-2">
               <input
@@ -212,40 +226,67 @@ export default function ShippingAddress({ userId, initialAddresses }: ShippingAd
                 className="w-full p-2 border rounded"
               />
               <div className="flex justify-end gap-2 mt-2">
-                <Button variant="secondary" onClick={resetForm}>Cancel</Button>
-                <Button variant="primary" onClick={() => handleUpdate(addr.address_id)}>Save</Button>
+                <Button variant="secondary" className="px-3 py-2" onClick={resetForm}>
+                  Cancel
+                </Button>
+                <Button
+                  variant="primary" className="px-3 py-2"
+                  onClick={() => handleUpdate(addr.address_id)}
+                >
+                  Save
+                </Button>
               </div>
             </div>
           ) : (
             <>
-              <div className="flex justify-between items-center">
-                <div className="flex gap-2 items-center">
+              <div className="flex justify-between items-center mt-4">
+                <div className="flex items-center gap-2">
                   <MapPin size={20} className="text-gray-600" />
-                  <p className="font-bold text-lg text-gray-700">{addr.address}</p>
+                  <p className="font-bold text-lg text-gray-700">
+                    {addr.address} {addr.city}
+                  </p>
                 </div>
-                {/* <p className="text-blue-600 text-sm font-medium">Default</p> */}
+
+                {/* Action Buttons */}
+                <div className="flex items-center gap-5">
+                  <button
+                    onClick={() => startEdit(addr)}
+                    className="flex items-center gap-1 text-sm text-blue-600 hover:underline"
+                  >
+                    <Pencil size={16} /> Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(addr.address_id)}
+                    className="flex items-center gap-1 text-sm text-red-600 hover:underline"
+                  > 
+                    <Trash2 size={16} /> Delete
+                  </button>
+                </div>
               </div>
 
               <div className="mt-3 pl-7 text-gray-700 space-y-1">
-                <p><span className="font-semibold">City:</span> {addr.city}</p>
-                <p><span className="font-semibold">Province:</span> {addr.province}</p>
-                {addr.postal_code && <p><span className="font-semibold">Postal Code:</span> {addr.postal_code}</p>}
-                {addr.special_instructions && <p><span className="font-semibold">Instructions:</span> {addr.special_instructions}</p>}
-              </div>
-
-              <div className="flex justify-end gap-5 mt-4">
-                <button
-                  onClick={() => startEdit(addr)}
-                  className="flex items-center gap-1 text-sm text-blue-600 hover:underline"
-                >
-                  <Pencil size={16} /> Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(addr.address_id)}
-                  className="flex items-center gap-1 text-sm text-red-600 hover:underline"
-                >
-                  <Trash2 size={16} /> Delete
-                </button>
+                <p>
+                  <span className="font-semibold">Street:</span> {addr.address}
+                </p>
+                <p>
+                  <span className="font-semibold">City:</span> {addr.city}
+                </p>
+                <p>
+                  <span className="font-semibold">Province:</span>{" "}
+                  {addr.province}
+                </p>
+                {addr.postal_code && (
+                  <p>
+                    <span className="font-semibold">Postal Code:</span>{" "}
+                    {addr.postal_code}
+                  </p>
+                )}
+                {addr.special_instructions && (
+                  <p>
+                    <span className="font-semibold">Instructions:</span>{" "}
+                    {addr.special_instructions}
+                  </p>
+                )}
               </div>
             </>
           )}
