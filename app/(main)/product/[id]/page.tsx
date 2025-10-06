@@ -9,7 +9,8 @@ import Link from "next/link";
 import Button from "@/app/ui/button";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useDirectCheckout } from "@/app/lib/query/checkout/direct-checkout";
+import { useDirectCheckout } from "@/app/lib/query/checkout/checkout-data";
+import { Loader } from "@/app/components/loader/loader";
 
 
 export default function ProductId() {
@@ -56,6 +57,8 @@ export default function ProductId() {
     };
 
     if (isError) return <div>Error loading product!</div>
+    const isOutOfStock = product.stock === 0;
+    const isInsufficientStock = quantity > product.stock;
 
     return (
         <div className="h-[100vh] flex flex-col justify-center items-center size-screen pt-40">
@@ -120,24 +123,44 @@ export default function ProductId() {
                         <Button
                             variant="secondary"
                             size="lg"
-                            disabled={addToCartMutation.isPending || product.stock === 0}
+                            disabled={addToCartMutation.isPending || isOutOfStock || isInsufficientStock}
                             onClick={handleAddToCart}
                             className="capitalize rounded-xs w-1/2"
                         >
-                            {addToCartMutation.isPending ? 'Adding...' : 'Add to Cart'}
+                            {addToCartMutation.isPending ? (
+                                <span className="flex items-center gap-2">
+                                    <Loader />
+                                    Adding...
+                                </span>
+                            ) : (
+                                'Add to Cart'
+                            )}
                         </Button>
                         <Button
                             variant="primary"
                             size="lg"
-                            disabled={addToCartMutation.isPending}
+                            disabled={directCheckout.isPending || isOutOfStock || isInsufficientStock}
                             onClick={handleCheckout}
                             className="capitalize rounded-xs w-1/2"
                         >
-                            Checkout
+                            {directCheckout.isPending ? (
+                                <span className="flex items-center gap-2">
+                                    <Loader />
+                                    Processing...
+                                </span>
+                            ) : (
+                                'Checkout'
+                            )}
                         </Button>
+                    </div>
+                    {isInsufficientStock && !isOutOfStock && (
+                        <p className="text-red-600 text-sm mt-2">
+                            Only {product.stock} item(s) available
+                        </p>
+                    )}
                     </div>
                 </div>
             </div>
-        </div>
+
     )
 }

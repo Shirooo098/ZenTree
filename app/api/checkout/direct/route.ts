@@ -4,6 +4,7 @@ import { eq, inArray } from "drizzle-orm";
 import { products, orders, order_products, order_status } from "@/db/schema";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { createPayPalOrder } from "@/config/config-paypal";
 
 interface DirectCheckoutItem {
     productId: number;
@@ -36,7 +37,6 @@ export async function POST(req: NextRequest) {
         }
 
         const productIds = items.map((item: DirectCheckoutItem) => item.productId);
-
         const productsData = await getProducts(productIds);
         
         if (productsData.length !== items.length) {
@@ -47,7 +47,6 @@ export async function POST(req: NextRequest) {
         }
 
         const productMap = createProductMap(productsData);
-
         const stockError = validateStock(items, productMap);
         if (stockError) {
             return NextResponse.json(
@@ -59,27 +58,50 @@ export async function POST(req: NextRequest) {
         // Get order status
         const newOrderStatus = await getOrderStatus('pending');
         if (!newOrderStatus) {
+        // Prepare items for PayPal
+        const paypalItems = items.map((item: DirectCheckoutItem) => {
+            const product = productMap.get(item.productId)!;
+            return {
+                product_id: item.productId,
+                product_name: product.product_name,
+                quantity: item.quantity,
+                product_price: product.product_price
+            };
+        });
+
+        // Create PayPal order
+        const paypalOrder = await createPayPalOrder(paypalItems);
+
+        // Get pending order status
+        const pendingOrderStatus = await getOrderStatus('pending');
+        if (!pendingOrderStatus) {
             return NextResponse.json(
                 { error: "Order status configuration error" },
                 { status: 500 }
             );
         }
 
-        // Create order
-        const newOrder = await createOrder(userId, newOrderStatus.order_status_id);
+        // Create order with pending status
+        const newOrder = await createOrder(
+            userId, 
+            pendingOrderStatus.order_status_id,
+            paypalOrder.orderId
+        );
 
-        // Process items
         const { totalAmount, orderItems } = await processOrderItems(
             newOrder.order_id,
             items,
-            productMap
+            productMap,
+            false // Don't decrement stock until payment confirmed
         );
 
         return NextResponse.json({
             success: true,
-            message: "Order placed successfully",
+            message: "Order created, awaiting payment",
             order: {
                 order_id: newOrder.order_id,
+                paypal_order_id: paypalOrder.orderId,
+                approval_url: paypalOrder.approvalUrl,
                 total: Number(totalAmount.toFixed(2)),
                 itemCount: items.length,
                 items: orderItems
@@ -153,12 +175,18 @@ async function getOrderStatus(statusName: string) {
     return status;
 }
 
-async function createOrder(userId: string, orderStatusId: number) {
+async function createOrder(
+    userId: string, 
+    orderStatusId: number,
+    paypalOrderId: string
+) {
     const [newOrder] = await db
         .insert(orders)
         .values({
             user_id: userId,
             order_status_id: orderStatusId,
+            paypal_order_id: paypalOrderId,
+            payment_status: 'pending'
         })
         .returning();
 
@@ -168,10 +196,12 @@ async function createOrder(userId: string, orderStatusId: number) {
 async function processOrderItems(
     orderId: number,
     items: DirectCheckoutItem[],
-    productMap: Map<number, any>
+    productMap: Map<number, any>,
+    decrementStock: boolean 
 ) {
     let totalAmount = 0;
     const orderItems = [];
+    decrementStock = false;
 
     for (const item of items) {
         const product = productMap.get(item.productId)!;
@@ -184,13 +214,15 @@ async function processOrderItems(
             price_at_purchase: Number(product.product_price)
         });
 
-        // Reduce stock
-        await db
-            .update(products)
-            .set({
-                stock: product.stock - item.quantity
-            })
-            .where(eq(products.product_id, item.productId));
+        // Only decrement stock if payment is confirmed
+        if (decrementStock) {
+            await db
+                .update(products)
+                .set({
+                    stock: product.stock - item.quantity
+                })
+                .where(eq(products.product_id, item.productId));
+        }
 
         const itemTotal = Number(product.product_price) * item.quantity;
         totalAmount += itemTotal;

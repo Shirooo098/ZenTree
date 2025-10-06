@@ -133,5 +133,39 @@ export interface Order {
     discount?: number;
     shippingFee?: number;
     total: number;
-    products: OrderProduct[]
+    products: OrderProduct[],
+    paypal_order_id?: string
+}
+export interface PayPalOrderResponse {
+    success: boolean;
+    message: string;
+    order: {
+        order_id: number;
+        paypal_order_id: string;
+        approval_url: string;
+        total: number;
+        itemCount: number;
+        items: Array<{
+            product_id: number;
+            product_name: string;
+            quantity: number;
+            price: number;
+        }>;
+    };
+}
+
+export interface PayPalCaptureResponse {
+    success: boolean;
+    message: string;
+    orderId: number;
+    paypalData: any;
+}
+
+export interface CheckoutRequest {
+    cartProductIds: number[];
+}
+
+export interface CompleteOrderRequest {
+    orderId: number;
+    paypalOrderId: string;
 }

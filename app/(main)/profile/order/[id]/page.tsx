@@ -142,7 +142,7 @@ export default function OrderPage() {
                         Continue Shopping
                     </Link>
                     <Link
-                        href="/orders"
+                        href="/profile/order"
                         className="flex-1 bg-green-600 text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-green-700 transition"
                     >
                         View All Orders

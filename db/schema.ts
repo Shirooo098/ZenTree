@@ -135,6 +135,8 @@ export const orders = pgTable('orders', {
   order_status_id: integer('order_status_id')
     .notNull()
     .references(() => order_status.order_status_id, { onDelete: 'cascade' }),
+  paypal_order_id: text('paypal_order_id'), 
+  payment_status: text('payment_status').default('pending'), 
   created_at: timestamp('created_at')
     .notNull()
     .defaultNow(),
@@ -155,6 +157,19 @@ export const order_products = pgTable('order_products', {
   price_at_purchase: real('price_at_purchase').notNull()
 })
 
+export const address = pgTable("address", {
+  address_id: serial("address_id").primaryKey(),
+  user_id: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  address: text("address").notNull(),
+  city: text("city").notNull(),
+  province: text("province").notNull(),
+  postal_code: text("postal_code"),
+  special_instructions: text("special_instructions"),
+});
+
+
 export const schema = { 
   user,
   session, 
@@ -167,5 +182,6 @@ export const schema = {
   cart_products,
   order_status,
   orders,
-  order_products
+  order_products,
+  address
 }

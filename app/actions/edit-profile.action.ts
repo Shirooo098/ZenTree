@@ -15,7 +15,6 @@ const EditProfileFormSchema = z.object({
         .max(11, "Please input the correct mobile number format."),    
 })
 
-
 export async function editProfileInformation(
     prevState: EditProfileState, 
     formData: FormData
