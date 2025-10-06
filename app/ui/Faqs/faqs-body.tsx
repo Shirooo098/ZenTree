@@ -5,6 +5,8 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { Link } from '@mui/material';
+import NextLink from 'next/link';
 
 export default function faqsbody() {
   return (
@@ -477,6 +479,215 @@ export default function faqsbody() {
             </AccordionDetails>
           </Accordion>
         </div>
+
+        {/*POLICIES*/}
+        <h1 className="faqs-h1">Policies</h1>
+
+        <div>
+          <Accordion className="border-1 rounded-sm border-[#d9d9d9]">
+            <AccordionSummary
+              expandIcon={<ArrowDropDownIcon />}
+              aria-controls="panel1-content"
+              id="panel1-header"
+            >
+              <Typography component="span" className="py-3">
+                <span className="faqs-span">
+                  What is your refund policy?
+                </span>
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>
+                We offer refunds within 14 days of delivery if your bonsai arrives damaged or in poor condition.
+                 Please contact us within 48 hours of delivery with clear photos and your order number. Refunds 
+                 will be issued to your original payment method once approved.
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+        </div>
+
+        <div>
+          <Accordion className="border-1 rounded-sm border-[#d9d9d9]">
+            <AccordionSummary
+              expandIcon={<ArrowDropDownIcon />}
+              aria-controls="panel1-content"
+              id="panel1-header"
+            >
+              <Typography component="span" className="py-3">
+                <span className="faqs-span">
+                  How secure is my payment information?
+                </span>
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>
+                Your payment is processed securely through our encrypted checkout system. We use industry-standard
+                 SSL encryption and work with trusted payment providers to ensure your data is safe. We do not store
+                  your full card information on our servers.
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+        </div>
+
+        <div>
+          <Accordion className="border-1 rounded-sm border-[#d9d9d9]">
+            <AccordionSummary
+              expandIcon={<ArrowDropDownIcon />}
+              aria-controls="panel1-content"
+              id="panel1-header"
+            >
+              <Typography component="span" className="py-3">
+                <span className="faqs-span">
+                  What is your privacy policy?
+                </span>
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>
+                    We only collect personal information necessary to process your order and improve your experience.
+                    We never sell your data to third parties. You may request access or deletion of your data by contacting us via our{' '}
+                    <Link component={NextLink} href="/contact" underline="hover">
+                      support@zentree.com
+                    </Link>.
+            </Typography>
+            </AccordionDetails>
+          </Accordion>
+        </div>
+
+        <div>
+          <Accordion className="border-1 rounded-sm border-[#d9d9d9]">
+            <AccordionSummary
+              expandIcon={<ArrowDropDownIcon />}
+              aria-controls="panel1-content"
+              id="panel1-header"
+            >
+              <Typography component="span" className="py-3">
+                <span className="faqs-span">
+                  What are your website terms and conditions?
+                </span>
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>
+                By using our site, you agree to our terms, including respecting our content, providing accurate
+                 information during checkout, and using our products responsibly.
+                 We reserve the right to update content, cancel orders, or refuse service when necessary.
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+        </div>
+
+        <div>
+          <Accordion className="border-1 rounded-sm border-[#d9d9d9]">
+            <AccordionSummary
+              expandIcon={<ArrowDropDownIcon />}
+              aria-controls="panel1-content"
+              id="panel1-header"
+            >
+              <Typography component="span" className="py-3">
+                <span className="faqs-span">
+                  What payment methods do you accept?
+                </span>
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>
+                We accept Visa, MasterCard, and other major debit/credit cards. We may also support local payment
+                 options depending on your location. All transactions are securely processed.
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+        </div>
+
+        <div>
+          <Accordion className="border-1 rounded-sm border-[#d9d9d9]">
+            <AccordionSummary
+              expandIcon={<ArrowDropDownIcon />}
+              aria-controls="panel1-content"
+              id="panel1-header"
+            >
+              <Typography component="span" className="py-3">
+                <span className="faqs-span">
+                  Do I need an account to place an order?
+                </span>
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>
+                No account is required. You can place an order as a guest. However,
+                creating an account lets you track orders, save addresses, and manage your purchase history.
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+        </div>
+
+        <div>
+          <Accordion className="border-1 rounded-sm border-[#d9d9d9]">
+            <AccordionSummary
+              expandIcon={<ArrowDropDownIcon />}
+              aria-controls="panel1-content"
+              id="panel1-header"
+            >
+              <Typography component="span" className="py-3">
+                <span className="faqs-span">
+                  How is my bonsai shipped?
+                </span>
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>
+                Your bonsai is carefully packaged using moisture-retaining materials and padding
+                 to keep it safe during transit. We aim to ship orders within 1–3 business days and provide tracking once dispatched.
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+        </div>
+
+        <div>
+          <Accordion className="border-1 rounded-sm border-[#d9d9d9]">
+            <AccordionSummary
+              expandIcon={<ArrowDropDownIcon />}
+              aria-controls="panel1-content"
+              id="panel1-header"
+            >
+              <Typography component="span" className="py-3">
+                <span className="faqs-span">
+                  Can I return or replace my bonsai?
+                </span>
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>
+                Due to the nature of live plants, we don’t accept standard returns. If your bonsai arrives damaged or unhealthy,
+                 please report it within 48 hours of delivery. We may offer a replacement or refund depending on the situation
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+        </div>
+
+        <div>
+          <Accordion className="border-1 rounded-sm border-[#d9d9d9]">
+            <AccordionSummary
+              expandIcon={<ArrowDropDownIcon />}
+              aria-controls="panel1-content"
+              id="panel1-header"
+            >
+              <Typography component="span" className="py-3">
+                <span className="faqs-span">
+                  How can I leave a review?
+                </span>
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>
+                After receiving your order, you can leave a review on the product page.
+                 Your feedback helps us improve and helps other customers make informed choices.
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+        </div>
+
+
       </div>
     </>
   );
