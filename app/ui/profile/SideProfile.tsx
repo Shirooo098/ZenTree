@@ -6,8 +6,9 @@ import { useState } from "react";
 
 import { FaUser } from "react-icons/fa6";
 import { FaLocationDot } from "react-icons/fa6";
-import { FaIdCard } from "react-icons/fa6";
+
 import Logout from '../logout';
+import { Box, Clock10  } from 'lucide-react';
 
 
 export default function SideProfile() {
@@ -22,16 +23,17 @@ export default function SideProfile() {
           Profile Information
         </Link>
 
-        <Link href="/profile/shipping-address"
+        <Link href="/profile/order-history"
           className="text-left text-lg font-dmSans flex items-center gap-3" >
-          <FaLocationDot />
-          Shipping Addresses
+
+            <Clock10 strokeWidth={1} />
+          Order History
         </Link>
 
-        <Link href='/profile/billing-details'
+        <Link href='/profile/order-tracking'
          className="text-left text-lg font-dmSans flex items-center gap-3" >
-          <FaIdCard />
-          Billing Details
+            <Box strokeWidth={1}/>
+          Order Tracking
         </Link>
 
        </div>
@@ -40,7 +42,7 @@ export default function SideProfile() {
         </div>
       </div>
 
-     
+
     </div>
   );
 }
