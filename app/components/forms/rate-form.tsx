@@ -1,78 +1,121 @@
+// app/components/forms/rate-form.tsx
 "use client";
+
+import { useSubmitReview } from "@/app/lib/query/review/review-data";
+import { Star } from "lucide-react";
 import { useState } from "react";
-import { FaLeaf, FaRegImage } from "react-icons/fa";
 
-export default function RateForm() {
-  const [productRating, setProductRating] = useState(4);
-  const [review, setReview] = useState("");
+interface RateFormProps {
+  productId: number;
+  orderId: number;
+  productName: string;
+  onSuccess?: () => void;
+}
 
-  const renderLeaves = (rating: number, setRating: (val: number) => void) => {
-    return (
-      <div className="flex items-center gap-1">
-        {[...Array(5)].map((_, i) => (
-          <FaLeaf
-            key={i}
-            onClick={() => setRating(i + 1)}
-            className="cursor-pointer text-2xl"
-            style={{ color: i < rating ? "#675d50" : "#d1d5db" }}
-          />
-        ))}
-      </div>
+export default function RateForm({
+  productId,
+  orderId,
+  productName,
+  onSuccess,
+}: RateFormProps) {
+  const [rating, setRating] = useState(0);
+  const [hoveredRating, setHoveredRating] = useState(0);
+  const [comment, setComment] = useState("");
+
+  const { mutate: submitReview, isPending } = useSubmitReview();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (rating === 0) {
+      return;
+    }
+
+    submitReview(
+      {
+        product_id: productId,
+        order_id: orderId,
+        rating,
+        comment: comment.trim() || undefined,
+      },
+      {
+        onSuccess: () => {
+          setRating(0);
+          setComment("");
+          onSuccess?.();
+        },
+      }
     );
   };
 
   return (
-    <div className="max-w-lg mx-auto border p-6 rounded-md shadow-md">
-      <h2 className="text-center text-lg font-bold mb-6">Rate our Product</h2>
+    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md">
+      <h3 className="text-xl font-bold text-gray-900 mb-4">
+        Review: {productName}
+      </h3>
 
-      {/* Product Info */}
-      <div className="flex items-center gap-4 mb-6">
-        <img
-          src="/img/bonsai-1.jpg"
-          alt="Product"
-          className="w-16 h-16 rounded object-cover"
-        />
-        <div>
-          <h3 className="font-semibold">JAPANESE MAPLE - INTERMEDIATE</h3>
-          <p className="text-sm text-gray-500">Chokkan Formal Upright</p>
+      {/* Star Rating */}
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Rating <span className="text-red-500">*</span>
+        </label>
+        <div className="flex gap-2">
+          {[1, 2, 3, 4, 5].map((star) => (
+            <button
+              key={star}
+              type="button"
+              onClick={() => setRating(star)}
+              onMouseEnter={() => setHoveredRating(star)}
+              onMouseLeave={() => setHoveredRating(0)}
+              className="transition-transform hover:scale-110"
+            >
+              <Star
+                className={`w-8 h-8 ${
+                  star <= (hoveredRating || rating)
+                    ? "fill-yellow-400 text-yellow-400"
+                    : "text-gray-300"
+                }`}
+              />
+            </button>
+          ))}
         </div>
+        {rating > 0 && (
+          <p className="text-sm text-gray-600 mt-1">
+            {rating} out of 5 stars
+          </p>
+        )}
       </div>
 
-      {/* Product Quality */}
+      {/* Comment */}
       <div className="mb-6">
-        <p className="font-medium">Product Quality</p>
-        <div className="flex items-center gap-2">
-          {renderLeaves(productRating, setProductRating)}
-          <span className="ml-2 text-green-600 font-medium">
-            {productRating >= 5
-              ? "Excellent"
-              : productRating >= 4
-                ? "Good"
-                : productRating >= 3
-                  ? "Fair"
-                  : "Poor"}
-          </span>
-        </div>
-      </div>
-
-      {/* Review Box */}
-      <div className="mb-6">
-        <label className="block font-medium mb-2">Review</label>
+        <label
+          htmlFor="comment"
+          className="block text-sm font-medium text-gray-700 mb-2"
+        >
+          Your Review (Optional)
+        </label>
         <textarea
-          value={review}
-          onChange={(e) => setReview(e.target.value)}
-          placeholder="Share your thoughts about our product."
-          className="w-full h-28 border rounded-md p-3 text-sm focus:ring-2 focus:ring-green-500 focus:outline-none"
+          id="comment"
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          rows={4}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
+          placeholder="Share your thoughts about this product..."
+          maxLength={500}
         />
+        <p className="text-xs text-gray-500 mt-1">
+          {comment.length}/500 characters
+        </p>
       </div>
 
-      {/* Buttons */}
-      <div className="flex justify-end gap-4">
-        <button className="text-gray-600 hover:underline">Cancel</button>
-        <button className="px-6 py-2 bg-[#675d50] text-white rounded-md hover:bg-[#53493f] transition">
-          Submit
-        </button>
-      </div>
-    </div>
+      {/* Submit Button */}
+      <button
+        type="submit"
+        disabled={rating === 0 || isPending}
+        className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+      >
+        {isPending ? "Submitting..." : "Submit Review"}
+      </button>
+    </form>
   );
 }

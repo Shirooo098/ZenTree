@@ -1,62 +1,46 @@
+// app/api/reviews/route.ts
 import { auth } from "@/app/lib/auth";
 import { db } from "@/db/drizzle";
-import { reviews } from "@/db/schema";
+import { eq, and } from "drizzle-orm";
+import { reviews, orders, order_products } from "@/db/schema";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-
-
-export async function POST(req: NextRequest) {
+ 
+// GET reviews for a specific product
+export async function GET(req: NextRequest) {
   try {
+    const { searchParams } = new URL(req.url);
+    const productId = searchParams.get("product_id");
 
-    const session = await auth.api.getSession({
-              headers: await headers()
-          });
-  
-          if (!session) {
-              return NextResponse.json(
-                  { error: "Unauthorized" },
-                  { status: 401 }
-              );
-          }
-  
-    const userId = session.user.id;
-
-    const body = await req.json();
-
-    if (!body.productId || !body.productRating) {
+    if (!productId) {
       return NextResponse.json(
-        { error: "Product ID and rating are required" },
+        { error: "Product ID is required" },
         { status: 400 }
       );
     }
 
-    // Validate rating range
-    if (body.productRating < 1 || body.productRating > 5) {
-      return NextResponse.json(
-        { error: "Rating must be between 1 and 5" },
-        { status: 400 }
-      );
-    }
+    const productReviews = await db
+      .select({
+        review_id: reviews.review_id,
+        user_id: reviews.user_id,
+        rating: reviews.rating,
+        comment: reviews.comment,
+        created_at: reviews.created_at,
+      })
+      .from(reviews)
+      .where(eq(reviews.product_id, parseInt(productId)))
+      .orderBy(reviews.created_at);
 
-    const reviewData = {
-      product_id: Number(body.productId),
-      user_id: Number(userId),        
-      rating: body.productRating,
-      comment: body.review || null,
-    };
+    return NextResponse.json({
+      success: true,
+      reviews: productReviews
+    });
 
-    const [inserted] = await db.insert(reviews).values(reviewData).returning();
-
-    if(!inserted) {
-      return NextResponse.json(
-        { error: "Review does not exist" },
-        { status: 400 }
-      )
-    }
-
-    return NextResponse.json(inserted, { status: 201 });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Failed to submit review" }, { status: 500 });
+    console.error("Error fetching reviews:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch reviews" },
+      { status: 500 }
+    );
   }
 }
