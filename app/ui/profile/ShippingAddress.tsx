@@ -11,6 +11,7 @@ import { useFormState } from "react-dom";
 
 
 
+
 interface Address {
   address_id: number;
   user_id: string;
@@ -222,7 +223,7 @@ export default function ShippingAddress({ userId, initialAddresses }: ShippingAd
                   <MapPin size={20} className="text-gray-600" />
                   <p className="font-bold text-lg text-gray-700">{addr.address}</p>
                 </div>
-                <p className="text-blue-600 text-sm font-medium">Default</p>
+                {/* <p className="text-blue-600 text-sm font-medium">Default</p> */}
               </div>
 
               <div className="mt-3 pl-7 text-gray-700 space-y-1">

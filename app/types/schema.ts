@@ -1,4 +1,3 @@
-// types/schema.ts
 
 import { z } from "zod";
 
@@ -15,4 +14,21 @@ export const productSchema = z.object({
     imageProduct: z.instanceof(File).optional().nullable(),
 });
 
+export const AddAddressFormSchema = z.object({
+  user_id: z.string(),
+  address: z.string().min(5),
+  city: z.string(),
+  province: z.string(),
+  postal_code: z.string().optional(),
+  special_instructions: z.string().optional(),
+});
+
+export const EditAddressSchema = z.object({
+  address_id: z.string(),
+  address: z.string().min(5),
+  city: z.string(),
+  province: z.string(),
+  postal_code: z.string().optional(),
+  special_instructions: z.string().optional(),
+});
 export type ProductSchema = z.infer<typeof productSchema>;
