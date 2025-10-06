@@ -136,6 +136,13 @@ export interface Order {
     products: OrderProduct[],
     paypal_order_id?: string
 }
+
+export interface AdminOrder extends Order {
+    user_name: string;
+    user_email: string;
+    payment_status: string | null;
+}
+
 export interface PayPalOrderResponse {
     success: boolean;
     message: string;

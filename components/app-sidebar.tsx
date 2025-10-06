@@ -60,8 +60,8 @@ const data = {
       icon: IconListDetails,
     },
     {
-      title: "Analytics",
-      href: "/admin/analytics",
+      title: "Order",
+      href: "/admin/order",
       icon: IconChartBar,
     },
     {
