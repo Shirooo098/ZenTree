@@ -2,14 +2,16 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Trash2, Plus, Minus, ShoppingCart, ReceiptText, Loader } from 'lucide-react';
+import { Trash2, Plus, Minus, ShoppingCart, ReceiptText, Loader, CreditCard } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useCart, useRemoveFromCart, useUpdateCartQuantity } from '@/app/lib/query/cart/cart-data';
+import { useCheckout } from '@/app/lib/query/checkout/checkout-data';
 
 export default function Cart() {
   const { data: cart, isLoading } = useCart();
   const removeFromCart = useRemoveFromCart();
   const updateQuantity = useUpdateCartQuantity();
+  const checkout = useCheckout();
   const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set());
   
   // Local quantity state for instant UI updates
@@ -17,13 +19,35 @@ export default function Cart() {
 
   // Initialize local quantities when cart data loads
   useEffect(() => {
-    if (cart?.items) {
-      const quantities: Record<number, number> = {};
-      cart.items.forEach(item => {
-        quantities[item.cart_products_id] = item.quantity;
-      });
-      setLocalQuantities(quantities);
-    }
+    if (!cart?.items || cart.items.length === 0) return;
+    
+    const quantities: Record<number, number> = {};
+    
+    cart.items.forEach(item => {
+      // Ensure we have valid data before processing
+      if (!item.cart_products_id || typeof item.quantity !== 'number' || typeof item.stock !== 'number') {
+        return;
+      }
+      
+      // Cap quantity at available stock
+      const validQuantity = Math.min(item.quantity, item.stock);
+      quantities[item.cart_products_id] = validQuantity;
+      
+      // Auto-update server if quantity exceeds stock
+      if (item.quantity > item.stock && validQuantity >= 1) {
+        updateQuantity.mutate({ 
+          cartProductId: item.cart_products_id, 
+          quantity: validQuantity 
+        }, {
+          onSuccess: () => {
+            // Silent update, no toast needed
+          }
+        });
+      }
+    });
+    
+    setLocalQuantities(quantities);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cart?.items]);
 
   const handleQuantityChange = (cartProductId: number, stock: number, change: number) => {
@@ -81,6 +105,15 @@ export default function Cart() {
     }
   };
 
+  const handleCheckout = () => {
+    if (selectedItems.size === 0) {
+      return;
+    }
+
+    const selectedItemsArray = Array.from(selectedItems);
+    checkout.mutate(selectedItemsArray);
+  };
+
   const selectedTotal = cart?.items
     .filter(item => selectedItems.has(item.cart_products_id))
     .reduce((sum, item) => {
@@ -89,8 +122,19 @@ export default function Cart() {
     }, 0) || 0;
 
   const selectedCount = selectedItems.size;
+  
+  // Check if any selected item is out of stock
+  const hasOutOfStock = cart?.items
+    .filter(item => selectedItems.has(item.cart_products_id))
+    .some(item => item.stock === 0) || false;
 
-  if (isLoading) return <div className="flex justify-center items-center h-screen"><Loader className="animate-spin" /></div>
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader className="animate-spin" />
+      </div>
+    );
+  }
 
   if (!cart || cart.items.length === 0) {
     return (
@@ -159,7 +203,6 @@ export default function Cart() {
                           fill
                           className="object-cover"
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                          
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
@@ -176,9 +219,18 @@ export default function Cart() {
                           {item.bonsai_size && (
                             <p className="text-sm text-gray-500">Size: {item.bonsai_size}</p>
                           )}
-                          {item.stock < 10 && (
+                          {item.stock === 0 ? (
+                            <p className="text-xs text-red-600 font-semibold mt-1">
+                              Out of Stock
+                            </p>
+                          ) : item.stock < 10 && (
                             <p className="text-xs text-amber-600 mt-1">
                               Only {item.stock} left in stock
+                            </p>
+                          )}
+                          {currentQty > item.stock && (
+                            <p className="text-xs text-red-600 mt-1">
+                              Quantity adjusted to available stock ({item.stock})
                             </p>
                           )}
                         </div>
@@ -197,7 +249,7 @@ export default function Cart() {
                           <button
                             onClick={() => handleQuantityChange(item.cart_products_id, item.stock, -1)}
                             onBlur={() => handleBlurOrDelay(item.cart_products_id)}
-                            disabled={currentQty <= 1}
+                            disabled={currentQty <= 1 || item.stock === 0}
                             className="p-1 rounded-md border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition"
                           >
                             <Minus className="h-4 w-4" />
@@ -206,7 +258,7 @@ export default function Cart() {
                           <button
                             onClick={() => handleQuantityChange(item.cart_products_id, item.stock, 1)}
                             onBlur={() => handleBlurOrDelay(item.cart_products_id)}
-                            disabled={currentQty >= item.stock}
+                            disabled={currentQty >= item.stock || item.stock === 0}
                             className="p-1 rounded-md border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition"
                           >
                             <Plus className="h-4 w-4" /> 
@@ -285,6 +337,40 @@ export default function Cart() {
                 </div>
               </div>
 
+              {selectedCount > 0 ? (
+                <>
+                  {hasOutOfStock && (
+                    <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded text-sm mb-2">
+                      Some items are out of stock. Please remove them to continue.
+                    </div>
+                  )}
+                  <button
+                    onClick={handleCheckout}
+                    disabled={checkout.isPending || hasOutOfStock}
+                    className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition mt-4 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {checkout.isPending ? (
+                      <>
+                        <Loader className="h-5 w-5 animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <CreditCard className="h-5 w-5" />
+                        Pay with PayPal
+                      </>
+                    )}
+                  </button>
+                </>
+              ) : (
+                <button
+                  disabled
+                  className="w-full bg-gray-400 text-white py-3 rounded-lg font-semibold cursor-not-allowed mt-4"
+                >
+                  Select items to checkout
+                </button>
+              )}
+              
               {/* Checkout Button */}
               <button 
                 disabled={selectedCount === 0}
@@ -299,6 +385,10 @@ export default function Cart() {
               >
                 Continue Shopping
               </Link>
+
+              <p className="text-xs text-gray-500 text-center mt-2">
+                You will be redirected to PayPal to complete your payment
+              </p>
             </div>
           </div>
         </div>

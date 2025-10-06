@@ -4,13 +4,13 @@ import { useOrder } from "@/app/lib/query/order/order-data";
 import { ImageKitProvider, Image } from "@imagekit/next";
 import { ArrowLeft, CheckCircle, Package } from "lucide-react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 export default function OrderPage() {
     const { id } = useParams<{ id: string }>();
     const orderId = Number(id);
 
-    const { data: order, isLoading, isError } = useOrder(orderId)
+    const { data: order, isLoading, isError } = useOrder(orderId);
 
     if (isLoading) {
         return (
@@ -37,13 +37,11 @@ export default function OrderPage() {
         );
     }
 
-
-
     return (
-        <div className="min-h-screen bg-gray-50 py-12 px-4">
-            <div className="max-w-3xl mx-auto">
+        <div className="min-h-screen py-12 px-6">
+            <div className="w-full max-w-[1400px] mx-auto space-y-8">
                 {/* Success Header */}
-                <div className="bg-white rounded-lg shadow-md p-8 mb-6 text-center">
+                <div className="bg-white w-full rounded-lg shadow-md p-8 text-center">
                     <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
                     <h1 className="text-3xl font-bold text-gray-900 mb-2">
                         Order Placed Successfully!
@@ -58,7 +56,7 @@ export default function OrderPage() {
                 </div>
 
                 {/* Order Details */}
-                <div className="bg-white rounded-lg shadow-md p-8 mb-6">
+                <div className="bg-white w-full rounded-lg shadow-md p-8">
                     <div className="flex items-center gap-2 mb-6">
                         <Package className="w-6 h-6 text-gray-700" />
                         <h2 className="text-2xl font-bold text-gray-900">Order Details</h2>
@@ -94,22 +92,25 @@ export default function OrderPage() {
                                     key={item.product_id}
                                     className="flex justify-between items-start py-3 border-b last:border-b-0"
                                 >
-                                    <div className="flex-1">
+                                    <div className="flex items-center gap-4">
                                         <ImageKitProvider urlEndpoint={item.product_image_url}>
                                             <Image
                                                 priority
                                                 src={item.product_image_url}
                                                 alt={item.product_name}
-                                                width={100}
-                                                height={100}
+                                                width={80}
+                                                height={80}
+                                                className="rounded-md border"
                                             />
                                         </ImageKitProvider>
-                                        <p className="font-semibold text-gray-900">
-                                            {item.product_name}
-                                        </p>
-                                        <p className="text-sm text-gray-600">
-                                            Quantity: {item.quantity} × ₱{item.price.toFixed(2)}
-                                        </p>
+                                        <div>
+                                            <p className="font-semibold text-gray-900">
+                                                {item.product_name}
+                                            </p>
+                                            <p className="text-sm text-gray-600">
+                                                Quantity: {item.quantity} × ₱{item.price.toFixed(2)}
+                                            </p>
+                                        </div>
                                     </div>
                                     <div className="text-right">
                                         <p className="font-bold text-gray-900">
@@ -133,17 +134,17 @@ export default function OrderPage() {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-4">
+                <div className="flex flex-col md:flex-row gap-4">
                     <Link
                         href="/product"
-                        className="flex-1 flex items-center justify-center gap-2 bg-white border-2 border-green-600 text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-green-50 transition"
+                        className="flex-1 flex items-center justify-center gap-2  border-2 bg-army-brown text-main-white hover:bg-hover-army-brown px-6 py-3 rounded-lg font-semibold transition"
                     >
                         <ArrowLeft className="w-5 h-5" />
                         Continue Shopping
                     </Link>
                     <Link
-                        href="/orders"
-                        className="flex-1 bg-green-600 text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-green-700 transition"
+                        href="/profile/order"
+                        className="flex-1 bg-dark-brown text-main-white hover:bg-hover-dark-brown px-6 py-3 rounded-lg font-semibold text-center  transition"
                     >
                         View All Orders
                     </Link>

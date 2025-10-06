@@ -30,13 +30,6 @@ export default function SideProfile() {
   Order History
 </Link>
 
-<Link
-  href="/profile/order-tracking"
-  className="text-left text-lg font-dmSans flex items-center gap-3"
->
-  <Box strokeWidth={1} />
-  Order Tracking
-</Link>
 
        </div>
         <div className="border-t-2 pt-5">
