@@ -10,7 +10,6 @@ export default function Home() {
       <div className='text-dark-brown'>
         <Hero/>
         <BonsaiSection/>
-        <ReviewsList />
         <CheckNow/>
       </div>
     </>
