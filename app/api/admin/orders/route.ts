@@ -3,7 +3,7 @@ import { db } from "@/db/drizzle";
 import { imageKit_productFiles, order_products, order_status, orders, products, user } from "@/db/schema";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 
 export async function GET() {
   try {
@@ -48,8 +48,10 @@ export async function GET() {
       .from(orders)
       .innerJoin(order_status, eq(orders.order_status_id, order_status.order_status_id))
       .innerJoin(user, eq(orders.user_id, user.id))
-      .orderBy(orders.created_at); // Most recent first
-
+      .orderBy(
+        sql`CASE WHEN ${order_status.order_status_name} = 'paid' THEN 0 ELSE 1 END`,
+        desc(orders.created_at)
+      );
     console.log("Admin fetching all orders. Total found:", allOrders.length);
     
     // Fetch products for each order

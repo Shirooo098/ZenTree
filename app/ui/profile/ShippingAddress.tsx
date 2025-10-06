@@ -8,6 +8,7 @@ import { updateAddress } from "@/app/actions/address/update-address.action";
 import { deleteAddress } from "@/app/actions/address/delete-address.action";
 import Button from "@/app/ui/button";
 import { useActionState } from "react";
+import { toast } from "sonner";
 
 
 interface Address {
@@ -65,23 +66,6 @@ export default function ShippingAddress({
     setFormState((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleAdd = async () => {
-    const data = new FormData();
-    data.append("user_id", userId);
-    Object.entries(formState).forEach(([k, v]) => data.append(k, v));
-
-    const result: AddressState = await addAddress(
-      { errors: {}, message: null },
-      data
-    );
-
-    if (result.message) {
-      alert(result.message);
-      setAddresses(await fetchAddresses());
-      resetForm();
-    }
-  };
-
   const handleUpdate = async (addressId: number) => {
     const data = new FormData();
     data.append("address_id", addressId.toString());
@@ -90,7 +74,7 @@ export default function ShippingAddress({
     const result: AddressState = await updateAddress(data);
 
     if (result.message) {
-      alert(result.message);
+      toast.success(result.message);
       setAddresses(await fetchAddresses());
       resetForm();
     }
@@ -98,6 +82,8 @@ export default function ShippingAddress({
 
   const handleDelete = async (id: number) => {
     await deleteAddress(id);
+
+    toast.success("Delete Address Successfully")
     setAddresses(addresses.filter((a) => a.address_id !== id));
   };
 

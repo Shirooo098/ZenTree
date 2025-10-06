@@ -1,3 +1,4 @@
+// complete-order/route.ts
 import { auth } from "@/app/lib/auth";
 import { db } from "@/db/drizzle";
 import { orders, order_status, products, order_products, cart_products, carts } from "@/db/schema";
@@ -27,7 +28,7 @@ export async function POST(req: NextRequest) {
         const captureData = await capturePayPalOrder(paypalOrderId);
 
         if (captureData.status === "COMPLETED") {
-            // Update order status to "completed"
+            // Update order status to "paid"
             const completedStatus = await db
                 .select()
                 .from(order_status)
@@ -39,6 +40,7 @@ export async function POST(req: NextRequest) {
                     .update(orders)
                     .set({ 
                         order_status_id: completedStatus[0].order_status_id,
+                        payment_status: 'completed',
                         updated_at: new Date()
                     })
                     .where(eq(orders.order_id, orderId));
@@ -64,7 +66,7 @@ export async function POST(req: NextRequest) {
                 }
             }
 
-            // Remove items from cart (if you stored cart_product_ids)
+            // Remove items from cart
             const [userCart] = await db
                 .select({ cart_id: carts.cart_id })
                 .from(carts)

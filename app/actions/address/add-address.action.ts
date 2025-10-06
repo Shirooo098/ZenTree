@@ -4,6 +4,8 @@ import { db } from "@/db/drizzle";
 import { schema } from "@/db/schema";
 import { AddressState } from "@/app/types/address";
 import { AddAddressFormSchema } from "@/app/types/schema";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 
 export async function addAddress(
@@ -26,7 +28,9 @@ export async function addAddress(
 
   try {
     await db.insert(schema.address).values(validated.data);
-    return { message: "Address added successfully!" };
+
+    revalidatePath("/profile")
+    redirect("/profile")
   } catch (err) {
     console.error(err);
     return { message: "Failed to add address" };

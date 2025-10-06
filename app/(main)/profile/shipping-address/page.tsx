@@ -27,7 +27,7 @@ export default async function ShippingAddressPage() {
 
 
   return (
-    <div className="flex gap-10 p-8">
+    <div className="flex gap-10">
     
       <div className="flex-1">
         <ShippingAddress userId={userId} initialAddresses={addresses} />

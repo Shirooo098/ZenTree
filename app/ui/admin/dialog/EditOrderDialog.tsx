@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { useUpdateOrderStatus } from "@/app/lib/query/admin/orders/order-data";
 
 interface EditOrderStatusDialogProps {
   order: AdminOrder | null;
@@ -33,49 +34,32 @@ const EditOrderStatusDialog = ({
 }: EditOrderStatusDialogProps) => {
   const [newStatus, setNewStatus] = useState<string>(order?.order_status_name || "");
   const [isUpdating, setIsUpdating] = useState(false);
+  const updateOrderStatus = useUpdateOrderStatus();
 
   const orderStatuses = [
-    { value: "Pending", label: "Pending" },
-    { value: "Processing", label: "Processing" },
-    { value: "Shipped", label: "Shipped" },
-    { value: "Delivered", label: "Delivered" },
-    { value: "Cancelled", label: "Cancelled" },
-    { value: "Refunded", label: "Refunded" },
+    { value: "processing", label: "Processing" },
+    { value: "shipped", label: "Shipped" },
+    { value: "cancelled", label: "Cancelled" },
+    { value: "refunded", label: "Refunded" },
   ];
 
-  // Update newStatus when order changes
   useState(() => {
     if (order) {
       setNewStatus(order.order_status_name);
     }
   });
-
-  const handleStatusUpdate = async () => {
+ const handleStatusUpdate = async () => {
     if (!order || !newStatus) return;
 
-    setIsUpdating(true);
-    try {
-      const response = await fetch(`/api/admin/orders/${order.order_id}/status`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus }),
-      });
-
-      if (response.ok) {
-        console.log(`Order ${order.order_id} updated to ${newStatus}`);
-        onSuccess?.();
-        onClose();
-      } else {
-        const error = await response.json();
-        console.error("Failed to update order status:", error);
-        // You could add toast notification here
+    updateOrderStatus.mutate(
+      { orderId: order.order_id, status: newStatus },
+      {
+        onSuccess: () => {
+          onSuccess?.();
+          onClose();
+        },
       }
-    } catch (error) {
-      console.error("Error updating order status:", error);
-      // You could add toast notification here
-    } finally {
-      setIsUpdating(false);
-    }
+    );
   };
 
   const handleOpenChange = (open: boolean) => {

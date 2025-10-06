@@ -1,3 +1,4 @@
+// cancel-order/route.ts
 import { auth } from "@/app/lib/auth";
 import { db } from "@/db/drizzle";
 import { eq } from "drizzle-orm";
@@ -34,6 +35,7 @@ export async function GET(req: NextRequest) {
                     .update(orders)
                     .set({ 
                         order_status_id: cancelledStatus[0].order_status_id,
+                        payment_status: 'cancelled',
                         updated_at: new Date()
                     })
                     .where(eq(orders.order_id, Number(orderId)));
