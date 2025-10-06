@@ -1,4 +1,4 @@
-// app/api/order/cancel/[id]/route.ts
+// app/api/order/cancel/[orderId]/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db/drizzle";
 import { orders, order_status } from "@/db/schema";
@@ -6,14 +6,15 @@ import { eq } from "drizzle-orm";
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = Number(params.id);
+    const { id } = await params;
+    const orderId = Number(id)
 
-    if (isNaN(id)) {
+    if (isNaN(orderId)) {
       return NextResponse.json(
-        { error: "Invalid order ID" },
+        { error: "InvalorderId order orderId" },
         { status: 400 }
       );
     }
@@ -35,7 +36,7 @@ export async function PATCH(
         order_status_id: cancelledStatus.order_status_id,
         updated_at: new Date()
       })
-      .where(eq(orders.order_id, id))
+      .where(eq(orders.order_id, orderId))
       .returning();
 
     if (updatedOrder.length === 0) {
