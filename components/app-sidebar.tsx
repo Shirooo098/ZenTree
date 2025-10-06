@@ -65,14 +65,14 @@ const data = {
       icon: IconChartBar,
     },
     {
-      title: "Projects",
-      href: "/admin/projects",
-      icon: IconFolder,
+      title: "Users",
+      href: "/admin/users",
+      icon: IconUsers,
     },
     {
-      title: "Team",
-      href: "/admin/team",
-      icon: IconUsers,
+      title: "Refund Request",
+      href: "/admin/refunds",
+      icon: IconFolder,
     },
   ],
   navClouds: [

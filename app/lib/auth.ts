@@ -79,6 +79,12 @@ export const auth = betterAuth({
         enabled: true,
         window: 30,
         max: 50,
+        customRules: {
+            "/sign-in/email": {
+                window: 10,
+                max: 3,
+            },
+        }
     },
     
 });

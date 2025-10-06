@@ -221,3 +221,7 @@ export const schema = {
   reviews,
   refund
 }
+  
+
+
+export type User = typeof user.$inferSelect
