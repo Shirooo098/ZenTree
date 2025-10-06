@@ -1,6 +1,5 @@
 "use client";
 
-
 import RateForm from "@/app/components/forms/rate-form";
 import { useOrder } from "@/app/lib/query/order/order-data";
 import { ImageKitProvider, Image } from "@imagekit/next";
@@ -29,8 +28,12 @@ export default function OrderPage() {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-700 mb-2">Order not found</h2>
-          <p className="text-gray-500 mb-6">We couldn&apos;t find this order.</p>
+          <h2 className="text-2xl font-bold text-gray-700 mb-2">
+            Order not found
+          </h2>
+          <p className="text-gray-500 mb-6">
+            We couldn&apos;t find this order.
+          </p>
           <Link
             href="/product"
             className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition"
@@ -70,7 +73,35 @@ export default function OrderPage() {
           <div className="space-y-4 mb-6">
             <div className="flex justify-between py-2 border-b">
               <span className="text-gray-600">Order Status</span>
-              <span className="font-semibold text-green-600 capitalize">
+              <span
+                className={`font-semibold capitalize ${
+                  order.order_status_name.toLowerCase().includes("pending")
+                    ? "text-yellow-900"
+                    : order.order_status_name.toLowerCase().includes("process")
+                      ? "text-sky-900"
+                      : order.order_status_name
+                            .toLowerCase()
+                            .includes("shipped")
+                        ? "text-teal-900"
+                        : order.order_status_name
+                              .toLowerCase()
+                              .includes("delivered")
+                          ? "text-emerald-900"
+                          : order.order_status_name
+                                .toLowerCase()
+                                .includes("completed")
+                            ? "text-green-900"
+                            : order.order_status_name
+                                  .toLowerCase()
+                                  .includes("cancelled")
+                              ? "text-red-900"
+                              : order.order_status_name
+                                    .toLowerCase()
+                                    .includes("refunded")
+                                ? "text-rose-900"
+                                : "text-gray-900"
+                }`}
+              >
                 {order.order_status_name}
               </span>
             </div>
@@ -107,7 +138,9 @@ export default function OrderPage() {
                         height={100}
                       />
                     </ImageKitProvider>
-                    <p className="font-semibold text-gray-900">{item.product_name}</p>
+                    <p className="font-semibold text-gray-900">
+                      {item.product_name}
+                    </p>
                     <p className="text-sm text-gray-600">
                       Quantity: {item.quantity} × ₱{item.price.toFixed(2)}
                     </p>
