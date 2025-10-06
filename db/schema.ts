@@ -82,6 +82,7 @@ export const products = pgTable('products', {
   bonsai_care_level: text("bonsai_care_level"),
   product_desc: text('product_desc').notNull(),
   stock: integer('stock').notNull(),
+  rating: integer('rating')
 });
 
 export const imageKit_productFiles = pgTable('imageKit_productFiles', {
@@ -155,6 +156,21 @@ export const order_products = pgTable('order_products', {
   price_at_purchase: real('price_at_purchase').notNull()
 })
 
+export const review_products = pgTable('review_products', {
+  reviews_id: serial('reviews_id').primaryKey(),
+  user_id: integer('user_id')
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' }),
+  product_id: integer('product_id')
+    .notNull()
+    .references(() => products.product_id, { onDelete: 'cascade' }),
+  rating: integer('rating').notNull(),
+  comment: real('comment').notNull(),
+  created_at: timestamp('created_at')
+  .notNull()
+  .defaultNow()
+})
+
 export const schema = { 
   user,
   session, 
@@ -167,5 +183,6 @@ export const schema = {
   cart_products,
   order_status,
   orders,
-  order_products
+  order_products,
+  review_products
 }

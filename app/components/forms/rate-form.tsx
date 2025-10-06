@@ -4,8 +4,6 @@ import { FaLeaf, FaRegImage } from "react-icons/fa";
 
 export default function RateForm() {
   const [productRating, setProductRating] = useState(4);
-  const [sellerRating, setSellerRating] = useState(4);
-  const [deliveryRating, setDeliveryRating] = useState(5);
   const [review, setReview] = useState("");
 
   const renderLeaves = (rating: number, setRating: (val: number) => void) => {
@@ -66,41 +64,6 @@ export default function RateForm() {
           placeholder="Share your thoughts about our product."
           className="w-full h-28 border rounded-md p-3 text-sm focus:ring-2 focus:ring-green-500 focus:outline-none"
         />
-      </div>
-
-      {/* About Service */}
-      <div className="mb-6">
-        <p className="font-medium mb-3">About Service</p>
-
-        {/* Seller Service */}
-        <div className="flex items-center gap-2 mb-3">
-          <span className="w-32 font-medium">Seller Service</span>
-          {renderLeaves(sellerRating, setSellerRating)}
-          <span className="ml-2 text-green-600 font-medium">
-            {sellerRating >= 5
-              ? "Excellent"
-              : sellerRating >= 4
-                ? "Good"
-                : sellerRating >= 3
-                  ? "Fair"
-                  : "Poor"}
-          </span>
-        </div>
-
-        {/* Delivery Service */}
-        <div className="flex items-center gap-2">
-          <span className="w-32 font-medium">Delivery Service</span>
-          {renderLeaves(deliveryRating, setDeliveryRating)}
-          <span className="ml-2 text-green-600 font-medium">
-            {deliveryRating >= 5
-              ? "Excellent"
-              : deliveryRating >= 4
-                ? "Good"
-                : deliveryRating >= 3
-                  ? "Fair"
-                  : "Poor"}
-          </span>
-        </div>
       </div>
 
       {/* Buttons */}
