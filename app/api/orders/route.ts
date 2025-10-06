@@ -31,6 +31,9 @@ export async function GET(){
             .innerJoin(order_status, eq(orders.order_status_id, order_status.order_status_id))
             .where(eq(orders.user_id, userId))
 
+            console.log("User ID:", userId);
+            console.log("Orders found:", allOrders.length);
+        
         const ordersWithProducts = await Promise.all(
             allOrders.map(async (order) => {
                 const productsInOrder = await db

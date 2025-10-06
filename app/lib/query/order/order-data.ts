@@ -12,23 +12,30 @@ interface CompleteOrderResponse {
   message?: string;
 }
 
-async function fetchOrder(orderId: number): Promise<Order>{
-    const res = await fetch(`/api/orders/${orderId}`, {
-        credentials: 'include'
-    })
+async function fetchOrder(orderId: number): Promise<Order> {
+  console.log("Fetching order:", orderId);
+  
+  const res = await fetch(`/api/orders/${orderId}`, {
+    credentials: 'include'
+  });
 
-    if(!res.ok) throw new Error('Failed to fetch order')
+  console.log("Response status:", res.status);
 
-    const data = await res.json();
-    return data.order;
+  if (!res.ok) {
+    throw new Error(`Failed to fetch order: ${res.status}`);
+  }
+
+  const data = await res.json();
+  console.log("Order data from API:", data);
+  return data.order;
 }
 
-export function useOrder(orderId: number){
-    return useQuery({
-        queryKey: ['order', orderId],
-        queryFn: () => fetchOrder(orderId),
-        enabled: !!orderId
-    })
+export function useOrder(orderId: number) {
+  return useQuery({
+    queryKey: ["order", orderId],
+    queryFn: () => fetchOrder(orderId), 
+    enabled: !!orderId
+  });
 }
 
 const fetchAllOrders = async (): Promise<Array<Order>> => {

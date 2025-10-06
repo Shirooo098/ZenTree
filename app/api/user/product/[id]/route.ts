@@ -1,7 +1,7 @@
 import { db } from "@/db/drizzle";
 import { imageKit_productFiles, products } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";                              
 
 export async function GET(req: NextRequest,
     { params } : { params: Promise<{id: string}>}    
