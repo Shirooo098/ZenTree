@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function faqsfrequestions() {
   return (
-    <div className="mt-20">
+    <div className="my-5 p-10">
       <div className="flex flex-col text-center items-center ">
         <div>
           <h1 className="text-2xl pb-3 ">Still Have Questions</h1>
@@ -16,10 +16,10 @@ export default function faqsfrequestions() {
         </div>
       </div>
 
-      <div className="flex justify-center items-center pb-10">
+      <div className="flex justify-center items-center ">
         <div className="flex flex-row space-x-12">
           <Link href="/contact">
-            <button className="px-4 py-2 rounded-[10px] bg-army-brown text-white px-5 text-sm">
+            <button className="px-4 py-2 rounded-[10px] bg-army-brown text-white text-sm">
               Contact Support
             </button>
           </Link>
