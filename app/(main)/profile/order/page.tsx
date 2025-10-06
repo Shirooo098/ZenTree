@@ -25,7 +25,7 @@ export default function OrdersPage() {
     );
 
   return (
-    <div className="w-full py-10 px-4 sm:px-8">
+    <div className="w-full  px-4 sm:px-8">
       {/* <h1 className="text-3xl font-bold text-dark-brown mb-8 text-center">
         My Orders
       </h1> */}

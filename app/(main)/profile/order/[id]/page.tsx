@@ -1,20 +1,23 @@
 "use client";
 
-import RateForm from "@/app/components/forms/rate-form";
+import { useState } from "react";
 import { useOrder } from "@/app/lib/query/order/order-data";
 import { ImageKitProvider, Image } from "@imagekit/next";
-import { ArrowLeft, CheckCircle, Package } from "lucide-react";
+import { ArrowLeft, CheckCircle, Package, X } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useState } from "react"; // ✅ import useState
 
 export default function OrderPage() {
   const { id } = useParams<{ id: string }>();
   const orderId = Number(id);
-
   const { data: order, isLoading, isError } = useOrder(orderId);
 
-  const [showReviewForm, setShowReviewForm] = useState(false); // ✅ state
+  // ✅ Declare state hooks first
+  const [showRefundForm, setShowRefundForm] = useState(false);
+  const [reason, setReason] = useState("");
+  const [comments, setComments] = useState("");
+  const [email, setEmail] = useState(""); // 🟦 must be declared BEFORE handleRefundSubmit
+  const [submitted, setSubmitted] = useState(false);
 
   if (isLoading) {
     return (
@@ -45,11 +48,42 @@ export default function OrderPage() {
     );
   }
 
+  // ✅ handleRefundSubmit now can access email safely
+  const handleRefundSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!reason || !email) return alert("Please fill in all required fields.");
+
+    try {
+      const res = await fetch(`/api/orders/${orderId}/refund`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: order.user_id, // get user ID from the order
+          email,
+          reason,
+          comments,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        return alert(`Error: ${data.error}`);
+      }
+
+      setSubmitted(true);
+      setShowRefundForm(false);
+      alert("Refund request submitted successfully!");
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong. Please try again.");
+    }
+  }; 
+
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4">
-      <div className="max-w-3xl mx-auto">
+    <div className="min-h-screen py-12 px-6">
+      <div className="w-full max-w-[1400px] mx-auto space-y-8">
         {/* Success Header */}
-        <div className="bg-white rounded-lg shadow-md p-8 mb-6 text-center">
+        <div className="bg-white w-full rounded-lg shadow-md p-8 text-center">
           <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Order Placed Successfully!
@@ -64,44 +98,31 @@ export default function OrderPage() {
         </div>
 
         {/* Order Details */}
-        <div className="bg-white rounded-lg shadow-md p-8 mb-6">
-          <div className="flex items-center gap-2 mb-6">
-            <Package className="w-6 h-6 text-gray-700" />
-            <h2 className="text-2xl font-bold text-gray-900">Order Details</h2>
+        <div className="bg-white w-full rounded-lg shadow-md p-8">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-2">
+              <Package className="w-6 h-6 text-gray-700" />
+              <h2 className="text-2xl font-bold text-gray-900">
+                Order Details
+              </h2>
+            </div>
+
+            {/* Refund Button */}
+            {(order.order_status_name.toLowerCase() === "pending" ||
+              order.order_status_name.toLowerCase() === "completed") && (
+              <button
+                className="bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded-lg transition"
+                onClick={() => setShowRefundForm(true)}
+              >
+                Request Refund
+              </button>
+            )}
           </div>
 
           <div className="space-y-4 mb-6">
             <div className="flex justify-between py-2 border-b">
               <span className="text-gray-600">Order Status</span>
-              <span
-                className={`font-semibold capitalize ${
-                  order.order_status_name.toLowerCase().includes("pending")
-                    ? "text-yellow-900"
-                    : order.order_status_name.toLowerCase().includes("process")
-                      ? "text-sky-900"
-                      : order.order_status_name
-                            .toLowerCase()
-                            .includes("shipped")
-                        ? "text-teal-900"
-                        : order.order_status_name
-                              .toLowerCase()
-                              .includes("delivered")
-                          ? "text-emerald-900"
-                          : order.order_status_name
-                                .toLowerCase()
-                                .includes("completed")
-                            ? "text-green-900"
-                            : order.order_status_name
-                                  .toLowerCase()
-                                  .includes("cancelled")
-                              ? "text-red-900"
-                              : order.order_status_name
-                                    .toLowerCase()
-                                    .includes("refunded")
-                                ? "text-rose-900"
-                                : "text-gray-900"
-                }`}
-              >
+              <span className="font-semibold text-green-600 capitalize">
                 {order.order_status_name}
               </span>
             </div>
@@ -128,37 +149,30 @@ export default function OrderPage() {
                   key={item.product_id}
                   className="flex justify-between items-start py-3 border-b last:border-b-0"
                 >
-                  <div className="flex-1">
+                  <div className="flex items-center gap-4">
                     <ImageKitProvider urlEndpoint={item.product_image_url}>
                       <Image
                         priority
                         src={item.product_image_url}
                         alt={item.product_name}
-                        width={100}
-                        height={100}
+                        width={80}
+                        height={80}
+                        className="rounded-md border"
                       />
                     </ImageKitProvider>
-                    <p className="font-semibold text-gray-900">
-                      {item.product_name}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      Quantity: {item.quantity} × ₱{item.price.toFixed(2)}
-                    </p>
+                    <div>
+                      <p className="font-semibold text-gray-900">
+                        {item.product_name}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        Quantity: {item.quantity} × ₱{item.price.toFixed(2)}
+                      </p>
+                    </div>
                   </div>
                   <div className="text-right">
                     <p className="font-bold text-gray-900">
                       ₱{item.subtotal?.toFixed(2)}
                     </p>
-                  </div>
-                  <div>
-                    {order.order_status_name?.toLowerCase() === "paid" && (
-                      <Link
-                        href={`/profile/order/${orderId}/review/${item.product_id}`}
-                        className="inline-block mt-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition text-sm font-medium"
-                      >
-                        Review
-                      </Link>
-                    )}
                   </div>
                 </div>
               ))}
@@ -177,22 +191,113 @@ export default function OrderPage() {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-4 mb-6">
+        <div className="flex flex-col md:flex-row gap-4">
           <Link
             href="/product"
-            className="flex-1 flex items-center justify-center gap-2 bg-white border-2 border-green-600 text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-green-50 transition"
+            className="flex-1 flex items-center justify-center gap-2 border-2 bg-army-brown text-main-white hover:bg-hover-army-brown px-6 py-3 rounded-lg font-semibold transition"
           >
             <ArrowLeft className="w-5 h-5" />
             Continue Shopping
           </Link>
           <Link
             href="/profile/order"
-            className="flex-1 bg-green-600 text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-green-700 transition"
+            className="flex-1 bg-dark-brown text-main-white hover:bg-hover-dark-brown px-6 py-3 rounded-lg font-semibold text-center transition"
           >
             View All Orders
           </Link>
         </div>
       </div>
+
+      {/* Refund Form Modal */}
+      {/* Refund Form Modal */}
+{showRefundForm && (
+  <div className="fixed inset-0 flex justify-center items-center bg-transparent backdrop-blur-sm z-50">
+    <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
+      <button
+        className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
+        onClick={() => setShowRefundForm(false)}
+         aria-label="Close refund form"
+      >
+        <X className="w-5 h-5" />
+      </button>
+
+      <h2 className="text-xl font-bold mb-4 text-gray-900 text-center">
+        Request a Refund
+      </h2>
+
+      <form onSubmit={handleRefundSubmit} className="space-y-4">
+
+        {/* 🟦 EMAIL FIELD — added for user contact */}
+        <div>
+          <label className="block text-sm font-medium mb-2 text-gray-700">
+            Your Email <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="email"
+            required
+            placeholder="Enter your email address"
+            className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-army-brown outline-none"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+
+        <div>
+          <label
+  htmlFor="refund-reason"
+  className="block text-sm font-medium mb-2 text-gray-700"
+>
+  Reason for Refund <span className="text-red-500">*</span>
+</label>
+<select
+  id="refund-reason"
+  value={reason}
+  onChange={(e) => setReason(e.target.value)}
+  className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-army-brown outline-none"
+  required
+>
+  <option value="">Select a reason</option>
+  <option value="Wrong item received">Wrong item received</option>
+  <option value="Item arrived damaged">Item arrived damaged</option>
+  <option value="Order didn’t arrive">Order didn’t arrive</option>
+  <option value="Changed my mind">Changed my mind</option>
+  <option value="Other">Other</option>
+</select>
+
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2 text-gray-700">
+            Additional Comments (optional)
+          </label>
+          <textarea
+            value={comments}
+            onChange={(e) => setComments(e.target.value)}
+            placeholder="Add any extra details here..."
+            rows={4}
+            className="w-full border rounded-lg px-3 py-2 resize-none focus:ring-2 focus:ring-army-brown outline-none"
+          />
+        </div>
+
+        <div className="flex justify-end gap-3 pt-2">
+          <button
+            type="button"
+            className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
+            onClick={() => setShowRefundForm(false)}
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
+          >
+            Submit Refund
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
     </div>
   );
 }

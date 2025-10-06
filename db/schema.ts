@@ -185,6 +185,24 @@ export const reviews = pgTable("reviews", {
     .defaultNow()
 })
 
+export const refund = pgTable("refund", {
+  refund_id: serial("refund_id").primaryKey(),
+  order_id: integer("order_id")
+    .notNull()
+    .references(() => orders.order_id, { onDelete: "cascade" }),
+  user_id: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  email: text("email").notNull(),
+  reason: text("reason").notNull(),
+  comments: text("comments"),
+  status: text("status").notNull().default("pending"), // pending, approved, rejected
+  created_at: timestamp("created_at").notNull().defaultNow(),
+  updated_at: timestamp("updated_at").notNull().defaultNow(),
+});
+
+
+
 
 export const schema = { 
   user,
@@ -200,5 +218,6 @@ export const schema = {
   orders,
   order_products,
   address,
-  reviews
+  reviews,
+  refund
 }
