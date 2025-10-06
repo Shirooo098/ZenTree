@@ -29,19 +29,20 @@ export default function RateForm({
     e.preventDefault();
 
     if (rating === 0) {
-      toast.error("Please select a rating before submitting.");
+      toast.error("Please select a rating");
       return;
     }
 
     submitReview(
-      { product_id: productId, order_id: orderId, rating, comment },
+      {
+        productId,
+        orderId,
+        rating,
+        comment,
+      },
       {
         onSuccess: () => {
-          toast.success("Review submitted successfully!");
-          if (onSuccess) onSuccess();
-        },
-        onError: (error: any) => {
-          toast.error(error.message || "Failed to submit review.");
+          onSuccess?.();
         },
       }
     );

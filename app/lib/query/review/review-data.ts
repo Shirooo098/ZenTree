@@ -1,29 +1,17 @@
-// app/lib/query/review/review-data.ts
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-
-interface SubmitReviewParams {
-  product_id: number;
-  order_id: number;
-  rating: number;
-  comment?: string;
-}
-
-interface Review {
-  review_id: number;
-  user_name: string;
-  product_name: string;
-  rating: number;
-  comment: string | null;
-  created_at: string;
-}
-
+import { Review, SubmitReviewParams } from "@/app/types/definition";
 
 async function submitReview(params: SubmitReviewParams) {
-  const res = await fetch("/api/reviews/get-review", {
+  const res = await fetch(`/api/reviews/add-review`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(params),
+    body: JSON.stringify({
+      product_id: params.productId,  
+      order_id: params.orderId,
+      rating: params.rating,
+      comment: params.comment,
+    }),
     credentials: "include",
   });
 
@@ -53,10 +41,12 @@ export function useSubmitReview() {
 
   return useMutation({
     mutationFn: submitReview,
-    onSuccess: () => {
+    onSuccess: (data, variables) => {
       toast.success("Review submitted successfully!");
-      // Invalidate relevant queries
-      queryClient.invalidateQueries({ queryKey: ["reviews"] });
+      // Invalidate reviews for the specific product
+      queryClient.invalidateQueries({ 
+        queryKey: ["reviews", variables.productId] 
+      });
     },
     onError: (error: any) => {
       toast.error(error.message || "Failed to submit review");
@@ -64,11 +54,10 @@ export function useSubmitReview() {
   });
 }
 
-// ✅ Consolidated into one function
 export function useGetReviews(productId: number) {
   return useQuery({
-    queryKey: ["reviews"],
+    queryKey: ["reviews", productId],
     queryFn: () => fetchReviews(productId),
-    enabled: true, // 👈 always fetch, even if no productId
+    enabled: !!productId, // Only fetch when productId exists
   });
 }
