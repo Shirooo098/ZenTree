@@ -1,23 +1,37 @@
+"use client";
+
 import { TableCell, TableRow } from "@/components/ui/table";
 import TableUI from "@/components/ui/table-ui";
 import { AdminOrder } from "@/app/types/definition";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Eye, Pencil } from "lucide-react";
+import { Eye, Pencil, Search } from "lucide-react";
 import Link from "next/link";
 import { Image, ImageKitProvider } from "@imagekit/next";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import EditOrderStatusDialog from "../dialog/EditOrderDialog";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const OrdersTable = ({
   ordersData,
-  onOrderUpdated
+  onOrderUpdated,
 }: {
   ordersData: AdminOrder[];
   onOrderUpdated?: () => void;
 }) => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<AdminOrder | null>(null);
+
+  // 🔍 Search & Filter states
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState("All");
 
   const tableHeads = [
     "Order ID",
@@ -43,35 +57,50 @@ const OrdersTable = ({
     onOrderUpdated?.();
   };
 
+  // 🧠 Filtered & searched data
+  const filteredOrders = useMemo(() => {
+    return ordersData.filter((order) => {
+      const matchesSearch =
+        order.user_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.user_email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.order_id.toString().includes(searchTerm);
+
+      const matchesStatus =
+        filterStatus === "All" || order.order_status_name === filterStatus;
+
+      return matchesSearch && matchesStatus;
+    });
+  }, [ordersData, searchTerm, filterStatus]);
+
   const displayTableRow = (order: AdminOrder) => (
     <TableRow key={order.order_id} className="h-[80px]">
       {/* Order ID */}
-      <TableCell className="font-medium">
-        #{order.order_id}
-      </TableCell>
+      <TableCell className="font-medium">#{order.order_id}</TableCell>
 
       {/* Customer */}
       <TableCell>
         <div className="flex flex-col">
           <span className="font-medium">{order.user_name}</span>
-          <span className="text-xs text-muted-foreground">{order.user_email}</span>
+          <span className="text-xs text-muted-foreground">
+            {order.user_email}
+          </span>
         </div>
       </TableCell>
 
-      {/* Products count or thumbnails */}
+      {/* Products */}
       <TableCell>
         {order.products.length > 0 ? (
           <div className="flex items-center gap-2">
             {order.products.slice(0, 2).map((p) => (
               <div key={p.product_id} className="relative w-10 h-10">
                 <ImageKitProvider urlEndpoint={p.product_image_url}>
-                    <Image
-                        src={p.product_image_url}
-                        alt={p.product_name}
-                        width={200}
-                        height={200}
-                        className="object-cover w-full h-full rounded-md border"
-                    />
+                  <Image
+                    src={p.product_image_url}
+                    alt={p.product_name}
+                    width={200}
+                    height={200}
+                    className="object-cover w-full h-full rounded-md border"
+                  />
                 </ImageKitProvider>
               </div>
             ))}
@@ -105,16 +134,16 @@ const OrdersTable = ({
             order.order_status_name === "Pending"
               ? "outline"
               : order.order_status_name === "Processing"
-              ? "secondary"
-              : order.order_status_name === "Shipped"
-              ? "default"
-              : order.order_status_name === "Delivered"
-              ? "default"
-              : order.order_status_name === "Cancelled"
-              ? "destructive"
-              : order.order_status_name === "Refunded"
-              ? "destructive"
-              : "outline"
+                ? "secondary"
+                : order.order_status_name === "Shipped"
+                  ? "default"
+                  : order.order_status_name === "Delivered"
+                    ? "default"
+                    : order.order_status_name === "Cancelled"
+                      ? "destructive"
+                      : order.order_status_name === "Refunded"
+                        ? "destructive"
+                        : "outline"
           }
         >
           {order.order_status_name}
@@ -137,18 +166,50 @@ const OrdersTable = ({
 
   return (
     <>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mt-6 w-full">
+       
+        <div className="relative w-full md:w-[40%]">
+          <Search className="absolute left-2 top-2.5 w-4 h-4 text-gray-400" />
+          <Input
+            type="text"
+            placeholder="Search by name, email, or order ID..."
+            className="pl-8 w-full"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+
+        <div className="w-full md:w-[10%] md:ml-auto">
+          <Select value={filterStatus} onValueChange={setFilterStatus}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Filter by status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="All">All</SelectItem>
+              <SelectItem value="Pending">Pending</SelectItem>
+              <SelectItem value="Processing">Processing</SelectItem>
+              <SelectItem value="Shipped">Shipped</SelectItem>
+              <SelectItem value="Delivered">Delivered</SelectItem>
+              <SelectItem value="Cancelled">Cancelled</SelectItem>
+              <SelectItem value="Refunded">Refunded</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      {/* 🧾 Table View */}
       <div className="w-full mt-6">
         <div className="border rounded-lg hidden lg:block">
           <TableUI
-            items={ordersData}
+            items={filteredOrders}
             tableHeads={tableHeads}
             tableRow={displayTableRow}
           />
         </div>
 
-        {/* Mobile View */}
+        {/* 📱 Mobile View */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 lg:hidden">
-          {ordersData.map((order) => (
+          {filteredOrders.map((order) => (
             <div
               key={order.order_id}
               className="border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
@@ -160,19 +221,21 @@ const OrdersTable = ({
                     order.order_status_name === "Pending"
                       ? "outline"
                       : order.order_status_name === "Processing"
-                      ? "secondary"
-                      : order.order_status_name === "Shipped"
-                      ? "default"
-                      : order.order_status_name === "Delivered"
-                      ? "default"
-                      : "destructive"
+                        ? "secondary"
+                        : order.order_status_name === "Shipped"
+                          ? "default"
+                          : order.order_status_name === "Delivered"
+                            ? "default"
+                            : "destructive"
                   }
                 >
                   {order.order_status_name}
                 </Badge>
               </div>
               <p className="text-sm font-medium">{order.user_name}</p>
-              <p className="text-xs text-muted-foreground mb-2">{order.user_email}</p>
+              <p className="text-xs text-muted-foreground mb-2">
+                {order.user_email}
+              </p>
               <p className="text-sm text-muted-foreground">
                 Total: ₱{order.total.toFixed(2)}
               </p>
@@ -181,21 +244,25 @@ const OrdersTable = ({
               </p>
               <div className="flex items-center gap-2 my-3">
                 {order.products.slice(0, 3).map((p) => (
-                  <ImageKitProvider 
-                      urlEndpoint={p.product_image_url}
-                      key={p.product_id}>
-                      <Image
-                          src={p.product_image_url}
-                          alt={p.product_name}
-                          width={50}
-                          height={50}
-                          className="object-cover w-10 h-10 rounded-md border"
-                      />
+                  <ImageKitProvider
+                    urlEndpoint={p.product_image_url}
+                    key={p.product_id}
+                  >
+                    <Image
+                      src={p.product_image_url}
+                      alt={p.product_name}
+                      width={50}
+                      height={50}
+                      className="object-cover w-10 h-10 rounded-md border"
+                    />
                   </ImageKitProvider>
                 ))}
               </div>
               <div className="flex gap-2">
-                <Link href={`/admin/orders/${order.order_id}`} className="flex-1">
+                <Link
+                  href={`/admin/orders/${order.order_id}`}
+                  className="flex-1"
+                >
                   <Button variant="outline" className="w-full" size="sm">
                     <Eye className="w-4 h-4 mr-1" /> View
                   </Button>
@@ -214,7 +281,7 @@ const OrdersTable = ({
         </div>
       </div>
 
-      {/* Edit Status Dialog */}
+      {/* 🪟 Edit Status Dialog */}
       <EditOrderStatusDialog
         order={selectedOrder}
         isOpen={isEditDialogOpen}

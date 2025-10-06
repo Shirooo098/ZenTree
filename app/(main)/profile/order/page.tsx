@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Loader } from "@/app/components/loader/loader";
 import { useAllOrders } from "@/app/lib/query/order/order-data";
@@ -10,47 +10,123 @@ export default function OrdersPage() {
   const { data: orders, isLoading, isError } = useAllOrders();
 
   if (isLoading) return <Loader />;
-  if (isError) return <p>Error loading orders</p>;
-  if(!orders) return <div>Error fetching Orders</div>
+  if (isError)
+    return <p className="text-center text-red-600">Error loading orders</p>;
+  if (!orders || orders.length === 0)
+    return (
+      <div className="flex flex-col justify-center items-center min-h-[60vh] text-gray-600">
+        <p className="text-lg font-medium mb-2">No orders found.</p>
+        <Link href="/product">
+          <Button className="bg-army-brown hover:bg-hover-army-brown text-main-white">
+            Browse Products
+          </Button>
+        </Link>
+      </div>
+    );
 
   return (
-    <div className="max-w-3xl mx-auto py-8">
-      <h1 className="text-2xl font-bold mb-4">My Orders</h1>
-      <ul className="space-y-4">
-        {orders?.map(order => (
-          <div key={order.order_id} className="border rounded-lg p-4">
-            <p className="font-semibold">
-              Order #{order.order_id} — {order.order_status_name}
-            </p>
-            <p className="text-sm text-gray-600">
-              Placed on {new Date(order.created_at).toLocaleDateString()}
-            </p>
+    <div className="w-full  px-4 sm:px-8">
+      {/* <h1 className="text-3xl font-bold text-dark-brown mb-8 text-center">
+        My Orders
+      </h1> */}
 
-            <ul className="mt-2 ml-4 list-disc">
-              {order.products.map(p => (
-                <li key={p.product_id}>
-                  <ImageKitProvider urlEndpoint={p.product_image_url}>
-                    <Image
-                      priority
-                      src={p.product_image_url}
-                      alt={p.product_name}
-                      width={100}
-                      height={100}
-                    />
-                  </ImageKitProvider>
-                  <p>{p.product_name} </p>
-                  <p>Price: ₱{p.price_at_purchase}</p>
-                  <p>Quantity {p.quantity}</p>
-                  <p>Total Price: ₱{p.price_at_purchase! * p.quantity}</p> 
-                </li>
+      <div className="space-y-6">
+        {orders.map((order) => (
+          <div
+            key={order.order_id}
+            className="bg-white shadow-md rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition w-full"
+          >
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b pb-3 mb-4">
+              <div>
+                <p className="text-lg font-semibold text-dark-brown">
+                  Order #{order.order_id}
+                </p>
+                <p className="text-sm text-gray-500">
+                  Placed on{" "}
+                  {new Date(order.created_at).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </p>
+              </div>
+              <span
+                className={`mt-2 sm:mt-0 px-3 py-1 text-sm font-semibold rounded-full
+  ${
+    order.order_status_name.toLowerCase().includes("pending")
+      ? "bg-yellow-300 text-yellow-900"
+      : order.order_status_name.toLowerCase().includes("process")
+        ? "bg-sky-300 text-sky-900"
+        : order.order_status_name.toLowerCase().includes("shipped")
+          ? "bg-teal-300 text-teal-900"
+          : order.order_status_name.toLowerCase().includes("delivered")
+            ? "bg-emerald-400 text-emerald-900"
+            : order.order_status_name.toLowerCase().includes("completed")
+              ? "bg-green-400 text-green-900"
+              : order.order_status_name.toLowerCase().includes("cancelled")
+                ? "bg-red-300 text-red-900"
+                : order.order_status_name.toLowerCase().includes("refunded")
+                  ? "bg-rose-300 text-rose-900"
+                  : "bg-gray-300 text-gray-900"
+  }`}
+              >
+                {order.order_status_name}
+              </span>
+            </div>
+
+            <div className="space-y-4">
+              {order.products.map((p) => (
+                <div
+                  key={p.product_id}
+                  className="flex flex-col sm:flex-row items-center gap-4 border-b pb-4 last:border-0"
+                >
+                  <div className="flex-shrink-0">
+                    <ImageKitProvider urlEndpoint={p.product_image_url}>
+                      <Image
+                        priority
+                        src={p.product_image_url}
+                        alt={p.product_name}
+                        width={100}
+                        height={100}
+                        className="rounded-lg object-cover"
+                      />
+                    </ImageKitProvider>
+                  </div>
+
+                  <div className="flex-1 w-full flex justify-between items-center text-center sm:text-left">
+                    <div className="text-left">
+                      <p className="font-semibold text-dark-brown">
+                        {p.product_name}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        Quantity: {p.quantity}
+                      </p>
+                    </div>
+
+                    <div className="text-right">
+                      <p className="text-sm text-gray-600">
+                        Price: ₱{p.price_at_purchase!.toFixed(2)}
+                      </p>
+                      <p className="text-md font-semibold text-army-brown mt-1">
+                        Total: ₱{(p.price_at_purchase! * p.quantity).toFixed(2)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               ))}
-            </ul>
-             <Link href={`/profile/order/${order?.order_id}`}>
-                <Button>Check Order</Button>
-            </Link>
+            </div>
+
+            <div className="pt-6 flex justify-end">
+              <Link href={`/profile/order/${order.order_id}`}>
+                <Button className="bg-dark-brown hover:bg-hover-dark-brown text-main-white px-5 py-2 rounded-lg transition">
+                  View Details
+                </Button>
+              </Link>
+            </div>
           </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

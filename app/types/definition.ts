@@ -126,6 +126,7 @@ export interface OrderProduct {
 export interface Order {
     order_id: number;
     user_id: string;
+    user_name?: string; 
     order_status_name: string;
     created_at: string;
     updated_at?: string;
