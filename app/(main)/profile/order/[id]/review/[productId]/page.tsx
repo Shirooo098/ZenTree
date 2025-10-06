@@ -2,6 +2,7 @@
 
 import RateForm from "@/app/components/forms/rate-form";
 import { useOrder } from "@/app/lib/query/order/order-data";
+import { Image, ImageKitProvider } from "@imagekit/next";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -114,22 +115,38 @@ export default function ProductReviewPage() {
         </Link>
 
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            Review Your Purchase
-          </h2>
-          <div className="flex items-center gap-4 pb-4 border-b">
-            <div className="flex-1">
-              <p className="font-semibold text-gray-900 text-lg">
-                {product.product_name || ""}
-              </p>
-              <p className="text-sm text-gray-600">
-                Purchased on{" "}
-                {new Date(order.created_at).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </p>
+          <div className="flex justify-between">
+            <div className="flex flex-col">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                Review Your Purchase
+              </h2>
+              <div className="flex items-center gap-4 pb-4 border-b">
+                <div className="flex-1">
+                  <p className="font-semibold text-gray-900 text-lg">
+                    {product.product_name || ""}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Purchased on{" "}
+                    {new Date(order.created_at).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center">
+              <ImageKitProvider urlEndpoint={product.product_image_url}>
+                <Image 
+                  src={product.product_image_url}
+                  alt={product.product_name}
+                  height={100}
+                  width={100}
+                  className="object-contain"
+                />
+              </ImageKitProvider>
             </div>
           </div>
         </div>

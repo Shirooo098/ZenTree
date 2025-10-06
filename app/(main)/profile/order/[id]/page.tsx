@@ -6,6 +6,7 @@ import { ImageKitProvider, Image } from "@imagekit/next";
 import { ArrowLeft, CheckCircle, Package, X } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 export default function OrderPage() {
   const { id } = useParams<{ id: string }>();
@@ -185,8 +186,21 @@ export default function OrderPage() {
                       </p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="font-bold text-gray-900">₱{item.subtotal?.toFixed(2)}</p>
+                  <div className="flex flex-col ">
+                    <div className="text-right">
+                      <p className="font-bold text-gray-900">₱{item.subtotal?.toFixed(2)}</p>
+                    </div>
+                    {order.order_status_name.toLowerCase() === "delivered" && (
+                      <Link href={`/profile/order/${order.order_id}/review/${item.product_id}`}>
+                        <Button
+                          variant="outline"
+                          className="mt-3"
+                        >
+                          Review
+                        </Button>
+                      </Link>
+                    )}
+
                   </div>
                 </div>
               ))}
