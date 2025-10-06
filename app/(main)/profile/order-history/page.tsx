@@ -101,15 +101,15 @@ export const mockOrders = [
 
 export default function OrderHistoryPage() {
   return (
-    <div className="min-h-screen bg-white text-black flex flex-col justify-center items-center">
-      <main className="container mx-auto px-4 pt-24 pb-5 flex flex-col p-[100px] w-full max-w-4xl">
+    <div className="min-h-screen text-black flex flex-col justify-center items-center">
+      <main className="container mx-auto px-4 pt-24 pb-5 flex flex-col">
         {/* Title Section */}
         <div className="flex flex-col mb-2 space-y-4 justify-center items-center mt-10">
           <h1 className="text-3xl font-bold text-center">Order History</h1>
         </div>
 
         {/* Orders Section */}
-        <div className="grid grid-cols-1 gap-8 w-full">
+        <div className="grid grid-cols-1 gap-8">
           {mockOrders.map((order) => (
             <div key={order.id} className="p-6 bg-white rounded-xl shadow-sm">
               <OrderCard order={order} onSelect={() => {}} />

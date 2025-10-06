@@ -5,7 +5,8 @@ import { useState } from "react";
 
 
 import { FaUser } from "react-icons/fa6";
-
+import { FaLocationDot } from "react-icons/fa6";
+import { FaIdCard } from "react-icons/fa6";
 import Logout from '../logout';
 import { Box, Clock10  } from 'lucide-react';
 
@@ -21,25 +22,21 @@ export default function SideProfile() {
           <FaUser />
           Profile Information
         </Link>
+<Link
+  href="/profile/order"
+  className="text-left text-lg font-dmSans flex items-center gap-3"
+>
+  <FaLocationDot />
+  Order History
+</Link>
 
-<<<<<<< HEAD
-        <Link href="/profile/order-history"
-          className="text-left text-lg font-dmSans flex items-center gap-3" >
-            
-            <Clock10 strokeWidth={1} />
-=======
-        <Link href="/profile/order"
-          className="text-left text-lg font-dmSans flex items-center gap-3" >
-          <FaLocationDot />
->>>>>>> c1e3ceb65f10aaf228b041d53a1873c2df2facdd
-          Order History
-        </Link>
-
-        <Link href='/profile/order-tracking'
-         className="text-left text-lg font-dmSans flex items-center gap-3" >
-            <Box strokeWidth={1}/>
-          Order Tracking
-        </Link>
+<Link
+  href="/profile/order-tracking"
+  className="text-left text-lg font-dmSans flex items-center gap-3"
+>
+  <Box strokeWidth={1} />
+  Order Tracking
+</Link>
 
        </div>
         <div className="border-t-2 pt-5">

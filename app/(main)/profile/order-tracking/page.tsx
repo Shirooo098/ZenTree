@@ -111,8 +111,8 @@ export default function OrderTrackingPage() {
 
 
   return (
-    <div className="min-h-screen bg-white text-black flex flex-col items-center">
-      <main className="w-full max-w-5xl px-6 sm:px-10 lg:px-16 pt-32 pb-20">
+    <div className="min-h-screen  text-black flex flex-col items-center">
+      <main className=" w-full">
         {/* Header */}
         <div className="text-center mb-14">
           <h1 className="text-4xl font-bold tracking-tight">Order Tracking</h1>

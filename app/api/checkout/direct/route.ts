@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
         }
 
         // Get order status
-        const newOrderStatus = await getOrderStatus('new');
+        const newOrderStatus = await getOrderStatus('pending');
         if (!newOrderStatus) {
             return NextResponse.json(
                 { error: "Order status configuration error" },
