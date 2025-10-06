@@ -170,6 +170,21 @@ export const address = pgTable("address", {
   special_instructions: text("special_instructions"),
 });
 
+export const reviews = pgTable("reviews", {
+  review_id: serial("review_id").primaryKey(),
+  user_id: integer("integer_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  product_id: integer("product_id")
+    .notNull()
+    .references(() => products.product_id, { onDelete: "cascade" }),
+  rating: integer("rating").notNull(),
+  comment: text("comment"),
+  created_at: timestamp("created_at")
+    .notNull()
+    .defaultNow()
+})
+
 
 export const schema = { 
   user,
@@ -184,5 +199,6 @@ export const schema = {
   order_status,
   orders,
   order_products,
-  address
+  address,
+  reviews
 }
