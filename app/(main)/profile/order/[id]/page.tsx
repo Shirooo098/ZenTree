@@ -18,50 +18,58 @@ export default function OrderPage() {
   const [email, setEmail] = useState(""); // Fetched from user table
   const [submitted, setSubmitted] = useState(false);
 
-  // Fetch user email when order is loaded
+  // Fetch user email once order is available
   useEffect(() => {
-    async function fetchUserEmail() {
-      if (!order?.user_id) return;
-      try {
-        const res = await fetch(`/api/users/${order.user_id}`);
-        if (!res.ok) return;
-        const userData = await res.json();
-        setEmail(userData.email || "");
-      } catch (err) {
-        console.error("Failed to fetch user email", err);
-      }
+  async function fetchUserEmail() {
+    if (!order?.user_id) return; // Exit if no order yet
+
+    try {
+      const res = await fetch(`/api/users/${order.user_id}`);
+      if (!res.ok) throw new Error("Failed to fetch user");
+
+      const userData = await res.json();
+      setEmail(userData.email || "");
+    } catch (err) {
+      console.error("Failed to fetch user email", err);
     }
-    fetchUserEmail();
-  }, [order?.user_id]);
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
-      </div>
-    );
   }
 
-  if (isError || !order) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-700 mb-2">Order not found</h2>
-          <p className="text-gray-500 mb-6">We couldn&apos;t find this order.</p>
-          <Link
-            href="/product"
-            className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition"
-          >
-            Continue Shopping
-          </Link>
-        </div>
-      </div>
-    );
+  fetchUserEmail();
+}, [order?.user_id]);
+
+
+
+  const handleSendReceipt = async () => {
+  if (!email) return alert("User email not found");
+  if (!order?.order_id) return alert("Order not found");
+
+  try {
+    const res = await fetch(`/api/orders/${order.order_id}/send-receipt`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    email,
+    description: `Thank you for your purchase! Here is your receipt for order #${order.order_id}.`,
+    link: `${window.location.origin}/profile/order/${order.order_id}`,
+  }),
+});
+
+
+    const data = await res.json();
+    if (!res.ok) return alert(`Error: ${data.error}`);
+
+    alert("Receipt email sent successfully!");
+  } catch (err) {
+    console.error(err);
+    alert("Failed to send receipt email. Try again.");
   }
+};
+
 
   const handleRefundSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!reason || !email) return alert("Please fill in all required fields.");
+    if (!order?.user_id) return alert("Order not found");
 
     try {
       const res = await fetch(`/api/orders/${orderId}/refund`, {
@@ -89,6 +97,31 @@ export default function OrderPage() {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
+  if (isError || !order) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-700 mb-2">Order not found</h2>
+          <p className="text-gray-500 mb-6">We couldn&apos;t find this order.</p>
+          <Link
+            href="/product"
+            className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition"
+          >
+            Continue Shopping
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen py-12 px-6">
       <div className="w-full max-w-[1400px] mx-auto space-y-8">
@@ -111,17 +144,31 @@ export default function OrderPage() {
               <h2 className="text-2xl font-bold text-gray-900">Order Details</h2>
             </div>
 
-            {/* Refund Button only visible for Delivered */}
-            {order.order_status_name.toLowerCase() === "delivered" && (
-              <button
-                className="bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded-lg transition"
-                onClick={() => setShowRefundForm(true)}
-              >
-                Request Refund
-              </button>
+            {/* Refund / Receipt Buttons only for Delivered */}
+            {order?.order_status_name.toLowerCase() === "delivered" && (
+              <div className="flex gap-3">
+                {!email ? (
+      <span>Loading email...</span>
+    ) : (
+      <button
+        className="bg-green-600 hover:bg-green-900 text-white font-medium px-4 py-2 rounded-lg transition"
+        onClick={handleSendReceipt}
+      >
+        Receipt
+      </button>
+    )}
+
+                <button
+                  className="bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded-lg transition"
+                  onClick={() => setShowRefundForm(true)}
+                >
+                  Request Refund
+                </button>
+              </div>
             )}
           </div>
 
+          {/* Order Status & Date */}
           <div className="space-y-4 mb-6">
             <div className="flex justify-between py-2 border-b">
               <span className="text-gray-600">Order Status</span>
@@ -193,7 +240,7 @@ export default function OrderPage() {
             </div>
           </div>
 
-          {/* Order Total */}
+          {/* Total */}
           <div className="border-t mt-6 pt-6">
             <div className="flex justify-between items-center">
               <span className="text-xl font-bold text-gray-900">Total</span>
@@ -202,7 +249,7 @@ export default function OrderPage() {
           </div>
         </div>
 
-        {/* Action Buttons */}
+        {/* Navigation Buttons */}
         <div className="flex flex-col md:flex-row gap-4">
           <Link
             href="/product"
