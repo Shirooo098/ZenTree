@@ -15,6 +15,8 @@ import { useUser } from "@/context/user-context";
 import { toast } from "sonner";
 
 export default function OrderPage() {
+
+  
   const { id } = useParams<{ id: string }>();
   const orderId = Number(id);
   const { data: order, isLoading, isError } = useOrder(orderId);
@@ -166,8 +168,8 @@ export default function OrderPage() {
                   disabled={markDeliveredMutation.isPending}
                 >
                   {markDeliveredMutation.isPending
-                    ? "Marking as Delivered..."
-                    : "Mark as Delivered"}
+                    ? "Marking as Received..."
+                    : "Mark as Received"}
                 </Button>
               </div>
             ) : null}
@@ -352,7 +354,6 @@ export default function OrderPage() {
                     Order didn&apos;t arrive
                   </option>
                   <option value="Changed my mind">Changed my mind</option>
-                  <option value="Other">Other</option>
                 </select>
               </div>
 

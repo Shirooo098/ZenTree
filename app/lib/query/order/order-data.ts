@@ -155,7 +155,7 @@ export function useMarkOrderDelivered() {
     mutationFn: (orderId: number) =>
       updateOrderStatus({ orderId, status: "delivered" }),
     onSuccess: (orderId) => {
-      toast.success("Order marked as delivered!");
+      toast.success("Order marked as received!");
       redirect(`/profile/order/${orderId}`);
     },
 
