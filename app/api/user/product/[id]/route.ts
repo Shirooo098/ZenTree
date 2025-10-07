@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";                              
 
 export async function GET(req: NextRequest,
-    { params }: { params: { id: string } }   
+    { params }: { params: Promise<{ id: string } >}   
 ){
     const id  = Number((await params).id)
     try {
