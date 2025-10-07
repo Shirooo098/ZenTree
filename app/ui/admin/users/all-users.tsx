@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { AlertTriangle, Ban, CheckCircle, Mail, Phone } from "lucide-react";
 import { useState } from "react";
-import BanUserDialog from "../ui/admin/dialog/BanUserDialog";
+import BanUserDialog from "../dialog/BanUserDialog";
 
 // Type definition based on your schema
 type UserData = {

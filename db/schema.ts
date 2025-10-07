@@ -195,13 +195,32 @@ export const refund = pgTable("refund", {
     .references(() => user.id, { onDelete: "cascade" }),
   email: text("email").notNull(),
   reason: text("reason").notNull(),
+  refund_type: text("refund_type").notNull().default("full"),   // full or partial
   comments: text("comments"),
-  status: text("status").notNull().default("pending"), // pending, approved, rejected
+  status: text("status").notNull().default("pending"), 
+    stock_restored: boolean("stock_restored").default(false),
+  stock_restored_at: timestamp("stock_restored_at"),
+  admin_notes: text("admin_notes"),
+  processed_by: text("processed_by"),
   created_at: timestamp("created_at").notNull().defaultNow(),
   updated_at: timestamp("updated_at").notNull().defaultNow(),
 });
 
-
+export const refund_items = pgTable("refund_items", {
+  refund_item_id: serial("refund_item_id").primaryKey(),
+  refund_id: integer("refund_id")
+    .notNull()
+    .references(() => refund.refund_id, { onDelete: "cascade" }),
+  product_id: integer("product_id")
+    .notNull()
+    .references(() => products.product_id, { onDelete: "cascade" }),
+  quantity: integer("quantity").notNull(),
+  condition: text("condition").notNull(), // 'resellable', 'defective', 'damaged', 'dead_plant', 'broken'
+  restocked: boolean("restocked").default(false), // if stock was restored
+  restocked_at: timestamp("restocked_at"),
+  notes: text("notes"), // Specific notes about this item
+  created_at: timestamp("created_at").notNull().defaultNow(),
+});
 
 
 export const schema = { 

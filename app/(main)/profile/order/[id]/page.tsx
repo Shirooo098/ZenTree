@@ -1,34 +1,75 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useMarkOrderDelivered,
   useOrder,
 } from "@/app/lib/query/order/order-data";
 import { ImageKitProvider, Image } from "@imagekit/next";
-import { ArrowLeft, CheckCircle, Package, X } from "lucide-react";
+import { ArrowLeft, CheckCircle, Package } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { sendReceiptAction } from "@/app/actions/send-receipt.action";
 import { useUser } from "@/context/user-context";
 import { toast } from "sonner";
+import RefundRequestDialog from "@/app/ui/refund/RefundRequestDialog";
 
 export default function OrderPage() {
   const { id } = useParams<{ id: string }>();
   const orderId = Number(id);
-  const { data: order, isLoading, isError } = useOrder(orderId);
+  const { data: order, isLoading, isError, refetch } = useOrder(orderId);
   const { user } = useUser();
   const markDeliveredMutation = useMarkOrderDelivered();
 
   const [showRefundForm, setShowRefundForm] = useState(false);
-  const [reason, setReason] = useState("");
-  const [comments, setComments] = useState("");
   const [isSendingReceipt, setIsSendingReceipt] = useState(false);
+
+  useEffect(() => {
+    if (order) {
+      console.log("🔍 Order data:", {
+        order_id: order.order_id,
+        user_id: order.user_id,
+        products: order.products.length
+      });
+    }
+    if (user) {
+      console.log("🔍 User data:", {
+        email: user.email,
+        name: user.name
+      });
+    }
+  }, [order, user]);
+
+  const getOrderStatusClasses = (status: string) => {
+    const statusLower = status.toLowerCase();
+    switch (statusLower) {
+      case "pending":
+        return "text-yellow-900";
+      case "processing":
+        return "text-sky-900";
+      case "shipped":
+        return "text-teal-900";
+      case "delivered":
+        return "text-emerald-900";
+      case "completed":
+        return "text-green-900";
+      case "cancelled":
+        return "text-red-900";
+      case "refunded":
+        return "text-rose-900";
+      case "refund processing":
+        return "text-orange-900";
+      case "refund rejected":
+        return "text-pink-900";
+      default:
+        return "text-gray-900";
+    }
+  };
 
   const handleSendReceipt = async () => {
     if (!order || !user.email) {
-      alert("Unable to send receipt. Missing order or email information.");
+      toast.error("Unable to send receipt. Missing order or email information.");
       return;
     }
 
@@ -54,34 +95,21 @@ export default function OrderPage() {
     }
   };
 
-  const handleRefundSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!reason || !user.email)
-      return toast.error("Please fill in all required fields.");
+  const handleMarkAsDelivered = () => {
+    markDeliveredMutation.mutate(orderId, {
+      onSuccess: () => {
+        toast.success("Order marked as delivered!");
+        refetch();
+      },
+      onError: () => {
+        toast.error("Failed to mark order as delivered");
+      },
+    });
+  };
 
-    try {
-      const res = await fetch(`/api/orders/${orderId}/refund`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: order?.user_id,
-          email: user.email,
-          reason,
-          comments,
-        }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        return alert(`Error: ${data.error}`);
-      }
-
-      setShowRefundForm(false);
-      toast.success("Refund request submitted successfully!");
-    } catch (err) {
-      console.error(err);
-      toast.error("Something went wrong. Please try again.");
-    }
+  const handleRefundSuccess = () => {
+    toast.success("Refund request submitted successfully!");
+    refetch();
   };
 
   if (isLoading) {
@@ -113,6 +141,13 @@ export default function OrderPage() {
     );
   }
 
+  const orderStatusLower = order.order_status_name.toLowerCase();
+  const canRequestRefund = orderStatusLower === "delivered";
+  const canMarkDelivered = orderStatusLower === "shipped";
+  const isRefundPending = orderStatusLower === "refund processing";
+  const isRefunded = orderStatusLower === "refunded";
+  const isRefundRejected = orderStatusLower === "refund rejected";
+
   return (
     <div className="min-h-screen py-12 px-6">
       <div className="w-full max-w-[1400px] mx-auto space-y-8">
@@ -141,63 +176,62 @@ export default function OrderPage() {
               </h2>
             </div>
 
-            {/* Action Buttons for Delivered orders */}
-            {order.order_status_name.toLowerCase() === "delivered" ? (
-              <div className="flex gap-2">
+            {/* Action Buttons based on order status */}
+            <div className="flex gap-2">
+              {canRequestRefund && (
+                <>
+                  <Button
+                    variant="outline"
+                    onClick={handleSendReceipt}
+                    disabled={isSendingReceipt || !user.email}
+                  >
+                    {isSendingReceipt ? "Sending..." : "Get Receipt"}
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={() => setShowRefundForm(true)}
+                  >
+                    Request Refund
+                  </Button>
+                </>
+              )}
+              
+              {canMarkDelivered && (
                 <Button
                   variant="outline"
-                  onClick={handleSendReceipt}
-                  disabled={isSendingReceipt || !user.email}
-                >
-                  {isSendingReceipt ? "Sending..." : "Get Receipt"}
-                </Button>
-                <Button
-                  variant="destructive"
-                  onClick={() => setShowRefundForm(true)}
-                >
-                  Request Refund
-                </Button>
-              </div>
-            ) : order.order_status_name.toLowerCase() === "shipped" ? (
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => markDeliveredMutation.mutate(orderId)}
+                  onClick={handleMarkAsDelivered}
                   disabled={markDeliveredMutation.isPending}
                 >
                   {markDeliveredMutation.isPending
                     ? "Marking as Delivered..."
                     : "Mark as Delivered"}
                 </Button>
-              </div>
-            ) : null}
+              )}
+
+              {isRefundPending && (
+                <div className="bg-orange-100 text-orange-800 px-4 py-2 rounded-lg text-sm font-medium">
+                  Refund request is being processed
+                </div>
+              )}
+
+              {isRefunded && (
+                <div className="bg-rose-100 text-rose-800 px-4 py-2 rounded-lg text-sm font-medium">
+                  Order has been refunded
+                </div>
+              )}
+
+              {isRefundRejected && (
+                <div className="bg-pink-100 text-pink-800 px-4 py-2 rounded-lg text-sm font-medium">
+                  Refund request was rejected
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="space-y-4 mb-6">
             <div className="flex justify-between py-2 border-b">
               <span className="text-gray-600">Order Status</span>
-              <span
-                className={`font-semibold capitalize ${
-                  order.order_status_name.toLowerCase() === "pending"
-                    ? "text-yellow-900"
-                    : order.order_status_name.toLowerCase() === "process"
-                      ? "text-sky-900"
-                      : order.order_status_name.toLowerCase() === "shipped"
-                        ? "text-teal-900"
-                        : order.order_status_name.toLowerCase() === "delivered"
-                          ? "text-emerald-900"
-                          : order.order_status_name.toLowerCase() ===
-                              "completed"
-                            ? "text-green-900"
-                            : order.order_status_name.toLowerCase() ===
-                                "cancelled"
-                              ? "text-red-900"
-                              : order.order_status_name.toLowerCase() ===
-                                  "refunded"
-                                ? "text-rose-900"
-                                : "text-gray-900"
-                }`}
-              >
+              <span className={`font-semibold capitalize ${getOrderStatusClasses(order.order_status_name)}`}>
                 {order.order_status_name}
               </span>
             </div>
@@ -244,13 +278,13 @@ export default function OrderPage() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex flex-col ">
+                  <div className="flex flex-col">
                     <div className="text-right">
                       <p className="font-bold text-gray-900">
                         ₱{item.subtotal?.toFixed(2)}
                       </p>
                     </div>
-                    {order.order_status_name.toLowerCase() === "delivered" && (
+                    {canRequestRefund && (
                       <Link
                         href={`/profile/order/${order.order_id}/review/${item.product_id}`}
                       >
@@ -294,101 +328,14 @@ export default function OrderPage() {
         </div>
       </div>
 
-      {/* Refund Form Modal */}
-      {showRefundForm && (
-        <div className="fixed inset-0 flex justify-center items-center bg-transparent backdrop-blur-sm z-50">
-          <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
-            <button
-              className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
-              onClick={() => setShowRefundForm(false)}
-              aria-label="Close refund form"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <h2 className="text-xl font-bold mb-4 text-gray-900 text-center">
-              Request a Refund
-            </h2>
-
-            <form onSubmit={handleRefundSubmit} className="space-y-4">
-              {/* Email Field */}
-              <div>
-                <label className="block text-sm font-medium mb-2 text-gray-700">
-                  Your Email <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="email"
-                  aria-label="email"
-                  required
-                  className="w-full border rounded-lg px-3 py-2 bg-gray-50 text-gray-700"
-                  value={user.email}
-                  readOnly
-                />
-              </div>
-
-              {/* Refund Reason */}
-              <div>
-                <label
-                  htmlFor="refund-reason"
-                  className="block text-sm font-medium mb-2 text-gray-700"
-                >
-                  Reason for Refund <span className="text-red-500">*</span>
-                </label>
-                <select
-                  id="refund-reason"
-                  value={reason}
-                  onChange={(e) => setReason(e.target.value)}
-                  className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-army-brown outline-none"
-                  required
-                >
-                  <option value="">Select a reason</option>
-                  <option value="Wrong item received">
-                    Wrong item received
-                  </option>
-                  <option value="Item arrived damaged">
-                    Item arrived damaged
-                  </option>
-                  <option value="Order didn't arrive">
-                    Order didn&apos;t arrive
-                  </option>
-                  <option value="Changed my mind">Changed my mind</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-
-              {/* Additional Comments */}
-              <div>
-                <label className="block text-sm font-medium mb-2 text-gray-700">
-                  Additional Comments (optional)
-                </label>
-                <textarea
-                  value={comments}
-                  onChange={(e) => setComments(e.target.value)}
-                  placeholder="Add any extra details here..."
-                  rows={4}
-                  className="w-full border rounded-lg px-3 py-2 resize-none focus:ring-2 focus:ring-army-brown outline-none"
-                />
-              </div>
-
-              <div className="flex justify-end gap-3 pt-2">
-                <button
-                  type="button"
-                  className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
-                  onClick={() => setShowRefundForm(false)}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
-                >
-                  Submit Refund
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      {/* Refund Request Dialog */}
+      <RefundRequestDialog
+        order={order}
+        userEmail={user.email || ""}
+        isOpen={showRefundForm}
+        onClose={() => setShowRefundForm(false)}
+        onSuccess={handleRefundSuccess}
+      />
     </div>
   );
 }

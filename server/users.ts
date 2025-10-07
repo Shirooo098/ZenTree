@@ -56,10 +56,11 @@ export const signUp = async (email: string, password: string, username: string, 
     }
 }
 
+
 export const getAllUsers = async () => {
   try {
     const dateThreshold = new Date();
-    dateThreshold.setDate(dateThreshold.getDate() - 1); 
+    dateThreshold.setHours(dateThreshold.getHours() - 24); // More precise 24-hour window
 
     const users = await db
       .select({
@@ -82,8 +83,8 @@ export const getAllUsers = async () => {
              FROM ${orders} o
              INNER JOIN ${order_status} os ON o.order_status_id = os.order_status_id
              WHERE o.user_id = ${user.id}
-             AND os.order_status_name = 'Cancelled'
-             AND o.created_at >= ${dateThreshold}
+             AND LOWER(os.order_status_name) = 'cancelled'
+             AND o.created_at >= ${dateThreshold.toISOString()}
             ), 0
           )
         `.as('cancellation_count')
@@ -92,7 +93,7 @@ export const getAllUsers = async () => {
 
     return users;
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching users:", error);
     return [];
   }
 };

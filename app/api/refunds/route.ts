@@ -5,7 +5,6 @@ import { desc } from "drizzle-orm"; // ✅ import desc helper
 
 export async function GET() {
   try {
-    // Fetch all refunds and order by created_at descending
     const allRefunds = await db
       .select()
       .from(refund)

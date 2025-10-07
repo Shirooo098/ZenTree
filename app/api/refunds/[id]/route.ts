@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db/drizzle";
-import { refund } from "@/db/schema";
-import { eq } from "drizzle-orm"; // ✅ import eq helper
+import { refund, orders, order_status } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 export async function PATCH(
   req: Request,
@@ -20,13 +20,60 @@ export async function PATCH(
   }
 
   try {
-    const updated = await db
+    // Get the refund to find the associated order
+    const [existingRefund] = await db
+      .select()
+      .from(refund)
+      .where(eq(refund.refund_id, refundId))
+      .limit(1);
+
+    if (!existingRefund) {
+      return NextResponse.json(
+        { error: "Refund not found" },
+        { status: 404 }
+      );
+    }
+
+    // Get the "refund processing" order status ID
+    const [refundProcessingStatus] = await db
+      .select()
+      .from(order_status)
+      .where(eq(order_status.order_status_name, "refund processing"))
+      .limit(1);
+
+    if (!refundProcessingStatus) {
+      return NextResponse.json(
+        { error: "Refund processing status not found" },
+        { status: 500 }
+      );
+    }
+
+    // Update refund status
+    const [updatedRefund] = await db
       .update(refund)
-      .set({ status })
-      .where(eq(refund.refund_id, refundId)) // ✅ use eq helper
+      .set({ 
+        status,
+        updated_at: new Date()
+      })
+      .where(eq(refund.refund_id, refundId))
       .returning();
 
-    return NextResponse.json(updated);
+    // Update order status to "refund processing"
+    await db
+      .update(orders)
+      .set({ 
+        order_status_id: refundProcessingStatus.order_status_id,
+        updated_at: new Date()
+      })
+      .where(eq(orders.order_id, existingRefund.order_id));
+
+    console.log(`✅ Updated refund #${refundId} and order #${existingRefund.order_id} to refund processing`);
+
+    return NextResponse.json({
+      success: true,
+      refund: updatedRefund,
+      message: "Refund submitted and order status updated to refund processing"
+    });
   } catch (err) {
     console.error("Error updating refund:", err);
     return NextResponse.json(

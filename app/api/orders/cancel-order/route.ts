@@ -23,19 +23,19 @@ export async function GET(req: NextRequest) {
         const orderId = searchParams.get('order_id');
 
         if (orderId) {
-            // Update order status to "cancelled"
-            const cancelledStatus = await db
+
+            const pendingStatus = await db
                 .select()
                 .from(order_status)
-                .where(eq(order_status.order_status_name, 'cancelled'))
+                .where(eq(order_status.order_status_name, 'pending'))
                 .limit(1);
 
-            if (cancelledStatus[0]) {
+            if (pendingStatus[0]) {
                 await db
                     .update(orders)
                     .set({ 
-                        order_status_id: cancelledStatus[0].order_status_id,
-                        payment_status: 'cancelled',
+                        order_status_id: pendingStatus[0].order_status_id,
+                        payment_status: 'cancelled', 
                         updated_at: new Date()
                     })
                     .where(eq(orders.order_id, Number(orderId)));

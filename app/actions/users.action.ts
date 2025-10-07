@@ -12,7 +12,6 @@ export const banUser = async (
   banExpiresIn: number
 ) => {
   try {
-    // Ban the user using auth API
     await auth.api.banUser({
       body: {
         userId,
@@ -22,7 +21,6 @@ export const banUser = async (
       headers: await headers(),
     });
 
-    // Optionally update your database
     const banExpiresDate = new Date(Date.now() + banExpiresIn * 1000);
     
     await db

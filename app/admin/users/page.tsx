@@ -1,4 +1,4 @@
-import UsersTable from "@/app/components/all-users";
+import UsersTable from "@/app/ui/admin/users/all-users";
 import { getAllUsers } from "@/server/users";
 
 
