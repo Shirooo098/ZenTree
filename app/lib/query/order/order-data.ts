@@ -1,5 +1,6 @@
 import { Order } from "@/app/types/definition";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { redirect } from "next/navigation";
 import { toast } from "sonner";
 interface CompleteOrderParams {
   orderId: number;
@@ -11,6 +12,21 @@ interface CompleteOrderResponse {
   orderId: number;
   message?: string;
 }
+
+type UpdateOrderStatusPayload = {
+  orderId: number;
+  status: string; // e.g., "delivered", "shipped"
+};
+
+type UpdateOrderStatusResponse = {
+  success: boolean;
+  message: string;
+  order_id: number;
+  new_status: string;
+  payment_status: string;
+  error?: string;
+};
+
 
 async function fetchOrder(orderId: number): Promise<Order> {
   console.log("Fetching order:", orderId);
@@ -111,5 +127,37 @@ export function useCancelOrder() {
     onError: (error: any) => {
       console.error("Error cancelling order:", error);
     },
+  });
+}
+
+async function updateOrderStatus({
+  orderId,
+  status,
+}: UpdateOrderStatusPayload): Promise<UpdateOrderStatusResponse> {
+  const res = await fetch(`/api/orders/${orderId}/shipped`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ status }),
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.error || "Failed to update order status");
+  }
+
+  return data;
+}
+
+export function useMarkOrderDelivered() {
+  return useMutation({
+    mutationFn: (orderId: number) =>
+      updateOrderStatus({ orderId, status: "delivered" }),
+    onSuccess: (orderId) => {
+      toast.success("Order marked as delivered!");
+      redirect(`/profile/order/${orderId}`);
+    },
+
   });
 }
