@@ -3,23 +3,22 @@
 import { useAddToCart } from "@/app/lib/query/cart/cart-data";
 import { useUserProductId } from "@/app/lib/query/product-data";
 import { ImageKitProvider, Image } from "@imagekit/next";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { MoveLeft } from "lucide-react";
 import Link from "next/link";
 import Button from "@/app/ui/button";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useDirectCheckout } from "@/app/lib/query/checkout/checkout-data";
 import { Loader } from "@/app/components/loader/loader";
 import ReviewsList from "@/app/components/forms/reviews/ReviewsList";
 
 export default function ProductId() {
-  const { id } = useParams<{ id: string }>();
-  const prodId = Number(id);
+    const { id } = useParams<{ id: string }>();
+    const prodId = Number(id);
+    const router = useRouter();
 
     const {data: product, isLoading, isError } = useUserProductId(prodId)
-    const addToCartMutation = useAddToCart();
-    const directCheckout = useDirectCheckout();
+    const addToCart = useAddToCart();
     const [quantity, setQuantity] = useState<number>(1);
 
     if (!product) return <div>Product not found</div>
@@ -33,15 +32,19 @@ export default function ProductId() {
     };
 
     const handleCheckout = () => {
-        if( quantity > product.stock ){
-            toast.error("Insufficient stock")
+        if (quantity > product.stock) {
+            toast.error("Insufficient stock");
             return;
         }
 
-        directCheckout.mutate([{
-            productId: product.id,
-            quantity
-        }])
+        addToCart.mutate({ 
+                productId: prodId, 
+                quantity 
+            },
+            {
+                onSuccess: () =>  {router.push(`/product/${id}/checkout`) }
+            }
+        );
     };
 
     const handleAddToCart = () => {
@@ -50,7 +53,7 @@ export default function ProductId() {
             return;
         }
 
-        addToCartMutation.mutate({ 
+        addToCart.mutate({ 
             productId: prodId, 
             quantity 
         });
@@ -124,11 +127,11 @@ export default function ProductId() {
                         <Button
                             variant="secondary"
                             size="lg"
-                            disabled={addToCartMutation.isPending || isOutOfStock || isInsufficientStock}
+                            disabled={addToCart.isPending || isOutOfStock || isInsufficientStock}
                             onClick={handleAddToCart}
                             className="capitalize rounded-xs w-1/2"
                         >
-                            {addToCartMutation.isPending ? (
+                            {addToCart.isPending ? (
                                 <span className="flex items-center gap-2">
                                     <Loader />
                                     Adding...
@@ -140,18 +143,10 @@ export default function ProductId() {
                         <Button
                             variant="primary"
                             size="lg"
-                            disabled={directCheckout.isPending || isOutOfStock || isInsufficientStock}
                             onClick={handleCheckout}
                             className="capitalize rounded-xs w-1/2"
                         >
-                            {directCheckout.isPending ? (
-                                <span className="flex items-center gap-2">
-                                    <Loader />
-                                    Processing...
-                                </span>
-                            ) : (
-                                'Checkout'
-                            )}
+                            Checkout
                         </Button>
                     </div>
                     {isInsufficientStock && !isOutOfStock && (

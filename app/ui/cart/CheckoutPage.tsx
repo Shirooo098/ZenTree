@@ -8,20 +8,25 @@ import ShippingAddress from "@/app/ui/cart/ShippingAddress";
 import CustomerInformation from "@/app/ui/cart/CustomerInformation";
 import OrderConfirmation from "@/app/ui/cart/Confirmation"; 
 import OrderSummary from "@/app/ui/cart/OrderSummary";
+import { User } from "@/db/schema";
+import { redirect } from "next/navigation";
+import { useUserAddress } from "@/app/lib/query/address/address-data";
+import { useCart } from "@/app/lib/query/cart/cart-data";
 
-interface CheckoutClientProps {
-  userData: {
-    id: string;
-    name: string;
-    username?: string | null;
-    email: string;
-    phoneNumber?: string | null;
-  };
+interface CheckoutPageProps {
+  userData: User;
 }
 
-export default function CheckoutClient({ userData }: CheckoutClientProps) {
-  const [paymentMethod, setPaymentMethod] = useState("maya");
+export default function CheckoutPage({ userData }: CheckoutPageProps) {
   const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const { data: cart, isLoading: isCartLoading, isError: isCartError } = useCart();
+  const { data: userAddress, isLoading: isAddressLoading } = useUserAddress();
+
+  if(!userData) redirect("/sign-in")
+
+  console.log('Cart data:', cart);
+  console.log('User address:', userAddress);
 
   const cartItems = [
     {
@@ -46,9 +51,6 @@ export default function CheckoutClient({ userData }: CheckoutClientProps) {
 
   const handleCheckout = () => setShowConfirmation(true);
 
-  if (showConfirmation) {
-    return <OrderConfirmation paymentMethod={paymentMethod} total={total} />;
-  }
 
   return (
     <div className="min-h-screen bg-white text-black pt-40 px-10">
@@ -67,11 +69,7 @@ export default function CheckoutClient({ userData }: CheckoutClientProps) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
           <div className="lg:col-span-2 space-y-6">
             <CustomerInformation userData={userData} />
-            <ShippingAddress />
-
-            <div className="bg-white rounded-lg border border-gray-300 p-6 shadow-sm">
-              <PaymentMethods onPaymentMethodChange={setPaymentMethod} />
-            </div>
+            <ShippingAddress userAddress={userAddress}/>
           </div>
 
           <OrderSummary
