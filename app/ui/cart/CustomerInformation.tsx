@@ -14,7 +14,7 @@ export default function CustomerInformation({ userData }: CustomerInformationPro
       <h3 className="text-xl font-semibold mb-4 text-gray-900">Customer Information</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm text-gray-600 mb-1">First Name</label>
+          <label className="block text-sm text-gray-600 mb-1"> Name</label>
           <input
             type="text"
             defaultValue={userData.name?.split(" ")[0] || ""}

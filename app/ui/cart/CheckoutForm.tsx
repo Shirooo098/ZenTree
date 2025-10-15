@@ -20,7 +20,7 @@ export default function CheckoutForm({ userData }: CheckoutFormProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
        
         <div>
-          <label className="block text-sm text-gray-600 mb-1">First Name</label>
+          <label className="block text-sm text-gray-600 mb-1">rst Name</label>
           <input
             type="text"
             defaultValue={userData.name?.split(" ")[0] || ""}

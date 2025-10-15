@@ -71,7 +71,7 @@ export default function OrdersPage() {
 
   return (
     <div className="w-full px-4 sm:px-8">
-      {/* Filters */}
+      
       <div className="flex flex-col sm:flex-row gap-3 mb-6 justify-between">
         <input
           type="text"
@@ -112,7 +112,7 @@ export default function OrdersPage() {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b pb-3 mb-4">
               <div>
                 <p className="text-lg font-semibold text-dark-brown">
-                  Order #{order.order_id}
+                  Serial #{order.order_id}
                 </p>
                 <p className="text-sm text-gray-500">
                   Placed on{" "}
