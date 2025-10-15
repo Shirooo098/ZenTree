@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation"; 
-import { ShoppingBag, User, History, MapPinHouse } from "lucide-react";
+import {  User, History, MapPinHouse } from "lucide-react";
 import Logout from "../logout";
 
 export default function SideProfile() {
@@ -11,7 +11,7 @@ export default function SideProfile() {
   // define the sidebar links
   const links = [
     { href: "/profile", label: "Profile Information", icon: <User /> },
-    { href: "/profile/my-purchases", label: "My Purchases", icon: <ShoppingBag /> },
+    
     { href: "/profile/order", label: "Order History", icon: <History /> },
     { href: "/profile/shipping-address", label: "Shipping Address", icon: <MapPinHouse /> },
   ];
