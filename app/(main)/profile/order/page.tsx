@@ -1,19 +1,60 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import { Loader } from "@/app/components/loader/loader";
 import { useAllOrders, useCancelOrder } from "@/app/lib/query/order/order-data";
 import { Button } from "@/components/ui/button";
 import { ImageKitProvider, Image } from "@imagekit/next";
 import Link from "next/link";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Box from "@mui/material/Box";
 
 export default function OrdersPage() {
   const { data: orders, isLoading, isError } = useAllOrders();
-
   const cancelOrder = useCancelOrder();
 
-  if (isLoading) return <Loader />;
-  if (isError) return <p className="text-center text-red-600">Error loading orders</p>;
+  const [searchQuery, setSearchQuery] = useState("");
+  const [tabValue, setTabValue] = useState(0);
 
+  const tabStatuses = [
+    "",
+    "pending",
+    "processing",
+    "shipped",
+    "delivered",
+    "completed",
+    "cancelled",
+    "refunded",
+  ];
+
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setTabValue(newValue);
+  };
+
+  const filteredOrders = useMemo(() => {
+    if (!orders) return [];
+
+    const selectedStatus = tabStatuses[tabValue];
+
+    return orders.filter((order) => {
+      const matchesSearch =
+        order.order_id.toString().includes(searchQuery) ||
+        order.products.some((p) =>
+          p.product_name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+      const matchesStatus = selectedStatus
+        ? order.order_status_name.toLowerCase() === selectedStatus
+        : true;
+
+      return matchesSearch && matchesStatus;
+    });
+  }, [orders, searchQuery, tabValue]);
+
+  if (isLoading) return <Loader />;
+  if (isError)
+    return <p className="text-center text-red-600">Error loading orders</p>;
   if (!orders || orders.length === 0)
     return (
       <div className="flex flex-col justify-center items-center min-h-[60vh] text-gray-600">
@@ -26,45 +67,88 @@ export default function OrdersPage() {
       </div>
     );
 
-    const getStatusClasses = (status: string) => {
-      switch (status.toLowerCase()) {
-        case "pending":
-          return "bg-yellow-300 text-yellow-900";
-        case "processing":
-          return "bg-sky-300 text-sky-900";
-        case "shipped":
-          return "bg-teal-300 text-teal-900";
-        case "delivered":
-          return "bg-emerald-400 text-emerald-900";
-        case "completed":
-          return "bg-green-400 text-green-900";
-        case "cancelled":
-          return "bg-red-300 text-red-900";
-        case "refunded":
-          return "bg-rose-300 text-rose-900";
-        default:
-          return "bg-gray-300 text-gray-900";
-      }
-    };
-
+  const getStatusClasses = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "pending":
+        return "bg-yellow-300 text-yellow-900";
+      case "processing":
+        return "bg-sky-300 text-sky-900";
+      case "shipped":
+        return "bg-teal-300 text-teal-900";
+      case "delivered":
+        return "bg-emerald-400 text-emerald-900";
+      case "completed":
+        return "bg-green-400 text-green-900";
+      case "cancelled":
+        return "bg-red-300 text-red-900";
+      case "refunded":
+        return "bg-rose-300 text-rose-900";
+      default:
+        return "bg-gray-300 text-gray-900";
+    }
+  };
 
   return (
-    <div className="w-full  px-4 sm:px-8">
-      {/* <h1 className="text-3xl font-bold text-dark-brown mb-8 text-center">
-        My Orders
-      </h1> */}
+    <div className="w-full px-4 sm:px-8 font-sans">
+      <div className="flex justify-between items-center w-full border-b border-black pb-5 mb-6">
+        <h1 className="text-2xl font-bold">Order History</h1>
+      </div>
 
-      <div className="space-y-6">
-        {orders.map((order) => (
+      <Box sx={{ width: "100%", bgcolor: "background.paper", borderRadius: 2 }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <Tabs
+            value={tabValue}
+            onChange={handleTabChange}
+            aria-label="order status tabs"
+            variant="fullWidth"
+            textColor="inherit"
+            indicatorColor="primary"
+            sx={{
+              width: "100%",
+              "& .MuiTabs-indicator": {
+                backgroundColor: "#4B3B2A",
+                height: "2px",
+                borderRadius: "4px 4px 0 0",
+              },
+              "& .MuiTab-root": {
+                flex: 1,
+                fontWeight: "bold",
+                textTransform: "none",
+                color: "black",
+                "&.Mui-selected": {
+                  color: "#4B3B2A",
+                },
+              },
+            }}
+          >
+            <Tab label="All" />
+            <Tab label="Pending" />
+            <Tab label="Processing" />
+            <Tab label="Shipped" />
+            <Tab label="Delivered" />
+            <Tab label="Completed" />
+            <Tab label="Cancelled" />
+            <Tab label="Refunded" />
+          </Tabs>
+        </Box>
+      </Box>
+
+      <div className="mt-6 space-y-6 max-h-[70vh] overflow-y-auto pr-2">
+        {filteredOrders.length === 0 && (
+          <p className="text-center text-gray-500">
+            No orders match your criteria.
+          </p>
+        )}
+
+        {filteredOrders.map((order) => (
           <div
             key={order.order_id}
             className="bg-white shadow-md rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition w-full"
           >
-            {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b pb-3 mb-4">
               <div>
                 <p className="text-lg font-semibold text-dark-brown">
-                  Order #{order.order_id}
+                  Serial #{order.order_id}
                 </p>
                 <p className="text-sm text-gray-500">
                   Placed on{" "}
@@ -75,7 +159,7 @@ export default function OrdersPage() {
                   })}
                 </p>
               </div>
-             <span
+              <span
                 className={`mt-2 sm:mt-0 px-3 py-1 text-sm font-semibold rounded-full ${getStatusClasses(
                   order.order_status_name
                 )}`}
@@ -126,9 +210,9 @@ export default function OrdersPage() {
               ))}
             </div>
 
-             <div className="pt-6 flex flex-col sm:flex-row justify-end gap-3">
+            <div className="pt-6 flex flex-col sm:flex-row justify-end gap-3">
               {order.order_status_name.toLowerCase() === "pending" && (
-               <Button
+                <Button
                   onClick={() => cancelOrder.mutate(String(order.order_id))}
                   className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg transition"
                   disabled={cancelOrder.isPending}

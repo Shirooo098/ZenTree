@@ -16,6 +16,8 @@ import { toast } from "sonner";
 import RefundRequestDialog from "@/app/ui/refund/RefundRequestDialog";
 
 export default function OrderPage() {
+
+  
   const { id } = useParams<{ id: string }>();
   const orderId = Number(id);
   const { data: order, isLoading, isError, refetch } = useOrder(orderId);
@@ -203,8 +205,8 @@ export default function OrderPage() {
                   disabled={markDeliveredMutation.isPending}
                 >
                   {markDeliveredMutation.isPending
-                    ? "Marking as Delivered..."
-                    : "Mark as Delivered"}
+                    ? "Marking as Received..."
+                    : "Mark as Received"}
                 </Button>
               )}
 
