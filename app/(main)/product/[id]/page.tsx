@@ -37,16 +37,39 @@ export default function ProductId() {
             return;
         }
 
-        addToCart.mutate({ 
-                productId: prodId, 
-                quantity 
-            },
-            {
-                onSuccess: () =>  {router.push(`/product/${id}/checkout`) }
-            }
-        );
+        if (quantity < 1) {
+            toast.error("Please select a valid quantity");
+            return;
+        }
+
+        // Store only THIS product for checkout
+        const checkoutData = {
+            items: [{
+                cart_products_id: 0,
+                cart_id: 0,
+                product_id: product.id,
+                quantity: quantity,
+                product_name: product.name,
+                product_price: product.price,
+                product_category: product.category || '',
+                product_desc: product.description || '',
+                stock: product.stock,
+                bonsai_size: product.size || null,
+                bonsai_category: product.bonsaiCategory || null,
+                bonsai_age: product.bonsaiAge || null,
+                bonsai_care_level: product.bonsaiCareLevel || null,
+                product_image_url: product.image_url || '',
+                product_image_id: product.image_id || null,
+            }],
+            isDirect: true,
+            fromProductPage: true
+        };
+
+        sessionStorage.setItem('checkout_data', JSON.stringify(checkoutData));
+        router.push(`/product/${id}/checkout`);
     };
 
+    // Add to cart - normal behavior
     const handleAddToCart = () => {
         if (quantity > product.stock) {
             toast.error("Insufficient stock");
@@ -143,6 +166,7 @@ export default function ProductId() {
                         <Button
                             variant="primary"
                             size="lg"
+                            disabled={isOutOfStock || isInsufficientStock}
                             onClick={handleCheckout}
                             className="capitalize rounded-xs w-1/2"
                         >
