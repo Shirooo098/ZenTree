@@ -17,6 +17,9 @@ interface PayPalItem {
   };
 }
 
+const BASE_URL = process.env.PROD_URL || "http://localhost:3000";
+
+
 async function generateAccessToken() {
   const response = await axios.post(
     `${process.env.PAYPAL_BASE_URL}/v1/oauth2/token`,

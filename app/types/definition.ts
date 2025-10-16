@@ -96,7 +96,7 @@ export type CartItemProps = {
     bonsai_category: string | null;
     bonsai_age: string | null;
     bonsai_care_level: string | null;
-    product_image_url: string | null;
+    product_image_url: string;
     product_image_id: string | null;
 }
 

@@ -244,3 +244,5 @@ export const schema = {
 
 
 export type User = typeof user.$inferSelect
+export type Address = typeof address.$inferSelect
+
