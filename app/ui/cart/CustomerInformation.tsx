@@ -1,14 +1,9 @@
 "use client";
 
-interface CustomerInformationProps {
-  userData: {
-    name: string;
-    email: string;
-    phoneNumber?: string | null;
-  };
-}
+import { CheckoutPageProps } from "./CheckoutPage";
 
-export default function CustomerInformation({ userData }: CustomerInformationProps) {
+
+export default function CustomerInformation({ userData }: CheckoutPageProps) {
   return (
     <div className="bg-white rounded-lg border border-gray-300 p-6 shadow-sm pb-4">
       <h3 className="text-xl font-semibold mb-4 text-gray-900">Customer Information</h3>

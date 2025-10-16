@@ -1,28 +1,10 @@
-import "./../../globals.css";
-import "./../../globalproduct.css";
 import SideProfile from "@/app/ui/profile/SideProfile";
 import { Toaster } from "sonner";
-import { UserProvider } from "@/context/user-context";
-import { auth } from "@/app/lib/auth";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { UserProvider, useUser } from "@/context/user-context";
 
-export default async function RootLayout({ children }: {children: React.ReactNode}) {
-  const session = await auth.api.getSession({
-    headers: await headers()
-  })
+export default function RootLayout({ children }: {children: React.ReactNode}) {
 
-  if(!session) redirect("/login")
-
-  const user = {
-    id: session.user.id!,
-    name: session.user.name!,
-    username: session.user.username,
-    phoneNumber: session.user.phoneNumber,
-    email: session.user.email!,
-    avater: session.user.image,
-    role: session.user.role,
-  };
+  const { user } = useUser()
 
   return (
     <UserProvider user={user}>

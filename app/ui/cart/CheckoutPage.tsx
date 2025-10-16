@@ -1,27 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
 import { ArrowLeftIcon } from "lucide-react";
-import { PaymentMethods } from "@/app/ui/cart/PaymentMethod";
 import ShippingAddress from "@/app/ui/cart/ShippingAddress";
 import CustomerInformation from "@/app/ui/cart/CustomerInformation";
-import OrderConfirmation from "@/app/ui/cart/Confirmation"; 
 import OrderSummary from "@/app/ui/cart/OrderSummary";
 import { User } from "@/db/schema";
 import { redirect } from "next/navigation";
 import { useUserAddress } from "@/app/lib/query/address/address-data";
 import { useCart } from "@/app/lib/query/cart/cart-data";
+import { LatestInvoicesSkeleton } from "@/components/ui/skeleton/skeleton";
 
-interface CheckoutPageProps {
-  userData: User;
+export interface CheckoutPageProps {
+  userData: Partial<User>;
 }
 
 export default function CheckoutPage({ userData }: CheckoutPageProps) {
   const [showConfirmation, setShowConfirmation] = useState(false);
 
-  const { data: cart, isLoading: isCartLoading, isError: isCartError } = useCart();
-  const { data: userAddress, isLoading: isAddressLoading } = useUserAddress();
+  const { data: cart } = useCart();
+  const { data: userAddress } = useUserAddress();
 
   if(!userData) redirect("/sign-in")
 
@@ -51,9 +50,8 @@ export default function CheckoutPage({ userData }: CheckoutPageProps) {
 
   const handleCheckout = () => setShowConfirmation(true);
 
-
   return (
-    <div className="min-h-screen bg-white text-black pt-40 px-10">
+    <div className="bg-white text-black p-10 rounded-sm">
       <main className="mx-auto max-w-7xl px-4">
         <div className="flex items-center justify-between pb-5">
           <h1 className="text-3xl font-bold">Checkout</h1>

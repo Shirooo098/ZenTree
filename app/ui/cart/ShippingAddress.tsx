@@ -17,6 +17,7 @@ interface ShippingAddressProps {
 
 export default function ShippingAddress({ userAddress }: ShippingAddressProps) {
   const hasAddress = !!userAddress;
+  const [isLoading, setIsLoading] = useState(true); 
 
   const [formData, setFormData] = useState({
     address: "",
@@ -26,7 +27,6 @@ export default function ShippingAddress({ userAddress }: ShippingAddressProps) {
     special_instructions: "",
   });
 
-  // 🩵 Sync formData when userAddress updates
   useEffect(() => {
     if (userAddress) {
       setFormData({
@@ -37,6 +37,8 @@ export default function ShippingAddress({ userAddress }: ShippingAddressProps) {
         special_instructions: userAddress.special_instructions || "",
       });
     }
+    
+    setIsLoading(false);
   }, [userAddress]);
 
   const handleChange = (
@@ -45,6 +47,23 @@ export default function ShippingAddress({ userAddress }: ShippingAddressProps) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
+  if (isLoading) {
+    return (
+      <div className="bg-gray-100 rounded-lg border border-gray-200 p-6 mt-5 shadow-sm animate-pulse">
+        <h3 className="text-xl font-semibold mb-4">Loading address...</h3>
+        <div className="space-y-3">
+          <div className="h-10 bg-gray-200 rounded-md"></div>
+          <div className="grid grid-cols-3 gap-4">
+            <div className="h-10 bg-gray-200 rounded-md"></div>
+            <div className="h-10 bg-gray-200 rounded-md"></div>
+            <div className="h-10 bg-gray-200 rounded-md"></div>
+          </div>
+          <div className="h-20 bg-gray-200 rounded-md"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <form className="space-y-4">

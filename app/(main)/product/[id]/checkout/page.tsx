@@ -1,30 +1,23 @@
-import { auth } from "@/app/lib/auth";
+"use client";
+
+import { Loader } from "@/app/components/loader/loader";
 import CheckoutPage from "@/app/ui/cart/CheckoutPage";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { useUser } from "@/context/user-context";
+import { Suspense } from "react";
 
-export default async function Checkout() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
 
-  if (!session) redirect("/login");
-
-  const normalizedUser = {
-    ...session.user,
-    image: session.user.image ?? null,
-    phoneNumber: session.user.phoneNumber ?? null,
-    username: session.user.username ?? null,
-    displayUsername: session.user.displayUsername ?? null,
-    role: session.user.role ?? null,
-    banned: session.user.banned ?? null,
-    banReason: session.user.banReason ?? null,
-    banExpires: session.user.banExpires ?? null,
-  };
+export default function Checkout() {
+  const { user } = useUser();
 
   return (
-    <div className="pt-40 pl-10 pr-10">
-      <CheckoutPage userData={normalizedUser} />
+    <div className="p-5">
+      <Suspense fallback={
+        <div className="flex justify-center items-center h-screen">
+          <Loader size={20} thickness={4} />
+        </div>
+      }>
+        <CheckoutPage userData={user} />
+      </Suspense>
     </div>
   );
 }
