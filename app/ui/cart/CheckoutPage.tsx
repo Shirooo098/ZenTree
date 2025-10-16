@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import ShippingAddress from "@/app/ui/cart/ShippingAddress";
 import CustomerInformation from "@/app/ui/cart/CustomerInformation";
 import OrderSummary from "@/app/ui/cart/OrderSummary";
@@ -21,6 +21,7 @@ export default function CheckoutPage({ userData }: CheckoutPageProps) {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [checkoutData, setCheckoutData] = useState<CartProps | null>(null);
   const [isDirectCheckout, setIsDirectCheckout] = useState(false);
+  const [isFromCart, setIsFromCart] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
@@ -37,18 +38,19 @@ export default function CheckoutPage({ userData }: CheckoutPageProps) {
   // Load checkout data
   useEffect(() => {
     const loadCheckoutData = () => {
-      // Check for direct checkout data in sessionStorage (from product page)
+      // Check for checkout data in sessionStorage
       const storedData = sessionStorage.getItem('checkout_data');
       
       if (storedData) {
         try {
           const parsed = JSON.parse(storedData);
           
-          // Only use stored data if it's from product page (direct checkout)
-          if (parsed.isDirect && parsed.fromProductPage) {
-            setIsDirectCheckout(true);
+          // Handle both direct checkout (from product page) AND cart checkout
+          if (parsed.isDirect || parsed.fromCart) {
+            setIsDirectCheckout(parsed.isDirect || false);
+            setIsFromCart(parsed.fromCart || false);
             
-            // Transform to CartProps format - ONLY the selected product
+            // Transform to CartProps format
             const transformedData: CartProps = {
               cart_id: 0,
               items: parsed.items,
@@ -70,10 +72,11 @@ export default function CheckoutPage({ userData }: CheckoutPageProps) {
         }
       }
       
-      // Use cart data only if NOT direct checkout
+      // Fallback: Use cart data only if NOT coming from sessionStorage
       if (cartData && !storedData) {
         setCheckoutData(cartData);
         setIsDirectCheckout(false);
+        setIsFromCart(false);
         setIsLoading(false);
       } else if (!storedData && !cartData) {
         setIsLoading(false);
@@ -122,8 +125,8 @@ export default function CheckoutPage({ userData }: CheckoutPageProps) {
   const total = subtotal + shipping + tax;
 
   const handleCheckout = () => {
-    // Clear direct checkout data after proceeding
-    if (isDirectCheckout) {
+    // Clear checkout data after proceeding
+    if (isDirectCheckout || isFromCart) {
       sessionStorage.removeItem('checkout_data');
     }
     setShowConfirmation(true);
@@ -134,14 +137,20 @@ export default function CheckoutPage({ userData }: CheckoutPageProps) {
       <main className="mx-auto max-w-7xl px-4">
         <div className="flex items-center justify-between pb-5">
           <h1 className="text-3xl font-bold">
-            Checkout {isDirectCheckout && <span className="text-lg text-gray-600">(Direct Purchase)</span>}
+            Checkout 
+            {isDirectCheckout && (
+              <span className="text-lg text-gray-600 ml-2">(Direct Purchase)</span>
+            )}
+            {isFromCart && (
+              <span className="text-lg text-gray-600 ml-2">(From Cart)</span>
+            )}
           </h1>
           <Link
-            href="/product"
+            href={isFromCart ? "/cart" : "/product"}
             className="inline-flex items-center text-gray-600 hover:text-black transition"
           >
-            <ArrowLeftIcon size={16} className="mr-2" />
-            Back to Product
+            <ArrowLeft size={16} className="mr-2" />
+            {isFromCart ? "Back to Cart" : "Back to Product"}
           </Link>
         </div>
 
@@ -159,6 +168,7 @@ export default function CheckoutPage({ userData }: CheckoutPageProps) {
             total={total}
             onCheckout={handleCheckout}
             isDirectCheckout={isDirectCheckout}
+            isFromCart={isFromCart}
           />
         </div>
       </main>
