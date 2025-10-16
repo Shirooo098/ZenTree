@@ -27,11 +27,9 @@ export async function middleware(request: NextRequest) {
     	currentPath.startsWith(route)
   	);
 
-	const isProductRoute = protectedRoute.product.some((route) => 
-		currentPath.startsWith(route)
-	)
+	const isCheckoutRoute = /^\/product\/[^/]+\/checkout(\/confirm)?$/.test(currentPath);
 
-    if(!isLoggedIn && (isAdminRoute || isUserRoute || isProductRoute)) {
+    if(!isLoggedIn && (isAdminRoute || isUserRoute || isCheckoutRoute)) {
         return NextResponse.redirect(new URL("/sign-in", request.url));
     }
 
