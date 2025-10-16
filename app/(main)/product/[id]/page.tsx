@@ -66,7 +66,7 @@ export default function ProductId() {
         };
 
         sessionStorage.setItem('checkout_data', JSON.stringify(checkoutData));
-        router.push(`/product/${id}/checkout`);
+        router.push(`/checkout`);
     };
 
     // Add to cart - normal behavior

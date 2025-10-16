@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,10 +9,31 @@ import CompleteOrder from "@/app/ui/checkout/CompleteOrder";
 function CompleteOrderValidator() {
   const router = useRouter();
   const searchParams = useSearchParams();
-
+  const [isClient, setIsClient] = useState(false);
   const paypalOrderId = searchParams.get("token");
-  const storedOrderId = sessionStorage.getItem("pending_order_id");
-  const storedPaypalOrderId = sessionStorage.getItem("paypal_order_id");
+  const [storedOrderId, setStoredOrderId] = useState<string | null>(null);
+  const [storedPaypalOrderId, setStoredPaypalOrderId] = useState<string | null>(null);
+
+  useEffect(() => {
+    setIsClient(true);
+    setStoredOrderId(sessionStorage.getItem("pending_order_id"));
+    setStoredPaypalOrderId(sessionStorage.getItem("paypal_order_id"));
+  }, []);
+
+  // Show loading state until client-side hydration completes
+  if (!isClient) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+        <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
+          <Loader2 className="w-16 h-16 animate-spin text-blue-600 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold mb-2">Loading...</h2>
+          <p className="text-gray-600">
+            Please wait while we prepare your order.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   // Validation
   if (!paypalOrderId || !storedOrderId) {

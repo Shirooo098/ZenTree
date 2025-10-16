@@ -17,9 +17,6 @@ interface PayPalItem {
   };
 }
 
-const BASE_URL = process.env.PROD_URL || "http://localhost:3000";
-
-
 async function generateAccessToken() {
   const response = await axios.post(
     `${process.env.PAYPAL_BASE_URL}/v1/oauth2/token`,
@@ -75,8 +72,8 @@ export async function createPayPalOrder(cartItems: CartItem[]) {
         },
       ],
       application_context: {
-        return_url: `${process.env.PROD_URL}/checkout/complete-order`,
-        cancel_url: `${process.env.PROD_URL}/checkout/cancel-order`,
+        return_url: `${process.env.BASE_URL}/checkout/complete-order`,
+        cancel_url: `${process.env.BASE_URL}/checkout/cancel-order`,
         shipping_preference: "NO_SHIPPING",
         user_action: "PAY_NOW",
         brand_name: "ZenTree",

@@ -12,18 +12,18 @@ import {
   CreditCard,
 } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   useCart,
   useRemoveFromCart,
   useUpdateCartQuantity,
 } from "@/app/lib/query/cart/cart-data";
-import { useCheckout } from "@/app/lib/query/checkout/checkout-data";
 
 export default function Cart() {
+  const router = useRouter();
   const { data: cart, isLoading } = useCart();
   const removeFromCart = useRemoveFromCart();
   const updateQuantity = useUpdateCartQuantity();
-  const checkout = useCheckout();
   const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set());
 
   // Local quantity state for instant UI updates
@@ -38,7 +38,6 @@ export default function Cart() {
     const quantities: Record<number, number> = {};
 
     cart.items.forEach((item) => {
-      // Ensure we have valid data before processing
       if (
         !item.cart_products_id ||
         typeof item.quantity !== "number" ||
@@ -47,11 +46,9 @@ export default function Cart() {
         return;
       }
 
-      // Cap quantity at available stock
       const validQuantity = Math.min(item.quantity, item.stock);
       quantities[item.cart_products_id] = validQuantity;
 
-      // Auto-update server if quantity exceeds stock
       if (item.quantity > item.stock && validQuantity >= 1) {
         updateQuantity.mutate(
           {
@@ -60,7 +57,7 @@ export default function Cart() {
           },
           {
             onSuccess: () => {
-              // Silent update, no toast needed
+              // Silent update
             },
           }
         );
@@ -80,7 +77,6 @@ export default function Cart() {
       const currentQty = prev[cartProductId] || 1;
       const newQuantity = currentQty + change;
 
-      // Validate bounds
       if (newQuantity < 1 || newQuantity > stock) {
         return prev;
       }
@@ -135,12 +131,30 @@ export default function Cart() {
   };
 
   const handleCheckout = () => {
-    if (selectedItems.size === 0) {
+    if (selectedItems.size === 0 || !cart) {
       return;
     }
 
-    const selectedItemsArray = Array.from(selectedItems);
-    checkout.mutate(selectedItemsArray);
+    // Get selected items with updated quantities
+    const selectedCartItems = cart.items
+      .filter((item) => selectedItems.has(item.cart_products_id))
+      .map((item) => ({
+        ...item,
+        quantity: localQuantities[item.cart_products_id] || item.quantity,
+      }));
+
+    // Store checkout data in sessionStorage (similar to direct checkout)
+    const checkoutData = {
+      isDirect: false, // This is from cart, not product page
+      fromCart: true,
+      items: selectedCartItems,
+      cartProductIds: Array.from(selectedItems),
+    };
+
+    sessionStorage.setItem('checkout_data', JSON.stringify(checkoutData));
+
+    // Navigate to checkout page
+    router.push('/checkout');
   };
 
   const selectedTotal =
@@ -234,7 +248,7 @@ export default function Cart() {
                           onChange={() =>
                             handleSelectItem(item.cart_products_id)
                           }
-                          aria-label={`Select ${item.product_name}`} // Accessibility
+                          aria-label={`Select ${item.product_name}`}
                         />
                         <span className="sr-only">{`Select ${item.product_name}`}</span>
                       </label>
@@ -321,6 +335,10 @@ export default function Cart() {
                           >
                             <Minus className="h-4 w-4" />
                           </button>
+
+                          <span className="px-3 py-1 min-w-[3rem] text-center font-medium">
+                            {currentQty}
+                          </span>
 
                           <button
                             onClick={() =>
@@ -439,20 +457,11 @@ export default function Cart() {
                   )}
                   <button
                     onClick={handleCheckout}
-                    disabled={checkout.isPending || hasOutOfStock}
+                    disabled={hasOutOfStock}
                     className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition mt-4 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {checkout.isPending ? (
-                      <>
-                        <Loader className="h-5 w-5 animate-spin" />
-                        Processing...
-                      </>
-                    ) : (
-                      <>
-                        <CreditCard className="h-5 w-5" />
-                        Pay with PayPal
-                      </>
-                    )}
+                    <CreditCard className="h-5 w-5" />
+                    Proceed to Checkout
                   </button>
                 </>
               ) : (
@@ -470,10 +479,6 @@ export default function Cart() {
               >
                 Continue Shopping
               </Link>
-
-              <p className="text-xs text-gray-500 text-center mt-2">
-                You will be redirected to PayPal to complete your payment
-              </p>
             </div>
           </div>
         </div>

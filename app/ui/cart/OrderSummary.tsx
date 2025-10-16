@@ -16,6 +16,7 @@ interface OrderSummaryProps {
   total: number;
   onCheckout: () => void;
   isDirectCheckout?: boolean;
+  isFromCart?: boolean;
 }
 
 export default function OrderSummary({
@@ -26,6 +27,7 @@ export default function OrderSummary({
   total,
   onCheckout,
   isDirectCheckout = false,
+  isFromCart = false
 }: OrderSummaryProps) {
   const router = useRouter();
   const { mutate: checkoutFromCart, isPending: isCartPending } = useCheckout();
@@ -33,21 +35,24 @@ export default function OrderSummary({
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleCompletePurchase = async () => {
-    if (isProcessing) return;
-    
-    setIsProcessing(true);
+  if (isProcessing) return;
+  
+  setIsProcessing(true);
 
-    try {
-      if (isDirectCheckout) {
-        // Direct checkout - create order and redirect to PayPal
-        const items = cartItems.map(item => ({
-          productId: item.product_id,
+  try {
+    // Check if this is from cart by looking at sessionStorage
+    const storedData = sessionStorage.getItem('checkout_data');
+    const parsed = storedData ? JSON.parse(storedData) : null;
+    
+      if (parsed?.fromCart) {
+        // Cart checkout - use cartProductIds
+        const checkoutItems = cartItems.map(item => ({
+          cartProductId: item.cart_products_id,
           quantity: item.quantity,
         }));
 
-        directCheckout(items, {
+        checkoutFromCart(checkoutItems, {
           onSuccess: () => {
-            // Clear the checkout data after successful redirect setup
             sessionStorage.removeItem('checkout_data');
           },
           onError: (error: Error) => {
@@ -55,26 +60,29 @@ export default function OrderSummary({
             toast.error(error.message || "Failed to process checkout");
           }
         });
-      } else {
-        // Cart checkout
-        const cartProductIds = cartItems.map(item => item.cart_products_id);
-        checkoutFromCart(cartProductIds, {
-          onSuccess: () => {
-            // Cleanup handled by the mutation
-          },
-          onError: (error: Error) => {
-            setIsProcessing(false);
-            toast.error(error.message || "Failed to process checkout");
-          }
-        });
+      } else if (isDirectCheckout) {
+          // Direct checkout from product page
+          const items = cartItems.map(item => ({
+            productId: item.product_id,
+            quantity: item.quantity,
+          }));
+
+          directCheckout(items, {
+            onSuccess: () => {
+              sessionStorage.removeItem('checkout_data');
+            },
+            onError: (error: Error) => {
+              setIsProcessing(false);
+              toast.error(error.message || "Failed to process checkout");
+            }
+          });
       }
     } catch (error) {
       setIsProcessing(false);
+      console.error(error)
       toast.error("An unexpected error occurred");
-      console.log(error)
     }
   };
-
   const isPending = isCartPending || isDirectPending || isProcessing;
 
   return (

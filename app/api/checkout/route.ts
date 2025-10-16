@@ -28,14 +28,17 @@ export async function POST(req: NextRequest) {
 
         const userId = session.user.id;
         const body = await req.json();
-        const { cartProductIds } = body;
+        const { checkoutItems } = body;
 
-        if (!cartProductIds || cartProductIds.length === 0 || !Array.isArray(cartProductIds)) {
+        if (!checkoutItems || checkoutItems.length === 0 || !Array.isArray(checkoutItems)) {
             return NextResponse.json(
                 { error: "No items selected for checkout" },
                 { status: 400 }
             );
         }
+
+        // Extract cart product IDs for database query
+        const cartProductIds = checkoutItems.map((item: any) => item.cartProductId);
 
         const selectedCartItems = await getSelectedCartItems(cartProductIds, userId);
 
@@ -53,7 +56,18 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        const stockError = checkStockAvailability(selectedCartItems);
+        // Override quantities with the ones from the client
+        const itemsWithUpdatedQuantities = selectedCartItems.map(item => {
+            const checkoutItem = checkoutItems.find(
+                (ci: any) => ci.cartProductId === item.cart_products_id
+            );
+            return {
+                ...item,
+                quantity: checkoutItem ? checkoutItem.quantity : item.quantity
+            };
+        });
+
+        const stockError = checkStockAvailability(itemsWithUpdatedQuantities);
         if (stockError) {
             return NextResponse.json(
                 { error: stockError },
@@ -62,7 +76,7 @@ export async function POST(req: NextRequest) {
         }
 
         const paypalOrder = await createPayPalOrder(
-            selectedCartItems.map(item => ({
+            itemsWithUpdatedQuantities.map(item => ({
                 product_id: item.product_id,
                 product_name: item.product_name,
                 quantity: item.quantity,
@@ -84,9 +98,8 @@ export async function POST(req: NextRequest) {
             paypalOrder.orderId
         );
 
-        await processOrderItems(newOrder.order_id, selectedCartItems);
+        await processOrderItems(newOrder.order_id, itemsWithUpdatedQuantities);
 
-        // await removeCartItems(cartProductIds);
         await db
             .update(orders)
             .set({ 
@@ -94,7 +107,7 @@ export async function POST(req: NextRequest) {
             })
             .where(eq(orders.order_id, newOrder.order_id));
 
-        const total = calculateTotal(selectedCartItems);
+        const total = calculateTotal(itemsWithUpdatedQuantities);
 
         return NextResponse.json({
             success: true,
@@ -104,8 +117,8 @@ export async function POST(req: NextRequest) {
                 paypal_order_id: paypalOrder.orderId,
                 approval_url: paypalOrder.approvalUrl,
                 total,
-                itemCount: selectedCartItems.length,
-                items: selectedCartItems.map(item => ({
+                itemCount: itemsWithUpdatedQuantities.length,
+                items: itemsWithUpdatedQuantities.map(item => ({
                     product_id: item.product_id,
                     product_name: item.product_name,
                     quantity: item.quantity,
@@ -186,7 +199,7 @@ async function createOrder(
         .values({
             user_id: userId,
             order_status_id: orderStatusId,
-            paypal_order_id: paypalOrderId, // Store PayPal order ID
+            paypal_order_id: paypalOrderId,
             payment_status: 'pending'
         })
         .returning();
@@ -202,7 +215,6 @@ async function processOrderItems(orderId: number, items: any[]) {
             quantity: item.quantity,
             price_at_purchase: Number(item.product_price)
         });
-
     });
 
     await Promise.all(promises);
