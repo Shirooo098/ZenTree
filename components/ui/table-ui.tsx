@@ -30,7 +30,7 @@ function TableUI<T>({ tableHeads, tableRow, items }: TableProps<T>) {
           items.map((item, index) => tableRow(item, index))
         ) : (
           <TableRow>
-            <TableCell colSpan={tableHeads.length}>No products found</TableCell>
+            <TableCell colSpan={tableHeads.length}>No data found</TableCell>
           </TableRow>
         )}
       </TableBody>
