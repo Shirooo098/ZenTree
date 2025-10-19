@@ -28,3 +28,6 @@ Order Management
  - Update Order Status Process/Pending/Cancelled/Delivered
  - Print invoices
  - Manage return/refund
+
+Order Status 
+ - Change order status delivered to completed

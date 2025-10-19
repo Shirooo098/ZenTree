@@ -71,7 +71,7 @@ export const verification = pgTable("verification", {
 
 export const products = pgTable('products', {
   product_id: serial('product_id').primaryKey(),
-   imageKit_productFiles_id: integer("imageKit_productFiles_id")
+  imageKit_productFiles_id: integer("imageKit_productFiles_id")
     .references(() => imageKit_productFiles.id, { onDelete: "cascade" }),
   product_name: text('product_name').notNull(),
   product_category: text('product_category').notNull(),
@@ -82,6 +82,8 @@ export const products = pgTable('products', {
   bonsai_care_level: text("bonsai_care_level"),
   product_desc: text('product_desc').notNull(),
   stock: integer('stock').notNull(),
+  created_at: timestamp('created_at').notNull().defaultNow(),
+  updated_at: timestamp('updated_at').notNull().defaultNow(),
   rating: integer('rating')
 });
 
