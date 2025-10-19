@@ -22,7 +22,6 @@ export default function OrdersPage() {
     "pending",
     "processing",
     "shipped",
-    "delivered",
     "completed",
     "cancelled",
     "refunded",
@@ -75,10 +74,8 @@ export default function OrdersPage() {
         return "bg-sky-300 text-sky-900";
       case "shipped":
         return "bg-teal-300 text-teal-900";
-      case "delivered":
-        return "bg-emerald-400 text-emerald-900";
       case "completed":
-        return "bg-green-400 text-green-900";
+        return "bg-emerald-400 text-emerald-900";
       case "cancelled":
         return "bg-red-300 text-red-900";
       case "refunded":
@@ -125,7 +122,6 @@ export default function OrdersPage() {
             <Tab label="Pending" />
             <Tab label="Processing" />
             <Tab label="Shipped" />
-            <Tab label="Delivered" />
             <Tab label="Completed" />
             <Tab label="Cancelled" />
             <Tab label="Refunded" />

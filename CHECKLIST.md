@@ -31,3 +31,4 @@ Order Management
 
 Order Status 
  - Change order status delivered to completed
+ - Create endpoint that automatically complete the status if not reviewed within 2 weeks

@@ -100,11 +100,11 @@ export default function OrderPage() {
   const handleMarkAsDelivered = () => {
     markDeliveredMutation.mutate(orderId, {
       onSuccess: () => {
-        toast.success("Order marked as delivered!");
+        toast.success("Order marked as received!");
         refetch();
       },
       onError: () => {
-        toast.error("Failed to mark order as delivered");
+        toast.error("Failed to mark order as received");
       },
     });
   };
@@ -144,7 +144,7 @@ export default function OrderPage() {
   }
 
   const orderStatusLower = order.order_status_name.toLowerCase();
-  const canRequestRefund = orderStatusLower === "delivered";
+  const canRequestRefund = orderStatusLower === "completed";
   const canMarkDelivered = orderStatusLower === "shipped";
   const isRefundPending = orderStatusLower === "refund processing";
   const isRefunded = orderStatusLower === "refunded";
@@ -240,7 +240,7 @@ export default function OrderPage() {
             <div className="flex justify-between py-2 border-b">
               <span className="text-gray-600">Order Date</span>
               <span className="font-semibold">
-                {new Date(order.created_at).toLocaleDateString("en-US", {
+                {new Date(order.created_at).toLocaleDateString("en-PH", {
                   year: "numeric",
                   month: "long",
                   day: "numeric",

@@ -127,7 +127,7 @@ export default function ProductReviewPage() {
                   </p>
                   <p className="text-sm text-gray-600">
                     Purchased on{" "}
-                    {new Date(order.created_at).toLocaleDateString("en-US", {
+                    {new Date(order.created_at).toLocaleDateString("en-PH", {
                       year: "numeric",
                       month: "long",
                       day: "numeric",

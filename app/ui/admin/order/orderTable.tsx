@@ -137,7 +137,7 @@ const OrdersTable = ({
                 ? "secondary"
                 : order.order_status_name === "Shipped"
                   ? "default"
-                  : order.order_status_name === "Delivered"
+                  : order.order_status_name === "Completed"
                     ? "default"
                     : order.order_status_name === "Cancelled"
                       ? "destructive"
@@ -189,7 +189,6 @@ const OrdersTable = ({
               <SelectItem value="Pending">Pending</SelectItem>
               <SelectItem value="Processing">Processing</SelectItem>
               <SelectItem value="Shipped">Shipped</SelectItem>
-              <SelectItem value="Delivered">Delivered</SelectItem>
               <SelectItem value="Cancelled">Cancelled</SelectItem>
               <SelectItem value="Refunded">Refunded</SelectItem>
             </SelectContent>
@@ -224,7 +223,7 @@ const OrdersTable = ({
                         ? "secondary"
                         : order.order_status_name === "Shipped"
                           ? "default"
-                          : order.order_status_name === "Delivered"
+                          : order.order_status_name === "Completed"
                             ? "default"
                             : "destructive"
                   }
