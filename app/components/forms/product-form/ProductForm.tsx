@@ -211,7 +211,7 @@ export default function ProductForm({
                                 </FormControl>
                                 <SelectContent>
                                     <SelectItem value="Beginner">Beginner</SelectItem>
-                                    <SelectItem value="Intermmediate">Intermediate</SelectItem>
+                                    <SelectItem value="Intermediate">Intermediate</SelectItem>
                                     <SelectItem value="Advanced">Advanced</SelectItem>
                                 </SelectContent>
                             </Select>
