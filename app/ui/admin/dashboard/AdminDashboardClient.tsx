@@ -6,8 +6,7 @@ import { useRevenueData } from "@/app/lib/query/admin/dashboard/stats-data";
 import ProductPerformanceDemo from "./AdminDashboardTable";
 
 export default function AdminDashboardClient(){
-    
-    const { data: revenueData, isLoading, isError} = useRevenueData();
+    const { data: revenueData} = useRevenueData();
 
     return(
         <div className="flex flex-1 flex-col">

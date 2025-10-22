@@ -11,7 +11,7 @@ import {
   IconFileWord,
   IconFolder,
   IconHelp,
-  IconInnerShadowTop,
+  IconLibraryPlus,
   IconListDetails,
   IconReport,
   IconSearch,
@@ -35,6 +35,7 @@ import {
 import { User } from "@/app/types/definition"
 import Link from "next/link"
 import Logo from "@/app/ui/Logo"
+import { BookPlus } from "lucide-react"
 
 
 
@@ -74,6 +75,11 @@ const data = {
       href: "/admin/refunds",
       icon: IconFolder,
     },
+    {
+      title: "Content Management",
+      href: "/admin/content-management",
+      icon: IconLibraryPlus,
+    }
   ],
   navClouds: [
     {

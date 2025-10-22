@@ -49,6 +49,3 @@ Manage platform-wide settings (e.g., currency, shipping options, payment options
 9. Notification Management
 Configure and send automated notifications (e.g., order confirmation emails).
 10. Audit Trail
-
-
-
