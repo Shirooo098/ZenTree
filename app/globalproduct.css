@@ -513,3 +513,10 @@ h3 {
   font-family: "DM Sans, DM Sans Fallback";
   font-size: 20px;
 }
+
+.faq-hero {
+  background-image: var(--faq-bg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}

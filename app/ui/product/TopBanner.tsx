@@ -1,32 +1,46 @@
 "use client";
+import { useEffect, useState } from "react";
 import { DMSans } from "../fonts";
 import Button from "../button";
 import { MoveRight } from "lucide-react";
 import Image from "next/image";
 
 export default function TopBanner() {
-  const scrollToShop = () => {
-  const section = document.getElementById("shop-section");
-  if (section) {
-    const yOffset = -110; 
-    const y =
-      section.getBoundingClientRect().top + window.pageYOffset + yOffset;
+  const [banner, setBanner] = useState({
+    title: "",
+    subtitle: "",
+    description: "",
+    image_url: "",
+  });
 
-    window.scrollTo({ top: y, behavior: "smooth" });
-  }
-};
+  useEffect(() => {
+    fetch("/api/top-banner")
+      .then((res) => res.json())
+      .then((data) => setBanner(data))
+      .catch((err) => console.error("Failed to fetch banner:", err));
+  }, []);
+
+  const scrollToShop = () => {
+    const section = document.getElementById("shop-section");
+    if (section) {
+      const yOffset = -110;
+      const y =
+        section.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  };
 
   return (
     <div className="container">
       <div className="hero">
-        <h1 className="product-hero">Discover the Art of</h1>
-        <h1 className="text">Bonsai</h1>
+        <h1 className="product-hero">
+          {banner.title || "Discover the Art of"}
+        </h1>
+        <h1 className="text">{banner.subtitle || "Bonsai"}</h1>
 
         <p className="text1">
-          Bring harmony and tranquility into your space with our carefully
-          cultivated bonsai trees. Each tree is a miniature work of art,
-          thoughtfully nurtured to foster a peaceful, balanced atmosphere in any
-          environment.
+          {banner.description ||
+            "Bring harmony and tranquility into your space with our carefully cultivated bonsai trees. Each tree is a miniature work of art, thoughtfully nurtured to foster a peaceful, balanced atmosphere in any environment."}
         </p>
 
         <Button
@@ -43,10 +57,11 @@ export default function TopBanner() {
       <div className="img-banner">
         <Image
           className="banner"
-          src="/img/banner.png"
+          src={banner.image_url || "/img/banner.png"}
           alt="Banner"
           width={383}
           height={550}
+          priority
         />
       </div>
     </div>

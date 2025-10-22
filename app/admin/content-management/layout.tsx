@@ -10,7 +10,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
                             Content Management
                         </h3>
                         <span className="mt-2 text-muted-foreground">
-                            A content management that manages the content of static pages.
+                            {/* A content management that manages the content of static pages. */}
                         </span>
                     </div>
                 </div>

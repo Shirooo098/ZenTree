@@ -1,33 +1,53 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { MapPin, PhoneCall, Mail } from "lucide-react";
 
 export default function DetailSection() {
+  const [detail, setDetail] = useState({
+    location: "",
+    phone: "",
+    email: "",
+  });
+
+  useEffect(() => {
+    fetch("/api/contact-detail")
+      .then((res) => res.json())
+      .then((data) => setDetail(data))
+      .catch((err) => console.error("Failed to fetch contact details:", err));
+  }, []);
+
   const items = [
     {
       icon: MapPin,
       title: "Location",
       text: (
-        <>
-          938 Aurora Boulevard, <br />
-          Cubao, Quezon City 1109
-        </>
-      ),
+  <>
+    {(detail.location || "").split(",").map((line, i) => (
+      <span key={i}>
+        {line.trim()}
+        <br />
+      </span>
+    ))}
+  </>
+),
+
     },
     {
       icon: PhoneCall,
       title: "Contact Number",
-      text: "123 (456) 789",
+      text: detail.phone,
     },
     {
       icon: Mail,
       title: "Email",
-      text: "zentree_support@gmail.com",
+      text: detail.email,
     },
   ];
 
   return (
     <main className="relative flex h-[38vh] sm:h-[45vh] md:h-[80vh] bg-[#FAF8F8]">
-      {/* main wrapper */}
-      <div className="max-w-6xl w-full mx-auto mt-20 px-4 sm:px-6 lg:px-8 ">
+      <div className="max-w-6xl w-full mx-auto mt-20 px-4 sm:px-6 lg:px-8">
         <h1 className="font-semibold tracking-wide text-2xl sm:text-3xl mb-2">
           We&apos;re here for you.
         </h1>
@@ -35,7 +55,6 @@ export default function DetailSection() {
           Have questions or need assistance with your Zen Tree products? We&apos;re just a message away.
         </p>
 
-        {/* Column layout pinned left */}
         <div className="flex flex-col gap-10 items-start mt-15">
           {items.map(({ icon: Icon, title, text }) => (
             <div

@@ -224,6 +224,82 @@ export const refund_items = pgTable("refund_items", {
   created_at: timestamp("created_at").notNull().defaultNow(),
 });
 
+export const homepage_content = pgTable("homepage_content", {
+  id: serial("id").primaryKey(),
+  quote1: text("quote1").notNull(),
+  quote2: text("quote2").notNull(),
+  quote3: text("quote3").notNull(),
+  author: text("author").notNull(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const bonsai_content = pgTable("bonsai_content", {
+  id: serial("id").primaryKey(),
+  bonsai1_title: text("bonsai1_title").notNull(),
+  bonsai1_description: text("bonsai1_description").notNull(),
+  bonsai2_title: text("bonsai2_title").notNull(),
+  bonsai2_description: text("bonsai2_description").notNull(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const top_banner = pgTable("top_banner", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  subtitle: text("subtitle").notNull(),
+  description: text("description").notNull(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const contact_hero = pgTable("contact_hero", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const faq_hero = pgTable("faq_hero", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const contact_detail = pgTable("contact_detail", {
+  id: serial("id").primaryKey(),
+  location: text("location").notNull(),
+  phone: text("phone").notNull(),
+  email: text("email").notNull(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const aboutpage_content = pgTable("aboutpage_content", {
+  id: serial("id").primaryKey(),
+  hero_title: text("hero_title").notNull(),
+  hero_desc: text("hero_desc"),
+  what_title: text("what_title"),
+  what_desc: text("what_desc"),
+  vision_title: text("vision_title"),
+  vision_desc: text("vision_desc"),
+  mission_title: text("mission_title"),
+  mission_desc: text("mission_desc"),
+  created_at: timestamp("created_at").notNull().defaultNow(),
+  updated_at: timestamp("updated_at").notNull().defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+export const care_hero = pgTable("care_hero", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
+});
 
 export const schema = { 
   user,
@@ -240,7 +316,15 @@ export const schema = {
   order_products,
   address,
   reviews,
-  refund
+  refund,
+  homepage_content,
+  bonsai_content,
+  top_banner,
+  contact_hero,
+  faq_hero,
+  contact_detail,
+  aboutpage_content,
+  care_hero
 }
   
 
