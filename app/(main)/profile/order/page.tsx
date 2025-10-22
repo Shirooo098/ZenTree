@@ -1,14 +1,15 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, SyntheticEvent } from "react";
 import { Loader } from "@/app/components/loader/loader";
-import { useAllOrders, useCancelOrder } from "@/app/lib/query/order/order-data";
+import { useAllOrders } from "@/app/lib/query/order/order-data";
 import { Button } from "@/components/ui/button";
 import { ImageKitProvider, Image } from "@imagekit/next";
 import Link from "next/link";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
+import { useCancelOrder } from "@/app/lib/query/cart/cart-data";
 
 export default function OrdersPage() {
   const { data: orders, isLoading, isError } = useAllOrders();
@@ -22,13 +23,12 @@ export default function OrdersPage() {
     "pending",
     "processing",
     "shipped",
-    "delivered",
     "completed",
     "cancelled",
     "refunded",
   ];
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (event: SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
 
@@ -75,10 +75,8 @@ export default function OrdersPage() {
         return "bg-sky-300 text-sky-900";
       case "shipped":
         return "bg-teal-300 text-teal-900";
-      case "delivered":
-        return "bg-emerald-400 text-emerald-900";
       case "completed":
-        return "bg-green-400 text-green-900";
+        return "bg-emerald-400 text-emerald-900";
       case "cancelled":
         return "bg-red-300 text-red-900";
       case "refunded":
@@ -125,7 +123,6 @@ export default function OrdersPage() {
             <Tab label="Pending" />
             <Tab label="Processing" />
             <Tab label="Shipped" />
-            <Tab label="Delivered" />
             <Tab label="Completed" />
             <Tab label="Cancelled" />
             <Tab label="Refunded" />
@@ -213,7 +210,7 @@ export default function OrdersPage() {
             <div className="pt-6 flex flex-col sm:flex-row justify-end gap-3">
               {order.order_status_name.toLowerCase() === "pending" && (
                 <Button
-                  onClick={() => cancelOrder.mutate(String(order.order_id))}
+                  onClick={() => cancelOrder.mutate(order.order_id)}
                   className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg transition"
                   disabled={cancelOrder.isPending}
                 >

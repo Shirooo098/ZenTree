@@ -10,7 +10,9 @@ export default function ContactForm() {
   const [state, formAction] = useActionState(submitEmail, initialState);
 
   return (
-    <form className="bg-white p-6 rounded-lg shadow-sm w-full max-w-md absolute right-100 mt-51 z-15 h-1/2">
+    <form 
+    action={formAction}
+    className="bg-white p-6 rounded-lg shadow-sm w-full max-w-md absolute right-100 mt-51 z-15 h-1/2">
       <h3 className="text-lg font-semibold mb-4 text-center">
         Need help with your bonsai?
       </h3>
@@ -80,11 +82,7 @@ export default function ContactForm() {
           {state.errorMessage}
         </p>
       )}
-      {Object.keys(state.errors).length === 0 && !state.errorMessage && (
-        <p className="mt-2 text-sm text-green-600 text-center">
-          Message sent successfully!
-        </p>
-      )}
+
     </form>
   );
 }

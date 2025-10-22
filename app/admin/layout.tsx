@@ -20,29 +20,29 @@ export default async function Layout({ children }: { children: React.ReactNode }
       
   return (
     <TanstackProvider user={session.user}>
-         <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-        <SidebarProvider
-            style={
-                {
-                "--sidebar-width": "calc(var(--spacing) * 72)",
-                "--header-height": "calc(var(--spacing) * 12)",
-                } as React.CSSProperties
-            }
-        >
-            <AppSidebar variant="inset"
-                user={{
-                    id: session.user.id,
-                    name: session.user.name,
-                    username: session.user.username,
-                    email: session.user.email,
-                    role: session.user.role
-                }} />
-            <SidebarInset>
-              <SiteHeader />
-              <div className="flex-grow p-4 pt-2 md:overflow-y-auto md:p-12 md:pt-6">{children}</div>
-            </SidebarInset>
-        </SidebarProvider>
-    </div>
+        <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
+            <SidebarProvider
+                style={
+                    {
+                    "--sidebar-width": "calc(var(--spacing) * 72)",
+                    "--header-height": "calc(var(--spacing) * 12)",
+                    } as React.CSSProperties
+                }
+            >
+                <AppSidebar variant="inset"
+                    user={{
+                        id: session.user.id,
+                        name: session.user.name,
+                        username: session.user.username,
+                        email: session.user.email,
+                        role: session.user.role
+                    }} />
+                <SidebarInset>
+                <SiteHeader />
+                <div className="flex-grow p-4 pt-2 md:overflow-y-auto md:p-12 md:pt-6">{children}</div>
+                </SidebarInset>
+            </SidebarProvider>
+        </div>
     </TanstackProvider>
   );
 }

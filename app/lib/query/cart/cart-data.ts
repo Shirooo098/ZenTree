@@ -132,7 +132,7 @@ export const useCancelOrder = () => {
 
   return useMutation({
     mutationFn: async (orderId: number) => {
-      const res = await fetch(`/api/order/cancel/${orderId}`, {
+      const res = await fetch(`/api/orders/cancel/${orderId}`, {
         method: "PATCH",
         credentials: "include"
       });

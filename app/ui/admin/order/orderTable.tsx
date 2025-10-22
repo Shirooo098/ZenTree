@@ -137,7 +137,7 @@ const OrdersTable = ({
                 ? "secondary"
                 : order.order_status_name === "Shipped"
                   ? "default"
-                  : order.order_status_name === "Delivered"
+                  : order.order_status_name === "Completed"
                     ? "default"
                     : order.order_status_name === "Cancelled"
                       ? "destructive"
@@ -153,8 +153,7 @@ const OrdersTable = ({
       {/* Actions */}
       <TableCell className="space-x-2">
         <Button
-          className="bg-blue-600 text-white hover:bg-blue-800"
-          variant="secondary"
+          variant="outline"
           size="sm"
           onClick={() => handleEditClick(order)}
         >
@@ -189,7 +188,6 @@ const OrdersTable = ({
               <SelectItem value="Pending">Pending</SelectItem>
               <SelectItem value="Processing">Processing</SelectItem>
               <SelectItem value="Shipped">Shipped</SelectItem>
-              <SelectItem value="Delivered">Delivered</SelectItem>
               <SelectItem value="Cancelled">Cancelled</SelectItem>
               <SelectItem value="Refunded">Refunded</SelectItem>
             </SelectContent>
@@ -224,7 +222,7 @@ const OrdersTable = ({
                         ? "secondary"
                         : order.order_status_name === "Shipped"
                           ? "default"
-                          : order.order_status_name === "Delivered"
+                          : order.order_status_name === "Completed"
                             ? "default"
                             : "destructive"
                   }
@@ -268,7 +266,7 @@ const OrdersTable = ({
                   </Button>
                 </Link>
                 <Button
-                  variant="secondary"
+                  variant="outline"
                   className="flex-1"
                   size="sm"
                   onClick={() => handleEditClick(order)}

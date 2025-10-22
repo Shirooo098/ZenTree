@@ -45,17 +45,6 @@ const RefundsTable = ({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedRefund, setSelectedRefund] = useState<RefundProps | null>(null);
 
-  // Handle empty or undefined data
-  if (!refundsData || refundsData.length === 0) {
-    return (
-      <div className="w-full mt-6 border rounded-lg p-8 text-center">
-        <AlertCircle className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-        <h3 className="text-lg font-semibold mb-2">No Refunds Found</h3>
-        <p className="text-muted-foreground">There are no refund requests at the moment.</p>
-      </div>
-    );
-  }
-
   const tableHeads = [
     "Refund ID",
     "Order ID",

@@ -58,7 +58,8 @@ export async function editProductAction(formData: FormData){
                 bonsai_care_level: bonsaiCareLevel,
                 product_price: productPrice,
                 product_desc: productDescription,
-                stock: stock
+                stock: stock,
+                updated_at: new Date(),
             })
             .where(eq(products.product_id, productId));
             

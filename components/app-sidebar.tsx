@@ -4,6 +4,8 @@ import * as React from "react"
 import {
   IconCamera,
   IconChartBar,
+  IconClipboard,
+  IconColumns3,
   IconDashboard,
   IconDatabase,
   IconFileAi,
@@ -11,8 +13,11 @@ import {
   IconFileWord,
   IconFolder,
   IconHelp,
-  IconInnerShadowTop,
+  IconHome,
+  IconLibraryPlus,
   IconListDetails,
+  IconPhone,
+  IconPlant,
   IconReport,
   IconSearch,
   IconSettings,
@@ -35,6 +40,7 @@ import {
 import { User } from "@/app/types/definition"
 import Link from "next/link"
 import Logo from "@/app/ui/Logo"
+import { BookPlus } from "lucide-react"
 
 
 
@@ -142,20 +148,36 @@ const data = {
   ],
   documents: [
     {
-      name: "Data Library",
-      href: "#",
-      icon: IconDatabase,
+      name: "Home",
+      href: "/admin/content-management/home",
+      icon: IconHome,
     },
     {
-      name: "Reports",
-      href: "#",
+      name: "Product",
+      href: "/admin/content-management/product",
+      icon: IconPlant,
+    },
+    {
+      name: "Care Guide",
+      href: "/admin/content-management/care-guide",
+      icon: IconColumns3,
+    },
+    {
+      name: "About",
+      href: "/admin/content-management/about",
       icon: IconReport,
     },
     {
-      name: "Word Assistant",
-      href: "#",
-      icon: IconFileWord,
+      name: "Contact",
+      href: "/admin/content-management/contact",
+      icon: IconPhone,
     },
+    {
+      name: "FAQs",
+      href: "/admin/content-management/faq",
+      icon: IconClipboard,
+    },
+
   ],
 }
 

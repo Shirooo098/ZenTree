@@ -62,7 +62,7 @@ export async function PATCH(
       case 'paid':
       case 'processing':
       case 'shipped':
-      case 'delivered':
+      case 'completed':
         payment_status = 'completed';
         break;
       case 'cancelled':
