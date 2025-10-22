@@ -89,7 +89,7 @@ async function completeOrder({ orderId, paypalOrderId }: CompleteOrderParams): P
 }
 
 async function cancelOrder(orderId: string): Promise<void> {
-  const res = await fetch(`/api/orders/cancel-order?order_id=${orderId}`, {
+  const res = await fetch(`/api/orders/cancel?order_id=${orderId}`, {
     method: "GET",
     credentials: 'include',
   });

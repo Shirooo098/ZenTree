@@ -16,8 +16,6 @@ import { toast } from "sonner";
 import RefundRequestDialog from "@/app/ui/refund/RefundRequestDialog";
 
 export default function OrderPage() {
-
-  
   const { id } = useParams<{ id: string }>();
   const orderId = Number(id);
   const { data: order, isLoading, isError, refetch } = useOrder(orderId);

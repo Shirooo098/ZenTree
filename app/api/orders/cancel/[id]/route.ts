@@ -1,4 +1,3 @@
-// app/api/order/cancel/[orderId]/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db/drizzle";
 import { orders, order_status } from "@/db/schema";
@@ -14,13 +13,13 @@ export async function PATCH(
 
     if (isNaN(orderId)) {
       return NextResponse.json(
-        { error: "InvalorderId order orderId" },
+        { error: "Invalid orderId" },
         { status: 400 }
       );
     }
 
     const cancelledStatus = await db.query.order_status.findFirst({
-      where: eq(order_status.order_status_name, "Cancelled")
+      where: eq(order_status.order_status_id, 6)
     });
 
     if (!cancelledStatus) {

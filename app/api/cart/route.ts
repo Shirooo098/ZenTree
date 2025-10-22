@@ -7,18 +7,31 @@ import { eq, and } from "drizzle-orm";
 
 export async function GET() {
     try {
-        const session = await auth.api.getSession({
-            headers: await headers()
-        });
-
-        if (!session) {
+        let session;
+        try {
+            session = await auth.api.getSession({
+                headers: await headers()
+            });
+        } catch (authError) {
+            console.error("Auth error:", authError);
             return NextResponse.json(
-                { error: "Unauthorized" },
+                { error: "Authentication failed", details: authError instanceof Error ? authError.message : "Unknown error" },
+                { status: 401 }
+            );
+        }
+
+        // Check if session exists and has user
+        if (!session || !session.user || !session.user.id) {
+            console.log("No valid session found");
+            return NextResponse.json(
+                { error: "Unauthorized - No valid session" },
                 { status: 401 }
             );
         }
 
         const userId = session.user.id;
+        console.log("Fetching cart for user:", userId);
+
         const newStatus = await getCartStatus('new');
 
         if (!newStatus) {

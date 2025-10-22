@@ -31,4 +31,24 @@ Order Management
 
 Order Status 
  - Change order status delivered to completed
- - Create endpoint that automatically complete the status if not reviewed within 2 weeks
+
+
+
+
+5. User Management
+Manage customer accounts (view, edit, suspend).
+Manage admin accounts (view, add, edit, delete).
+6. Sales & Analytics Reports
+Access to sales data, revenue, product performance reports.
+Customer insights.
+7. Content Management System (CMS)
+Manage static pages (About Us, Contact, FAQs, Privacy Policy).
+Manage promotions, banners, and homepage content.
+8. Settings & Configuration:
+Manage platform-wide settings (e.g., currency, shipping options, payment options).
+9. Notification Management
+Configure and send automated notifications (e.g., order confirmation emails).
+10. Audit Trail
+
+
+
