@@ -1,6 +1,8 @@
 "use server";
 
 import { EmailState } from "./definitions";
+import nodemailer from "nodemailer";
+import Mail from "nodemailer/lib/mailer";
 
 export async function submitEmail(
   prevState: EmailState,
@@ -24,26 +26,37 @@ export async function submitEmail(
   }
 
   try {
-    // Send email via API route
-    const res = await fetch('http://localhost:3000/api/customer', {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ firstName, lastName, email, contact, message }),
+    // ✅ Directly send the email here (no fetch)
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.NODEMAILER_USER,
+        pass: process.env.NODEMAILER_APP_PASSWORD,
+      },
     });
 
-    const result = await res.json();
+    const mailOptions: Mail.Options = {
+      from: email,
+      to: process.env.NODEMAILER_USER,
+      subject: `Bonsai Inquiry from ${firstName} ${lastName}`,
+      text: `
+      📩 You’ve received a new message from your customer form!
+      
+      Name: ${firstName} ${lastName}
+      Email: ${email}
+      Contact Number: ${contact}
+      Message: ${message}
+      `,
+    };
 
-    if (!res.ok) {
-      return {
-        errors: {},
-        errorMessage: result.error || "Failed to send email.",
-      };
-    }
+    await transporter.sendMail(mailOptions);
 
-    console.log("Email sent:", result);
     return { errors: {}, errorMessage: null };
   } catch (error) {
-    console.error("Submit Email Error:", error);
+    console.error("Email send error:", error);
     return {
       errors: {},
       errorMessage: "Something went wrong while sending email.",
