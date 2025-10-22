@@ -1,10 +1,9 @@
 "use client";
 
 import { SectionCards } from "./AdminSectionCard";
-import { DataTable } from "@/components/data-table";
-import data from '../../../lib/data.json'
 import { RevenueChart } from "@/components/chart-area-interactive";
 import { useRevenueData } from "@/app/lib/query/admin/dashboard/stats-data";
+import ProductPerformanceDemo from "./AdminDashboardTable";
 
 export default function AdminDashboardClient(){
     
@@ -18,7 +17,8 @@ export default function AdminDashboardClient(){
                     <div className="px-4 lg:px-6">
                         <RevenueChart data={revenueData} />
                     </div>
-                    <DataTable data={data} />
+                     {/* <AdminDashboardTable /> */}
+                     <ProductPerformanceDemo />
                 </div>
             </div>
         </div>
