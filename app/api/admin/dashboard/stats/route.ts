@@ -133,7 +133,7 @@ const getPendingOrders = async (yesterday: Date) => {
     const pendingStatus = await db
         .select()
         .from(order_status)
-        .where(inArray(order_status.order_status_name, ["pending", "processing"]))
+        .where(inArray(order_status.order_status_id, [1, 2]))
 
     const statusIds = pendingStatus.map(currStatus => currStatus.order_status_id)
 

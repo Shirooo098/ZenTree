@@ -153,8 +153,7 @@ const OrdersTable = ({
       {/* Actions */}
       <TableCell className="space-x-2">
         <Button
-          className="bg-blue-600 text-white hover:bg-blue-800"
-          variant="secondary"
+          variant="outline"
           size="sm"
           onClick={() => handleEditClick(order)}
         >
@@ -267,7 +266,7 @@ const OrdersTable = ({
                   </Button>
                 </Link>
                 <Button
-                  variant="secondary"
+                  variant="outline"
                   className="flex-1"
                   size="sm"
                   onClick={() => handleEditClick(order)}
