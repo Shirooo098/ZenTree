@@ -60,7 +60,7 @@ export default function ContactAdminPage() {
   return (
     <main className="min-h-screen bg-white px-4 py-12 flex flex-col items-center space-y-16">
       {/* Hero Section Editor */}
-      <section className="w-full max-w-2xl bg-white border border-gray-200 rounded-xl p-8 shadow-sm space-y-6">
+      <section className="w-full max-w-8xl bg-white border border-gray-200 rounded-xl p-8 shadow-sm space-y-6">
         <h1 className="text-3xl font-semibold text-gray-800 text-center">Edit Contact Section</h1>
 
         <div className="space-y-6">
@@ -71,7 +71,7 @@ export default function ContactAdminPage() {
         <div className="flex justify-center">
           <button
             onClick={handleHeroSave}
-            className="mt-4 bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2 rounded-lg transition-all"
+            className="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-lg transition text-center"
           >
             Save Hero
           </button>
@@ -79,7 +79,7 @@ export default function ContactAdminPage() {
       </section>
 
       {/* Contact Detail Editor */}
-      <section className="w-full max-w-2xl bg-white border border-gray-200 rounded-xl p-8 shadow-sm space-y-6">
+      <section className="w-full max-w-8xl bg-white border border-gray-200 rounded-xl p-8 shadow-sm space-y-6">
         <h1 className="text-3xl font-semibold text-gray-800 text-center">Edit Contact Details</h1>
 
         <div className="space-y-6">
@@ -91,7 +91,7 @@ export default function ContactAdminPage() {
         <div className="flex justify-center">
           <button
             onClick={handleDetailSave}
-            className="mt-4 bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2 rounded-lg transition-all"
+            className="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-lg transition text-center"
           >
             Save Contact Details
           </button>

@@ -58,7 +58,7 @@ export default function Page() {
 
   return (
     <main className="min-h-screen bg-white px-4 py-12 flex flex-col items-center space-y-16">
-      <section className="w-full max-w-3xl bg-white border border-gray-200 rounded-xl p-8 shadow-sm space-y-8">
+      <section className="w-full max-w-8xl bg-white border border-gray-200 rounded-xl p-8 shadow-sm space-y-8">
         <h1 className="text-3xl font-semibold text-gray-800 text-center">
           Edit About Us Section
         </h1>
@@ -115,7 +115,7 @@ export default function Page() {
         <div className="flex justify-center">
           <button
             onClick={handleSave}
-            className="mt-4 bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2 rounded-lg transition-all"
+            className="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-lg transition text-center"
           >
             Save All Changes
           </button>

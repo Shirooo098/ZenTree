@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { toast } from "sonner"; // ✅ Import toast from Sonner
 
 interface Topic { id?: number; title: string; description: string; }
 interface Hero { title: string; description: string; image_url?: string; }
@@ -25,19 +26,32 @@ export default function CareAdminPage() {
     fetchFaqs();
   }, []);
 
-  // HERO HANDLERS
+  // 🧭 HERO HANDLERS
   const handleHeroChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setHero({ ...hero, [e.target.name]: e.target.value });
   };
 
   const handleHeroSave = async () => {
-    await fetch("/api/care-hero", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(hero) });
-    alert("✅ Care Hero updated!");
+    const toastId = toast.loading("Saving hero section...");
+    try {
+      const res = await fetch("/api/care-hero", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(hero),
+      });
+      if (res.ok) toast.success(" Care Hero updated!", { id: toastId });
+      else toast.error(" Failed to update Care Hero.", { id: toastId });
+    } catch {
+      toast.error(" Something went wrong while saving.", { id: toastId });
+    }
   };
 
-  // TOPIC HANDLERS
+  // 🌿 TOPIC HANDLERS
   const fetchTopics = () => {
-    fetch("/api/care-topics").then(res => res.json()).then(setTopics).catch(console.error);
+    fetch("/api/care-topics")
+      .then(res => res.json())
+      .then(setTopics)
+      .catch(console.error);
   };
 
   const handleTopicChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -46,34 +60,68 @@ export default function CareAdminPage() {
 
   const handleTopicSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const url = "/api/care-topics";
-    const method = editingTopic ? "PUT" : "POST";
-    const body = editingTopic ? { id: editingTopic.id, ...topicForm } : topicForm;
-    await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-    setTopicForm({ title: "", description: "" });
-    setEditingTopic(null);
-    fetchTopics();
+    const toastId = toast.loading(editingTopic ? "Updating topic..." : "Adding new topic...");
+
+    try {
+      const url = "/api/care-topics";
+      const method = editingTopic ? "PUT" : "POST";
+      const body = editingTopic ? { id: editingTopic.id, ...topicForm } : topicForm;
+
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      if (res.ok) {
+        toast.success(editingTopic ? " Topic updated!" : " Topic added!", { id: toastId });
+        setTopicForm({ title: "", description: "" });
+        setEditingTopic(null);
+        fetchTopics();
+      } else {
+        toast.error(" Failed to save topic.", { id: toastId });
+      }
+    } catch {
+      toast.error(" Error saving topic.", { id: toastId });
+    }
   };
 
   const handleEditTopic = (topic: Topic) => {
     setEditingTopic(topic);
     setTopicForm({ title: topic.title, description: topic.description });
+    toast.info(" Editing topic...");
   };
 
   const handleDeleteTopic = async (id: number) => {
-    if (!confirm("Are you sure you want to delete this topic?")) return;
-    await fetch("/api/care-topics", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id }) });
-    fetchTopics();
+    const confirmed = confirm("Are you sure you want to delete this topic?");
+    if (!confirmed) return;
+
+    const toastId = toast.loading("Deleting topic...");
+    try {
+      const res = await fetch("/api/care-topics", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+
+      if (res.ok) {
+        toast.success(" Topic deleted successfully!", { id: toastId });
+        fetchTopics();
+      } else {
+        toast.error(" Failed to delete topic.", { id: toastId });
+      }
+    } catch {
+      toast.error(" Error deleting topic.", { id: toastId });
+    }
   };
 
-  // FAQ HANDLERS
+  // ❓ FAQ HANDLERS
   const fetchFaqs = () => {
-  fetch("/api/care-faq")
-    .then(res => res.json())
-    .then(data => setFaqs(Array.isArray(data) ? data : [])) // <-- always an array
-    .catch(console.error);
-};
-
+    fetch("/api/care-faq")
+      .then(res => res.json())
+      .then(data => setFaqs(Array.isArray(data) ? data : []))
+      .catch(console.error);
+  };
 
   const handleFaqChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFaqForm({ ...faqForm, [e.target.name]: e.target.value });
@@ -81,43 +129,80 @@ export default function CareAdminPage() {
 
   const handleFaqSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const url = "/api/care-faq";
-    const method = editingFaq ? "PUT" : "POST";
-    const body = editingFaq ? { id: editingFaq.id, ...faqForm } : faqForm;
-    await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-    setFaqForm({ title: "", description: "" });
-    setEditingFaq(null);
-    fetchFaqs();
+    const toastId = toast.loading(editingFaq ? "Updating FAQ..." : "Adding new FAQ...");
+
+    try {
+      const url = "/api/care-faq";
+      const method = editingFaq ? "PUT" : "POST";
+      const body = editingFaq ? { id: editingFaq.id, ...faqForm } : faqForm;
+
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      if (res.ok) {
+        toast.success(editingFaq ? "💬 FAQ updated!" : "🆕 FAQ added!", { id: toastId });
+        setFaqForm({ title: "", description: "" });
+        setEditingFaq(null);
+        fetchFaqs();
+      } else {
+        toast.error(" Failed to save FAQ.", { id: toastId });
+      }
+    } catch {
+      toast.error(" Error saving FAQ.", { id: toastId });
+    }
   };
 
   const handleEditFaq = (faq: FAQ) => {
     setEditingFaq(faq);
     setFaqForm({ title: faq.title, description: faq.description });
+    toast.info(" Editing FAQ...");
   };
 
   const handleDeleteFaq = async (id: number) => {
-    if (!confirm("Are you sure you want to delete this FAQ?")) return;
-    await fetch("/api/care-faq", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id }) });
-    fetchFaqs();
+    const confirmed = confirm("Are you sure you want to delete this FAQ?");
+    if (!confirmed) return;
+
+    const toastId = toast.loading("Deleting FAQ...");
+    try {
+      const res = await fetch("/api/care-faq", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+
+      if (res.ok) {
+        toast.success(" FAQ deleted successfully!", { id: toastId });
+        fetchFaqs();
+      } else {
+        toast.error(" Failed to delete FAQ.", { id: toastId });
+      }
+    } catch {
+      toast.error(" Error deleting FAQ.", { id: toastId });
+    }
   };
 
   return (
     <main className="min-h-screen bg-gray-50 px-4 py-12 flex flex-col items-center space-y-12">
-      
+
       {/* HERO SECTION */}
-      <section className="w-full max-w-2xl bg-white border border-gray-200 rounded-xl p-8 shadow-sm space-y-6">
+      <section className="w-full max-w-8xl bg-white border border-gray-200 rounded-xl p-8 shadow-sm space-y-6">
         <h1 className="text-3xl font-semibold text-center text-gray-800">Edit Care Guide</h1>
         <InputField label="Title" name="title" value={hero.title} onChange={handleHeroChange} />
         <TextArea label="Description" name="description" value={hero.description} onChange={handleHeroChange} />
         <div className="flex justify-center">
-          <button className="bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2 rounded-lg transition" onClick={handleHeroSave}>
+          <button
+            onClick={handleHeroSave}
+            className="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-lg transition text-center">
             Save Changes
           </button>
         </div>
       </section>
 
       {/* TOPICS SECTION */}
-      <section className="w-full max-w-3xl">
+      <section className="w-full max-w-8xl">
         <form onSubmit={handleTopicSubmit} className="mb-10 flex flex-col gap-4 bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
           <h2 className="text-2xl font-bold mb-5 text-center text-gray-800">Manage Care Topics</h2>
           <InputField label="Title" name="title" value={topicForm.title} onChange={handleTopicChange} />
@@ -148,7 +233,7 @@ export default function CareAdminPage() {
       </section>
 
       {/* FAQ SECTION */}
-      <section className="w-full max-w-3xl">
+      <section className="w-full max-w-8xl">
         <form onSubmit={handleFaqSubmit} className="mb-10 flex flex-col gap-4 bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
           <h2 className="text-2xl font-bold mb-5 text-center text-gray-800">Manage FAQs</h2>
           <InputField label="Question" name="title" value={faqForm.title} onChange={handleFaqChange} />
@@ -181,15 +266,18 @@ export default function CareAdminPage() {
   );
 }
 
-// REUSABLE INPUT COMPONENTS
+// ✅ Reusable Input Components
 function InputField({ label, name, value, onChange }: any) {
   return (
     <div className="flex flex-col space-y-1">
       <label className="text-gray-600 text-sm font-medium">{label}</label>
       <input
-        name={name} value={value} onChange={onChange}
+        name={name}
+        value={value}
+        onChange={onChange}
         className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 transition"
-        placeholder={`Enter ${label.toLowerCase()}`} required
+        placeholder={`Enter ${label.toLowerCase()}`}
+        required
       />
     </div>
   );
@@ -200,9 +288,13 @@ function TextArea({ label, name, value, onChange }: any) {
     <div className="flex flex-col space-y-1">
       <label className="text-gray-600 text-sm font-medium">{label}</label>
       <textarea
-        name={name} value={value} onChange={onChange} rows={4}
+        name={name}
+        value={value}
+        onChange={onChange}
+        rows={4}
         className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 transition resize-none"
-        placeholder={`Enter ${label.toLowerCase()}`} required
+        placeholder={`Enter ${label.toLowerCase()}`}
+        required
       />
     </div>
   );

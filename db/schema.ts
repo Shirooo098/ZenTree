@@ -317,6 +317,23 @@ export const care_faq =  pgTable("care_faq", {
   description: text("description").notNull(),
 });
 
+export const promotion_banner = pgTable("promotion_banner", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  subtitle: text("subtitle").notNull(),
+  discount_text: text("discount_text").notNull(),
+  show_banner: boolean("show_banner").default(true).notNull(),
+});
+
+
+export const faqs = pgTable("faqs", {
+  id: serial("id").primaryKey(),
+  category: text("category").notNull(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+});
+
+
 
 export const schema = { 
   user,
@@ -343,7 +360,9 @@ export const schema = {
   aboutpage_content,
   care_hero,
   care_topics,
-  care_faq
+  care_faq,
+  promotion_banner,
+  faqs
 }
   
 

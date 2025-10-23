@@ -1,23 +1,25 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db/drizzle";
-import { care_faq } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { faqs } from "@/db/schema";
+import { eq, asc } from "drizzle-orm";
 
 export async function GET() {
   try {
-    const faqs = await db.select().from(care_faq).orderBy(care_faq.id);
-    return NextResponse.json(faqs);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (error) {
+    const allFaqs = await db
+      .select()
+      .from(faqs)
+      .orderBy(asc(faqs.category), asc(faqs.id));
+    return NextResponse.json(allFaqs);
+  } catch {
     return NextResponse.json({ error: "Failed to fetch FAQs" }, { status: 500 });
   }
 }
 
 export async function POST(req: Request) {
   try {
-    const { title, description } = await req.json();
-    const inserted = await db.insert(care_faq).values({ title, description });
-    return NextResponse.json({ success: true, faq: inserted });
+    const { category, title, description } = await req.json();
+    await db.insert(faqs).values({ category, title, description });
+    return NextResponse.json({ success: true });
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return NextResponse.json({ error: "Failed to add FAQ" }, { status: 500 });
@@ -26,8 +28,11 @@ export async function POST(req: Request) {
 
 export async function PUT(req: Request) {
   try {
-    const { id, title, description } = await req.json();
-    await db.update(care_faq).set({ title, description }).where(eq(care_faq.id, id));
+    const { id, category, title, description } = await req.json();
+    await db
+      .update(faqs)
+      .set({ category, title, description })
+      .where(eq(faqs.id, id));
     return NextResponse.json({ success: true });
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
@@ -38,7 +43,7 @@ export async function PUT(req: Request) {
 export async function DELETE(req: Request) {
   try {
     const { id } = await req.json();
-    await db.delete(care_faq).where(eq(care_faq.id, id));
+    await db.delete(faqs).where(eq(faqs.id, id));
     return NextResponse.json({ success: true });
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {

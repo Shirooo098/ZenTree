@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function Page() {
   const [banner, setBanner] = useState({
@@ -19,18 +20,28 @@ export default function Page() {
     setBanner({ ...banner, [e.target.name]: e.target.value });
   };
 
-  const handleSave = async () => {
-    await fetch("/api/top-banner", {
+const handleSave = async () => {
+  try {
+    const res = await fetch("/api/top-banner", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(banner),
     });
-    alert("✅ Top banner updated!");
-  };
+
+    if (res.ok) {
+      toast.success("Content banner updated!");
+    } else {
+      toast.error("Failed to update content banner.");
+    }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (error) {
+    toast.error("⚠️ An error occurred while updating the banner.");
+  }
+};
 
   return (
     <main className="min-h-screen bg-white px-4 py-12 flex flex-col items-center">
-      <section className="w-full max-w-2xl bg-white border border-gray-200 rounded-xl p-8 shadow-sm space-y-6">
+      <section className="w-full max-w-8xl bg-white border border-gray-200 rounded-xl p-8 shadow-sm space-y-6">
         <h1 className="text-3xl font-semibold text-gray-800 text-center">
           Edit Product Section
         </h1>
@@ -60,7 +71,7 @@ export default function Page() {
         <div className="flex justify-center">
           <button
             onClick={handleSave}
-            className="mt-4 bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2 rounded-lg transition-all"
+            className="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-lg transition text-center"
           >
             Save Banner Changes
           </button>
