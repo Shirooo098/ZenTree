@@ -18,7 +18,7 @@ export default function FaqsHero() {
 
   return (
     <>
-      <div className="relative w-full py-70 px-4 font-sans max-h-100 overflow-hidden">
+      <div className="relative w-full py-80  font-sans max-h-100 overflow-hidden ">
         
         <div className="img-banner absolute inset-0 -z-10">
           <Image

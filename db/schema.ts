@@ -301,6 +301,23 @@ export const care_hero = pgTable("care_hero", {
   updated_at: timestamp("updated_at").defaultNow().notNull(),
 });
 
+export const care_topics = pgTable("care_topics", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
+});
+
+
+
+export const care_faq =  pgTable("care_faq", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+});
+
+
 export const schema = { 
   user,
   session, 
@@ -324,7 +341,9 @@ export const schema = {
   faq_hero,
   contact_detail,
   aboutpage_content,
-  care_hero
+  care_hero,
+  care_topics,
+  care_faq
 }
   
 
