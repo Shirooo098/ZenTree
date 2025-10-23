@@ -79,6 +79,8 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import { useProductPerformance, useProductDetail } from "@/app/lib/query/admin/dashboard/table/table-performance-data"
+import { useState } from "react"
+import { useQueryClient } from "@tanstack/react-query"
 
 export const schema = z.object({
   product_id: z.number(),
@@ -502,12 +504,16 @@ const chartConfig = {
 
 function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
   const isMobile = useIsMobile()
-  const { data: productDetail, isLoading } = useProductDetail(item.product_id, 180)
+  const [isOpen, setIsOpen] = useState(false)
+  const queryClient = useQueryClient() 
+
+  const { data: productDetail, isLoading } = useProductDetail(item.product_id, 180, isOpen)
+
 
   const chartData = productDetail?.monthly_data || []
 
   return (
-    <Drawer direction={isMobile ? "bottom" : "right"}>
+    <Drawer direction={isMobile ? "bottom" : "right"} open={isOpen} onOpenChange={setIsOpen}>
       <DrawerTrigger asChild>
         <Button variant="link" className="text-foreground w-fit px-0 text-left">
           {item.product_name}
