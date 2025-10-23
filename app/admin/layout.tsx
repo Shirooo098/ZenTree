@@ -1,49 +1,29 @@
-
-import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { headers } from "next/headers";
-import { auth } from "../lib/auth";
-import { redirect } from "next/navigation";
-import { SiteHeader } from "@/components/site-header";
+import { SidebarWrapper } from "@/components/sidebar-wrapper";
 import { TanstackProvider } from "@/context/tanstack-provider";
+import { auth } from "../lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
- 
 export default async function Layout({ children }: { children: React.ReactNode }) {
-
     const session = await auth.api.getSession({
         headers: await headers()
     })
-    if(!session) redirect ("/sign-in")
-    
+    if(!session) redirect("/sign-in")
     if(session.user.role !== "admin") return <h1>Unauthorized</h1>
   
-      
-  return (
-    <TanstackProvider user={session.user}>
-        <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-            <SidebarProvider
-                style={
-                    {
-                    "--sidebar-width": "calc(var(--spacing) * 72)",
-                    "--header-height": "calc(var(--spacing) * 12)",
-                    } as React.CSSProperties
-                }
-            >
-                <AppSidebar variant="inset"
-                    user={{
-                        id: session.user.id,
-                        name: session.user.name,
-                        username: session.user.username,
-                        email: session.user.email,
-                        role: session.user.role
-                    }} />
-                <SidebarInset>
-                <SiteHeader />
-                <div className="flex-grow p-4 pt-2 md:overflow-y-auto md:p-12 md:pt-6">{children}</div>
-                </SidebarInset>
-            </SidebarProvider>
-        </div>
-    </TanstackProvider>
-  );
+    return (
+        <TanstackProvider user={session.user}>
+            <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
+                <SidebarWrapper user={{
+                    id: session.user.id,
+                    name: session.user.name,
+                    username: session.user.username,
+                    email: session.user.email,
+                    role: session.user.role
+                }}>
+                    {children}
+                </SidebarWrapper>
+            </div>
+        </TanstackProvider>
+    );
 }
-

@@ -4,6 +4,7 @@ import { SectionCards } from "./AdminSectionCard";
 import { RevenueChart } from "@/components/chart-area-interactive";
 import { useRevenueData } from "@/app/lib/query/admin/dashboard/stats-data";
 import ProductPerformanceDemo from "./AdminDashboardTable";
+import ProductPerformanceTable from "./AdminDashboardTable";
 
 export default function AdminDashboardClient(){
     const { data: revenueData} = useRevenueData();
@@ -17,7 +18,7 @@ export default function AdminDashboardClient(){
                         <RevenueChart data={revenueData} />
                     </div>
                      {/* <AdminDashboardTable /> */}
-                     <ProductPerformanceDemo />
+                     <ProductPerformanceTable />
                 </div>
             </div>
         </div>
