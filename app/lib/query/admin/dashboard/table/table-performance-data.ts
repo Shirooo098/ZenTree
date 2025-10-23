@@ -220,12 +220,19 @@ async function fetchProductDetail(
 }
 
 // Hook for individual product details
-export function useProductDetail(productId: number, period: number = 180) {
+export function useProductDetail(
+    productId: number,
+    period: number = 180,
+    enabled: boolean
+) {
   return useQuery({
     queryKey: ["product-detail", productId, period],
     queryFn: () => fetchProductDetail(productId, period),
-    staleTime: 5 * 60 * 1000,
+    staleTime: 30 * 60 * 1000, // 30 minutes
+    gcTime: 60 * 60 * 1000, // Keep in cache for 1 hour
     refetchOnWindowFocus: false,
-    enabled: !!productId, // Only fetch if productId is provided
+    refetchOnMount: false, // Don't refetch if data exists in cache
+    refetchOnReconnect: false,
+    enabled: enabled && !!productId,
   })
 }

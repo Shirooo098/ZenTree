@@ -38,11 +38,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { User } from "@/app/types/definition"
-import Link from "next/link"
 import Logo from "@/app/ui/Logo"
-import { BookPlus } from "lucide-react"
-
-
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   user: User;
