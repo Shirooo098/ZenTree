@@ -1,9 +1,8 @@
 // app/api/admin/refund/[id]/route.ts
-import { auth } from "@/app/lib/auth";
 import { db } from "@/db/drizzle";
-import { refund, refund_items, user, products, orders, order_status } from "@/db/schema";
+import { refund, refund_items, products, orders, order_status } from "@/db/schema";
+import { getCurrentUser } from "@/server/users";
 import { eq, sql } from "drizzle-orm";
-import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
@@ -11,10 +10,8 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers()
-    });
-
+    const session = await getCurrentUser();
+    
     if (!session) {
       return NextResponse.json(
         { error: "Unauthorized" },
@@ -22,15 +19,9 @@ export async function POST(
       );
     }
 
-    const [currentUser] = await db
-      .select({ role: user.role })
-      .from(user)
-      .where(eq(user.id, session.user.id))
-      .limit(1);
-
-    if (!currentUser || currentUser.role !== "admin") {
+    if (session.role !== "admin" && session.role !== "staff") {
       return NextResponse.json(
-        { error: "Forbidden - Admin access required" },
+        { error: "Forbidden - Admin or Staff access required" },
         { status: 403 }
       );
     }
@@ -109,7 +100,7 @@ export async function POST(
         .set({
           status: newStatus,
           admin_notes: admin_notes || null,
-          processed_by: session.user.id,
+          processed_by: session.id,
           updated_at: new Date()
         })
         .where(eq(refund.refund_id, refundId));

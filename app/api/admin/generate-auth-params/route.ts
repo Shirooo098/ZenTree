@@ -1,18 +1,17 @@
 import { auth } from "@/app/lib/auth";
 import { imagekit } from "@/config/config-imageKit";
+import { getCurrentUser } from "@/server/users";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
 
 export async function GET(req: Request){
     try {
-        const session = await auth.api.getSession({
-            headers: await headers(),
-        })
+        const user = await getCurrentUser()
 
-        if(!session) return NextResponse.redirect(new URL("/sign-in", req.url))
+        if(!user) return NextResponse.redirect(new URL("/sign-in", req.url))
 
-        if (session.user.role !== "admin") return NextResponse.redirect(new URL("/", req.url));
+        if (user.role !== "admin" && user.role !== "staff") return NextResponse.redirect(new URL("/", req.url));
 
 
         const authParams = imagekit.getAuthenticationParameters();

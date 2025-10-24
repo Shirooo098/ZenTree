@@ -32,18 +32,15 @@ Order Management
 Order Status 
  - Change order status delivered to completed
 
-
-
+Staff Role 
+ - Initialize Middleware to redirect staff to admin
+ - Update the context provider
+ - Restrict permissions
+ - Actions (Create | Update)
 
 5. User Management
 Manage customer accounts (view, edit, suspend).
 Manage admin accounts (view, add, edit, delete).
-6. Sales & Analytics Reports
-Access to sales data, revenue, product performance reports.
-Customer insights.
-7. Content Management System (CMS)
-Manage static pages (About Us, Contact, FAQs, Privacy Policy).
-Manage promotions, banners, and homepage content.
 8. Settings & Configuration:
 Manage platform-wide settings (e.g., currency, shipping options, payment options).
 9. Notification Management

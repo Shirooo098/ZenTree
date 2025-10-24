@@ -6,12 +6,5 @@ import AdminDashboardClient from "@/app/ui/admin/dashboard/AdminDashboardClient"
 
 
 export default async function Admin(){
-    const session = await auth.api.getSession({
-        headers: await headers()
-    })
-    if(!session) redirect ("/sign-in")
-    
-    if(session.user.role !== "admin") return <h1>Unauthorized</h1>
-  
     return <AdminDashboardClient/>
 }
