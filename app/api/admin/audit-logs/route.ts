@@ -100,6 +100,17 @@ export async function GET(req: NextRequest) {
       old_values: log.old_values ? JSON.parse(log.old_values as string) : null,
       new_values: log.new_values ? JSON.parse(log.new_values as string) : null,
       metadata: log.metadata ? JSON.parse(log.metadata as string) : null,
+        created_at: log.created_at
+          ? new Date(log.created_at).toLocaleString("en-PH", {
+              timeZone: "Asia/Manila",
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+            })
+          : null,
     }));
 
     return NextResponse.json({
