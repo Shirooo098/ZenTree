@@ -420,7 +420,8 @@ export const schema = {
   care_faq,
   promotion_banner,
   faqs,
-  audit_log
+  audit_log,
+  rateLimit
 }
 
 export type User = typeof user.$inferSelect
