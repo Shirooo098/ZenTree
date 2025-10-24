@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, boolean, serial, integer, real, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean, serial, integer, real, jsonb, bigint } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -382,6 +382,14 @@ export const refund_items = pgTable("refund_items", {
   notes: text("notes"),
   created_at: timestamp("created_at").notNull().defaultNow(),
 });
+
+export const rateLimit = pgTable("rate_limit", {
+  id: text("id").primaryKey(),
+  key: text("key"),
+  count: integer("count"),
+  lastRequest: bigint("last_request", { mode: "number" }),
+});
+
 
 export const schema = { 
   user,
