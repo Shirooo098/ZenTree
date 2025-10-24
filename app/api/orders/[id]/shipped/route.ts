@@ -41,7 +41,7 @@ export async function PATCH(
       );
     }
 
-    const statusNameLower = status.toLowerCase();
+    const statusNameLower = status.toLowerCase().trim();
 
     const [orderStatus] = await db
       .select()

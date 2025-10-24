@@ -98,11 +98,11 @@ export default function OrderPage() {
   const handleMarkAsDelivered = () => {
     markDeliveredMutation.mutate(orderId, {
       onSuccess: () => {
-        toast.success("Order marked as received!");
+        toast.success("Order marked as Received!");
         refetch();
       },
       onError: () => {
-        toast.error("Failed to mark order as received");
+        toast.error("Failed to mark order as Received");
       },
     });
   };

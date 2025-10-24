@@ -153,7 +153,7 @@ async function updateOrderStatus({
 export function useMarkOrderDelivered() {
   return useMutation({
     mutationFn: (orderId: number) =>
-      updateOrderStatus({ orderId, status: "delivered" }),
+      updateOrderStatus({ orderId, status: "completed" }),
     onSuccess: (orderId) => {
       toast.success("Order marked as received!");
       redirect(`/profile/order/${orderId}`);
