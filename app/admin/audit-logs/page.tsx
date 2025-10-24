@@ -17,6 +17,7 @@ import {
 import { useAuditLogs, usePrefetchAuditLogs } from "@/app/lib/query/admin/audit/useAudit";
 
 export default function Page() {
+
   const searchParams = useSearchParams();
   const router = useRouter();
   const page = Number(searchParams.get('page')) || 1;

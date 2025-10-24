@@ -1,6 +1,3 @@
-"use client"
-
-import * as React from "react"
 import {
   IconCamera,
   IconChartBar,
@@ -22,26 +19,6 @@ import {
   IconUsers,
 } from "@tabler/icons-react"
 
-import { NavDocuments } from "@/components/nav-documents"
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { User } from "@/app/types/definition"
-import Logo from "@/app/ui/Logo"
-
-interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
-  user: User;
-}
-
 const data = {
   user: {
     name: "shadcn",
@@ -58,6 +35,7 @@ const data = {
       title: "Audit Logs",
       href: "/admin/audit-logs",
       icon: IconReportSearch,
+      requiresAdmin: true,
     },
     {
       title: "Products",
@@ -180,42 +158,15 @@ const data = {
   ],
 }
 
-export function AppSidebar({ user, ...props }: AppSidebarProps) {
-  const userData = user;
 
-  // Filter navMain items based on user role
-  const filteredNavMain = data.navMain.filter(item => {
-    // Hide Audit Logs if user is not admin
-    if (item.title === "Audit Logs" && user.role !== "admin") {
-      return false;
-    }
-    return true;
-  });
-
-  return (
-    <Sidebar collapsible="offcanvas" {...props}>
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5 "
-            >
-              <a href="/admin" className="flex h-full justify-start">
-                <Logo size="nav"/>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarHeader>
-      <SidebarContent>
-        <NavMain items={filteredNavMain} />
-        <NavDocuments items={data.documents} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
-      </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={userData} />
-      </SidebarFooter>
-    </Sidebar>
-  )
+export function getFilteredNavigation(userRole: string) {
+  return {
+    ...data,
+    navMain: data.navMain.filter(item => {
+      if (item.requiresAdmin && userRole !== "admin") {
+        return false;
+      }
+      return true;
+    }),
+  };
 }

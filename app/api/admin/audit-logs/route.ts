@@ -17,9 +17,9 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    if (session.role !== "admin" && session.role !== "staff") {
+    if (session.role !== "admin") {
       return NextResponse.json(
-        { error: "Forbidden - Admin or Staff access required" },
+        { error: "Forbidden - Admin access required" },
         { status: 403 }
       );
     }
