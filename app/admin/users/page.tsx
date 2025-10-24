@@ -1,4 +1,4 @@
-import { AddUserDialog } from "@/app/ui/admin/dialog/AddUserDialog";
+import { AddUserDialog } from "@/app/ui/admin/dialog/user-dialog/AddUserDialog";
 import UsersTable from "@/app/ui/admin/users/all-users";
 import { getAllUsers } from "@/server/users";
 

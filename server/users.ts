@@ -199,3 +199,44 @@ export async function createUser(data: {
     throw error;
   }
 }
+export async function deleteUser(userId: string) {
+  try {
+    await db.delete(user).where(eq(user.id, userId));
+    revalidatePath("/admin/users");
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    throw new Error("Failed to delete user");
+  }
+}
+export async function updateUser(
+  userId: string,
+  data: {
+    name: string;
+    email: string;
+    username: string | null;
+    role: string;
+    phoneNumber: string | null;
+  }
+) {
+  try {
+    await db
+      .update(user)
+      .set({
+        name: data.name,
+        email: data.email,
+        username: data.username,
+        displayUsername: data.username,
+        role: data.role,
+        phoneNumber: data.phoneNumber,
+        updatedAt: new Date(),
+      })
+      .where(eq(user.id, userId));
+
+    revalidatePath("/admin/users");
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating user:", error);
+    throw new Error("Failed to update user");
+  }
+}
