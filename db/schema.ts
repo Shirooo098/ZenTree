@@ -82,9 +82,13 @@ export const products = pgTable('products', {
   bonsai_care_level: text("bonsai_care_level"),
   product_desc: text('product_desc').notNull(),
   stock: integer('stock').notNull(),
+  rating: integer('rating'),
   created_at: timestamp('created_at').notNull().defaultNow(),
+  created_by: text('created_by').references(() => user.id),
   updated_at: timestamp('updated_at').notNull().defaultNow(),
-  rating: integer('rating')
+  updated_by: text('updated_by').references(() => user.id),
+  deleted_at: timestamp('deleted_at'), // Soft delete
+  deleted_by: text('deleted_by').references(() => user.id),
 });
 
 export const imageKit_productFiles = pgTable('imageKit_productFiles', {
@@ -92,15 +96,196 @@ export const imageKit_productFiles = pgTable('imageKit_productFiles', {
   product_image_id: text('product_image_id').notNull().unique(),
   product_image_url: text('product_image_url').notNull(),
   user_id: text('user_id').notNull().references(() => user.id),
-  upload_timestamp: timestamp().defaultNow()
-})
+  upload_timestamp: timestamp().defaultNow(),
+  created_by: text('created_by').references(() => user.id),
+  deleted_at: timestamp('deleted_at'),
+  deleted_by: text('deleted_by').references(() => user.id),
+});
+
+export const homepage_content = pgTable("homepage_content", {
+  id: serial("id").primaryKey(),
+  quote1: text("quote1").notNull(),
+  quote2: text("quote2").notNull(),
+  quote3: text("quote3").notNull(),
+  author: text("author").notNull(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  created_by: text('created_by').references(() => user.id),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
+  updated_by: text('updated_by').references(() => user.id),
+});
+
+export const bonsai_content = pgTable("bonsai_content", {
+  id: serial("id").primaryKey(),
+  bonsai1_title: text("bonsai1_title").notNull(),
+  bonsai1_description: text("bonsai1_description").notNull(),
+  bonsai2_title: text("bonsai2_title").notNull(),
+  bonsai2_description: text("bonsai2_description").notNull(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  created_by: text('created_by').references(() => user.id),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
+  updated_by: text('updated_by').references(() => user.id),
+});
+
+export const top_banner = pgTable("top_banner", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  subtitle: text("subtitle").notNull(),
+  description: text("description").notNull(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  created_by: text('created_by').references(() => user.id),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
+  updated_by: text('updated_by').references(() => user.id),
+});
+
+export const contact_hero = pgTable("contact_hero", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  created_by: text('created_by').references(() => user.id),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
+  updated_by: text('updated_by').references(() => user.id),
+});
+
+export const faq_hero = pgTable("faq_hero", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  created_by: text('created_by').references(() => user.id),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
+  updated_by: text('updated_by').references(() => user.id),
+});
+
+export const contact_detail = pgTable("contact_detail", {
+  id: serial("id").primaryKey(),
+  location: text("location").notNull(),
+  phone: text("phone").notNull(),
+  email: text("email").notNull(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  created_by: text('created_by').references(() => user.id),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
+  updated_by: text('updated_by').references(() => user.id),
+});
+
+export const aboutpage_content = pgTable("aboutpage_content", {
+  id: serial("id").primaryKey(),
+  hero_title: text("hero_title").notNull(),
+  hero_desc: text("hero_desc"),
+  what_title: text("what_title"),
+  what_desc: text("what_desc"),
+  vision_title: text("vision_title"),
+  vision_desc: text("vision_desc"),
+  mission_title: text("mission_title"),
+  mission_desc: text("mission_desc"),
+  created_at: timestamp("created_at").notNull().defaultNow(),
+  created_by: text('created_by').references(() => user.id),
+  updated_at: timestamp("updated_at").notNull().defaultNow()
+    .$onUpdate(() => new Date()),
+  updated_by: text('updated_by').references(() => user.id),
+});
+
+export const care_hero = pgTable("care_hero", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  created_by: text('created_by').references(() => user.id),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
+  updated_by: text('updated_by').references(() => user.id),
+});
+
+export const care_topics = pgTable("care_topics", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  created_by: text('created_by').references(() => user.id),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
+  updated_by: text('updated_by').references(() => user.id),
+  deleted_at: timestamp('deleted_at'),
+  deleted_by: text('deleted_by').references(() => user.id),
+});
+
+export const care_faq = pgTable("care_faq", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  created_by: text('created_by').references(() => user.id),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
+  updated_by: text('updated_by').references(() => user.id),
+  deleted_at: timestamp('deleted_at'),
+  deleted_by: text('deleted_by').references(() => user.id),
+});
+
+export const promotion_banner = pgTable("promotion_banner", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  subtitle: text("subtitle").notNull(),
+  discount_text: text("discount_text").notNull(),
+  show_banner: boolean("show_banner").default(true).notNull(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  created_by: text('created_by').references(() => user.id),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
+  updated_by: text('updated_by').references(() => user.id),
+});
+
+export const faqs = pgTable("faqs", {
+  id: serial("id").primaryKey(),
+  category: text("category").notNull(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  created_by: text('created_by').references(() => user.id),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
+  updated_by: text('updated_by').references(() => user.id),
+  deleted_at: timestamp('deleted_at'),
+  deleted_by: text('deleted_by').references(() => user.id),
+});
+
+export const refund = pgTable("refund", {
+  refund_id: serial("refund_id").primaryKey(),
+  order_id: integer("order_id")
+    .notNull()
+    .references(() => orders.order_id, { onDelete: "cascade" }),
+  user_id: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  email: text("email").notNull(),
+  reason: text("reason").notNull(),
+  refund_type: text("refund_type").notNull().default("full"),
+  comments: text("comments"),
+  status: text("status").notNull().default("pending"), 
+  stock_restored: boolean("stock_restored").default(false),
+  stock_restored_at: timestamp("stock_restored_at"),
+  admin_notes: text("admin_notes"),
+  processed_by: text("processed_by").references(() => user.id),
+  created_at: timestamp("created_at").notNull().defaultNow(),
+  updated_at: timestamp("updated_at").notNull().defaultNow(),
+  updated_by: text('updated_by').references(() => user.id),
+});
+
+// Audit log table for tracking all admin/staff actions
+export const audit_log = pgTable("audit_log", {
+  id: serial("id").primaryKey(),
+  user_id: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  action: text("action").notNull(), // 'create', 'update', 'delete'
+  table_name: text("table_name").notNull(),
+  record_id: text("record_id").notNull(),
+  old_values: text("old_values"), // JSON string
+  new_values: text("new_values"), // JSON string
+  ip_address: text("ip_address"),
+  user_agent: text("user_agent"),
+  created_at: timestamp("created_at").notNull().defaultNow(),
+});
 
 export const cart_status = pgTable('cart_status', {
   cart_status_id: serial('cart_status_id').primaryKey(),
-  cart_status_name: text('cart_status_name')
-    .notNull()
-    .default('new')
-})
+  cart_status_name: text('cart_status_name').notNull().default('new')
+});
 
 export const carts = pgTable('carts', {
   cart_id: serial('cart_id').primaryKey(),
@@ -110,7 +295,7 @@ export const carts = pgTable('carts', {
   cart_status_id: integer('cart_status_id')
     .notNull()
     .references(() => cart_status.cart_status_id, { onDelete: 'cascade' })
-})
+});
 
 export const cart_products = pgTable('cart_products', {
   cart_products_id: serial('cart_products_id').primaryKey(),
@@ -121,14 +306,12 @@ export const cart_products = pgTable('cart_products', {
     .notNull()
     .references(() => products.product_id, { onDelete: 'cascade' }),
   quantity: integer('quantity').notNull(),
-})
+});
 
 export const order_status = pgTable('order_status', {
   order_status_id: serial('order_status_id').primaryKey(),
-  order_status_name: text('order_status_name')
-    .notNull()
-    .default('pending')
-})
+  order_status_name: text('order_status_name').notNull().default('pending')
+});
 
 export const orders = pgTable('orders', {
   order_id: serial('order_id').primaryKey(),
@@ -140,13 +323,9 @@ export const orders = pgTable('orders', {
     .references(() => order_status.order_status_id, { onDelete: 'cascade' }),
   paypal_order_id: text('paypal_order_id'), 
   payment_status: text('payment_status').default('pending'), 
-  created_at: timestamp('created_at')
-    .notNull()
-    .defaultNow(),
-  updated_at: timestamp('updated_at')
-    .notNull()
-    .defaultNow()
-})
+  created_at: timestamp('created_at').notNull().defaultNow(),
+  updated_at: timestamp('updated_at').notNull().defaultNow()
+});
 
 export const order_products = pgTable('order_products', {
   order_products_id: serial('order_products_id').primaryKey(),
@@ -158,7 +337,7 @@ export const order_products = pgTable('order_products', {
     .references(() => products.product_id, { onDelete: 'cascade' }),
   quantity: real('quantity').notNull(),
   price_at_purchase: real('price_at_purchase').notNull()
-})
+});
 
 export const address = pgTable("address", {
   address_id: serial("address_id").primaryKey(),
@@ -182,30 +361,7 @@ export const reviews = pgTable("reviews", {
     .references(() => products.product_id, { onDelete: "cascade" }),
   rating: integer("rating").notNull(),
   comment: text("comment"),
-  created_at: timestamp("created_at")
-    .notNull()
-    .defaultNow()
-})
-
-export const refund = pgTable("refund", {
-  refund_id: serial("refund_id").primaryKey(),
-  order_id: integer("order_id")
-    .notNull()
-    .references(() => orders.order_id, { onDelete: "cascade" }),
-  user_id: text("user_id")
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
-  email: text("email").notNull(),
-  reason: text("reason").notNull(),
-  refund_type: text("refund_type").notNull().default("full"),   // full or partial
-  comments: text("comments"),
-  status: text("status").notNull().default("pending"), 
-    stock_restored: boolean("stock_restored").default(false),
-  stock_restored_at: timestamp("stock_restored_at"),
-  admin_notes: text("admin_notes"),
-  processed_by: text("processed_by"),
-  created_at: timestamp("created_at").notNull().defaultNow(),
-  updated_at: timestamp("updated_at").notNull().defaultNow(),
+  created_at: timestamp("created_at").notNull().defaultNow()
 });
 
 export const refund_items = pgTable("refund_items", {
@@ -217,123 +373,12 @@ export const refund_items = pgTable("refund_items", {
     .notNull()
     .references(() => products.product_id, { onDelete: "cascade" }),
   quantity: integer("quantity").notNull(),
-  condition: text("condition").notNull(), // 'resellable', 'defective', 'damaged', 'dead_plant', 'broken'
-  restocked: boolean("restocked").default(false), // if stock was restored
+  condition: text("condition").notNull(),
+  restocked: boolean("restocked").default(false),
   restocked_at: timestamp("restocked_at"),
-  notes: text("notes"), // Specific notes about this item
+  notes: text("notes"),
   created_at: timestamp("created_at").notNull().defaultNow(),
 });
-
-export const homepage_content = pgTable("homepage_content", {
-  id: serial("id").primaryKey(),
-  quote1: text("quote1").notNull(),
-  quote2: text("quote2").notNull(),
-  quote3: text("quote3").notNull(),
-  author: text("author").notNull(),
-  created_at: timestamp("created_at").defaultNow().notNull(),
-  updated_at: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export const bonsai_content = pgTable("bonsai_content", {
-  id: serial("id").primaryKey(),
-  bonsai1_title: text("bonsai1_title").notNull(),
-  bonsai1_description: text("bonsai1_description").notNull(),
-  bonsai2_title: text("bonsai2_title").notNull(),
-  bonsai2_description: text("bonsai2_description").notNull(),
-  created_at: timestamp("created_at").defaultNow().notNull(),
-  updated_at: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export const top_banner = pgTable("top_banner", {
-  id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  subtitle: text("subtitle").notNull(),
-  description: text("description").notNull(),
-  created_at: timestamp("created_at").defaultNow().notNull(),
-  updated_at: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export const contact_hero = pgTable("contact_hero", {
-  id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  description: text("description").notNull(),
-  created_at: timestamp("created_at").defaultNow().notNull(),
-  updated_at: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export const faq_hero = pgTable("faq_hero", {
-  id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  description: text("description").notNull(),
-  created_at: timestamp("created_at").defaultNow().notNull(),
-  updated_at: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export const contact_detail = pgTable("contact_detail", {
-  id: serial("id").primaryKey(),
-  location: text("location").notNull(),
-  phone: text("phone").notNull(),
-  email: text("email").notNull(),
-  created_at: timestamp("created_at").defaultNow().notNull(),
-  updated_at: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export const aboutpage_content = pgTable("aboutpage_content", {
-  id: serial("id").primaryKey(),
-  hero_title: text("hero_title").notNull(),
-  hero_desc: text("hero_desc"),
-  what_title: text("what_title"),
-  what_desc: text("what_desc"),
-  vision_title: text("vision_title"),
-  vision_desc: text("vision_desc"),
-  mission_title: text("mission_title"),
-  mission_desc: text("mission_desc"),
-  created_at: timestamp("created_at").notNull().defaultNow(),
-  updated_at: timestamp("updated_at").notNull().defaultNow()
-    .$onUpdate(() => new Date()),
-});
-
-export const care_hero = pgTable("care_hero", {
-  id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  description: text("description").notNull(),
-  created_at: timestamp("created_at").defaultNow().notNull(),
-  updated_at: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export const care_topics = pgTable("care_topics", {
-  id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  description: text("description").notNull(),
-  created_at: timestamp("created_at").defaultNow().notNull(),
-  updated_at: timestamp("updated_at").defaultNow().notNull(),
-});
-
-
-
-export const care_faq =  pgTable("care_faq", {
-  id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  description: text("description").notNull(),
-});
-
-export const promotion_banner = pgTable("promotion_banner", {
-  id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  subtitle: text("subtitle").notNull(),
-  discount_text: text("discount_text").notNull(),
-  show_banner: boolean("show_banner").default(true).notNull(),
-});
-
-
-export const faqs = pgTable("faqs", {
-  id: serial("id").primaryKey(),
-  category: text("category").notNull(),
-  title: text("title").notNull(),
-  description: text("description").notNull(),
-});
-
-
 
 export const schema = { 
   user,
@@ -351,6 +396,7 @@ export const schema = {
   address,
   reviews,
   refund,
+  refund_items,
   homepage_content,
   bonsai_content,
   top_banner,
@@ -362,11 +408,10 @@ export const schema = {
   care_topics,
   care_faq,
   promotion_banner,
-  faqs
+  faqs,
+  audit_log
 }
-  
-
 
 export type User = typeof user.$inferSelect
 export type Address = typeof address.$inferSelect
-
+export type AuditLog = typeof audit_log.$inferSelect

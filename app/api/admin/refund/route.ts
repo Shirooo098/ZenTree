@@ -1,10 +1,8 @@
 // app/api/refunds/route.ts
-import { auth } from "@/app/lib/auth";
 import { db } from "@/db/drizzle";
 import { refund, refund_items, user, products, order_products } from "@/db/schema";
 import { getCurrentUser } from "@/server/users";
 import { eq, desc, and } from "drizzle-orm";
-import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function GET() {
