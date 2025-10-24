@@ -1,8 +1,7 @@
-import { auth } from "@/app/lib/auth";
 import { db } from "@/db/drizzle";
-import { order_status, orders, user } from "@/db/schema";
+import { order_status, orders } from "@/db/schema";
+import { getCurrentUser } from "@/server/users";
 import { eq } from "drizzle-orm";
-import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
@@ -10,10 +9,8 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers()
-    });
-
+    const session = await getCurrentUser();
+    
     if (!session) {
       return NextResponse.json(
         { error: "Unauthorized" },
@@ -21,18 +18,13 @@ export async function PATCH(
       );
     }
 
-    const [currentUser] = await db
-      .select({ role: user.role })
-      .from(user)
-      .where(eq(user.id, session.user.id))
-      .limit(1);
-
-    if (!currentUser || currentUser.role !== "admin") {
+    if (session.role !== "admin" && session.role !== "staff") {
       return NextResponse.json(
         { error: "Forbidden - Admin access required" },
         { status: 403 }
       );
     }
+
 
     const { id } = await params
     const orderId = Number(id)

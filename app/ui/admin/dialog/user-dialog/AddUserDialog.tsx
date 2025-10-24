@@ -31,8 +31,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
-import { createUser } from "@/server/users";
 import { useRouter } from "next/navigation";
+import { auth } from "@/app/lib/auth";
+import { signUp } from "@/server/users";
 
 const userSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -65,20 +66,30 @@ export function AddUserDialog() {
   });
 
     async function onSubmit(data: UserFormValues) {
-        setIsLoading(true);
-        try {
-            await createUser(data);
-            
-            toast.success("User created successfully",);
-            
-            form.reset();
-            setOpen(false);
-            router.refresh();
-        } catch (error) {
-            toast.error(error instanceof Error ? error.message : "Failed to create user",);
-        } finally {
-            setIsLoading(false);
+      setIsLoading(true);
+      try {
+        const result = await signUp(
+          data.email,
+          data.password,
+          data.username || "",
+          data.name,
+          data.role,
+          data.phoneNumber
+        );
+
+        if (result.success) {
+          toast.success(result.message);
+          form.reset();
+          setOpen(false);
+          router.refresh();
+        } else {
+          toast.error(result.message);
         }
+      } catch (error) {
+        toast.error(error instanceof Error ? error.message : "Failed to create user");
+      } finally {
+        setIsLoading(false);
+      }
     }
 
   return (
@@ -135,7 +146,7 @@ export function AddUserDialog() {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username (Optional)</FormLabel>
+                  <FormLabel>Username</FormLabel>
                   <FormControl>
                     <Input placeholder="johndoe" {...field} />
                   </FormControl>

@@ -2,19 +2,18 @@
 import { auth } from "@/app/lib/auth";
 import { db } from "@/db/drizzle";
 import { imageKit_productFiles } from "@/db/schema";
+import { getCurrentUser } from "@/server/users";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest){
     try {
-        const session = await auth.api.getSession({
-            headers: await headers()
-        });
+        const session = await getCurrentUser();
 
         if(!session) return NextResponse.redirect(new URL("/sign-in", req.url));
-        if(session.user.role !== "admin") return NextResponse.redirect(new URL("/", req.url));
+        if(session.role !== "admin" && session.role !== "staff") return NextResponse.redirect(new URL("/", req.url));
        
-        const userId = session.user.id;
+        const userId = session.id;
         const { fileId, url } = await req.json();
 
         if (!fileId || !url) {

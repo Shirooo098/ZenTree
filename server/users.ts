@@ -7,7 +7,6 @@ import { account, order_status, orders, user } from "@/db/schema";
 import { eq, sql } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { hash } from "bcryptjs";
 import { revalidatePath } from "next/cache";
 
 
@@ -37,7 +36,13 @@ export const signIn = async (email: string, password: string) => {
     }
 }
 
-export const signUp = async (email: string, password: string, username: string, name: string) => {
+export const signUp = async (
+  email: string,
+  password: string,
+  username: string,
+  name: string,
+  role?: string,
+  phoneNumber?: string) => {
     try {
         await auth.api.signUpEmail({
             body: {
@@ -47,6 +52,15 @@ export const signUp = async (email: string, password: string, username: string, 
                 username
             },
         })
+
+        console.log("Role:", role)
+         await db
+          .update(user)
+          .set({
+            role: role ?? "user",
+            phoneNumber: phoneNumber ?? null,
+          })
+          .where(eq(user.email, email));
         return{
             success: true,
             message: "Signed-Up Successfully"
@@ -128,77 +142,7 @@ export const getCurrentUser = async () => {
         role: session.user.role
     }
 }
-export async function createUser(data: {
-  name: string;
-  email: string;
-  username?: string;
-  password: string;
-  role: "admin" | "staff";
-  phoneNumber?: string;
-}) {
-  try {
-    const existingUser = await db.query.user.findFirst({
-      where: eq(user.email, data.email),
-    });
 
-    if (existingUser) {
-      throw new Error("Email already exists");
-    }
-
-    if (data.username) {
-      const existingUsername = await db.query.user.findFirst({
-        where: eq(user.username, data.username),
-      });
-
-      if (existingUsername) {
-        throw new Error("Username already exists");
-      }
-    }
-
-    const userId = crypto.randomUUID();
-    const hashedPassword = await hash(data.password, 10);
-
-    await db.insert(user).values({
-      id: userId,
-      name: data.name,
-      email: data.email,
-      username: data.username || null,
-      displayUsername: data.username || null,
-      role: data.role,
-      phoneNumber: data.phoneNumber || null,
-      emailVerified: true, 
-      image: null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      banned: false,
-      banReason: null,
-      banExpires: null,
-    });
-
-    // Create account with password
-    await db.insert(account).values({
-      id: crypto.randomUUID(),
-      accountId: userId,
-      providerId: "credential",
-      userId: userId,
-      password: hashedPassword,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      accessToken: null,
-      refreshToken: null,
-      idToken: null,
-      accessTokenExpiresAt: null,
-      refreshTokenExpiresAt: null,
-      scope: null,
-    });
-
-    revalidatePath("/admin/users");
-    return { success: true };
-  } catch (error) {
-    console.error("Error creating user:", error);
-    throw error;
-  }
-}
 export async function deleteUser(userId: string) {
   try {
     await db.delete(user).where(eq(user.id, userId));
