@@ -40,7 +40,7 @@ export async function PUT(req: NextRequest) {
 
 
     if (existing) {
-      // Update first record
+      
       await db
         .update(aboutpage_content)
         .set({
@@ -49,7 +49,7 @@ export async function PUT(req: NextRequest) {
         })
         .where(eq(aboutpage_content.id, existing.id));
     } else {
-      // Create one if missing
+      
       await db.insert(aboutpage_content).values({
         ...body,
         created_at: new Date(),
