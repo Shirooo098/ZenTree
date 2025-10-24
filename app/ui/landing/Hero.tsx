@@ -4,14 +4,14 @@ import { DMSans } from "../fonts";
 
 
 async function getHeroContent() {
-  const res = await fetch(`${process.env.BASE_URL}/api/homepage-content`, {
+  const res = await fetch(`/api/homepage-content`, {
     cache: "no-store",
   });
   return res.json();
 }
 
 async function getBanner() {
-  const res = await fetch(`${process.env.BASE_URL}/api/promotion-banner`, { cache: "no-store" });
+  const res = await fetch(`api/promotion-banner`, { cache: "no-store" });
   return res.json();
 }
 
@@ -20,7 +20,7 @@ export default async function Hero() {
  const banner = await getBanner();
 
   return (
-    <div className="overflow-visible"> {/* make sure it's not hidden or scroll */}
+    <div className="overflow-visible"> 
       
 {banner?.show_banner && (
   <div className="bg-gradient-to-r from-green-700 via-emerald-600 to-green-700 text-white font-semibold tracking-wide py-2 z-50 shadow-md overflow-hidden whitespace-nowrap">

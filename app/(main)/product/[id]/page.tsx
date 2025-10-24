@@ -42,7 +42,7 @@ export default function ProductId() {
             return;
         }
 
-        // Store only THIS product for checkout
+        
         const checkoutData = {
             items: [{
                 cart_products_id: 0,
@@ -69,7 +69,7 @@ export default function ProductId() {
         router.push(`/checkout`);
     };
 
-    // Add to cart - normal behavior
+
     const handleAddToCart = () => {
         if (quantity > product.stock) {
             toast.error("Insufficient stock");
