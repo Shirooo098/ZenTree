@@ -47,6 +47,15 @@ export const signInWithEmail = async (email: string, password: string) => {
             }
             alert(ctx.error.message)
         },
+        fetchOptions: {
+            onError: async (context: { response: any; }) => {
+                const { response } = context;
+                if (response.status === 429) {
+                    const retryAfter = response.headers.get("X-Retry-After");
+                    console.log(`Rate limit exceeded. Retry after ${retryAfter} seconds`);
+                }
+            },
+        }
     })
 }
 
