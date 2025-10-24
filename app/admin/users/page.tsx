@@ -8,7 +8,7 @@ export default async function Page(){
 
     return(
         <div>
-            <div className="flex justify-end">
+            <div className="flex justify-end pb-4">
                 <AddUserDialog />
             </div>
             <UsersTable usersData={allUsers ?? []}/>
