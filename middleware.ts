@@ -33,12 +33,12 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL("/sign-in", request.url));
     }
 
-	if(isLoggedIn && isAdminRoute && userRole !== 'admin'){
+	if(isLoggedIn && isAdminRoute && userRole !== 'admin' && userRole !== 'staff'){
 		return NextResponse.redirect(new URL("/", request.url))
 	}
 
 	if (isLoggedIn && (currentPath === "/sign-in" || currentPath === "/sign-up")) {
-        const redirectPath = userRole === 'admin' ? '/admin' : '/profile';
+        const redirectPath = (userRole === 'admin' || userRole === 'staff') ? '/admin' : '/profile';
         return NextResponse.redirect(new URL(redirectPath, request.url));
     }
 
