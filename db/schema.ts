@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, boolean, serial, integer, real } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean, serial, integer, real, jsonb } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -279,6 +279,7 @@ export const audit_log = pgTable("audit_log", {
   new_values: text("new_values"), // JSON string
   ip_address: text("ip_address"),
   user_agent: text("user_agent"),
+  metadata: jsonb('metadata'), 
   created_at: timestamp("created_at").notNull().defaultNow(),
 });
 
@@ -324,7 +325,9 @@ export const orders = pgTable('orders', {
   paypal_order_id: text('paypal_order_id'), 
   payment_status: text('payment_status').default('pending'), 
   created_at: timestamp('created_at').notNull().defaultNow(),
-  updated_at: timestamp('updated_at').notNull().defaultNow()
+  updated_at: timestamp('updated_at').notNull().defaultNow(),
+  updated_by: text('updated_by').references(() => user.id),
+
 });
 
 export const order_products = pgTable('order_products', {

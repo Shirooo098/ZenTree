@@ -55,8 +55,8 @@ const data = {
       icon: IconDashboard,
     },
     {
-      title: "Audit Log",
-      href: "/admin/audit-log",
+      title: "Audit Logs",
+      href: "/admin/audit-logs",
       icon: IconReportSearch,
     },
     {

@@ -29,16 +29,18 @@ export async function createAuditLog({
   oldValues,
   newValues,
   ipAddress,
-  userAgent
+  userAgent,
+  metadata
 }: {
   userId: string;
   action: 'create' | 'update' | 'delete';
   tableName: string;
   recordId: string | number;
-  oldValues?: Record<string, any>;
-  newValues?: Record<string, any>;
+  oldValues?: Record<string, any> | null;
+  newValues?: Record<string, any> | null;
   ipAddress: string;
   userAgent: string;
+  metadata?: Record<string, any>; // Add metadata parameter
 }) {
   try {
     await db.insert(audit_log).values({
@@ -50,6 +52,7 @@ export async function createAuditLog({
       new_values: newValues ? JSON.stringify(newValues) : null,
       ip_address: ipAddress,
       user_agent: userAgent,
+      metadata: metadata ? JSON.stringify(metadata) : null, // Add metadata field
     });
   } catch (error) {
     console.error('Failed to create audit log:', error);
