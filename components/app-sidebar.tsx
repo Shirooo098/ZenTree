@@ -183,6 +183,15 @@ const data = {
 export function AppSidebar({ user, ...props }: AppSidebarProps) {
   const userData = user;
 
+  // Filter navMain items based on user role
+  const filteredNavMain = data.navMain.filter(item => {
+    // Hide Audit Logs if user is not admin
+    if (item.title === "Audit Logs" && user.role !== "admin") {
+      return false;
+    }
+    return true;
+  });
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -200,7 +209,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={filteredNavMain} />
         <NavDocuments items={data.documents} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
