@@ -383,14 +383,6 @@ export const refund_items = pgTable("refund_items", {
   created_at: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const rateLimit = pgTable("rate_limit", {
-  id: text("id").primaryKey(),
-  key: text("key"),
-  count: integer("count"),
-  lastRequest: bigint("last_request", { mode: "number" }),
-});
-
-
 export const schema = { 
   user,
   session, 
@@ -421,7 +413,6 @@ export const schema = {
   promotion_banner,
   faqs,
   audit_log,
-  rateLimit
 }
 
 export type User = typeof user.$inferSelect
