@@ -3,6 +3,7 @@ import { DMSans } from "../fonts";
 
 async function getHeroContent() {
   const res = await fetch(`${process.env.PROD_URL}/api/homepage-content`, {
+    method: "GET",
     cache: "no-store",
   });
   return res.json();
@@ -10,6 +11,7 @@ async function getHeroContent() {
 
 async function getBanner() {
   const res = await fetch(`${process.env.PROD_URL}/api/promotion-banner`, {
+    method: "GET",
     cache: "no-store",
   });
   return res.json();
