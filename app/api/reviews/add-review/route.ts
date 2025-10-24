@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { product_id, order_id, rating, comment } = body;
 
-    // Validate required fields
+      
     if (!product_id || !order_id || !rating) {
       return NextResponse.json(
         { error: "Missing required fields" },
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Validate rating range
+      
     if (rating < 1 || rating > 5) {
       return NextResponse.json(
         { error: "Rating must be between 1 and 5" },
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Verify that the order belongs to the user and contains the product
+      
     const [orderItem] = await db
       .select({
         order_id: orders.order_id,
@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Check if user has already reviewed this product for this order
+      
     const [existingReview] = await db
       .select()
       .from(reviews)
@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Insert the review
+      
     const [newReview] = await db
       .insert(reviews)
       .values({

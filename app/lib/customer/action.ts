@@ -8,14 +8,14 @@ export async function submitEmail(
   prevState: EmailState,
   formData: FormData
 ): Promise<EmailState> {
-  // Extract form data
+    
   const firstName = formData.get("firstName")?.toString() || "";
   const lastName = formData.get("lastName")?.toString() || "";
   const email = formData.get("email")?.toString() || "";
   const contact = formData.get("contact")?.toString() || "";
   const message = formData.get("message")?.toString() || "";
 
-  // Validation
+    
   const errors: EmailState["errors"] = {};
   if (!firstName) errors.firstName = ["First name is required"];
   if (!email || !email.includes("@")) errors.email = ["Valid email required"];
@@ -26,7 +26,7 @@ export async function submitEmail(
   }
 
   try {
-    // ✅ Directly send the email here (no fetch)
+      
     const transporter = nodemailer.createTransport({
       service: "gmail",
       host: "smtp.gmail.com",

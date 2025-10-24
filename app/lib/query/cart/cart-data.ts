@@ -89,7 +89,7 @@ export function useRemoveFromCart() {
             return res.json();
         },
         onSuccess: () => {
-            // Invalidate cart query to refetch updated cart
+              
             queryClient.invalidateQueries({ queryKey: ['cart'] });
         },
         onError: (error) => {
@@ -118,7 +118,7 @@ export function useUpdateCartQuantity() {
             return res.json();
         },
         onSuccess: () => {
-            // Invalidate cart query to refetch updated cart
+              
             queryClient.invalidateQueries({ queryKey: ['cart'] });
         },
         onError: (error) => {

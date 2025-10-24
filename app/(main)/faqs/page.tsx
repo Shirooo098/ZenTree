@@ -1,15 +1,13 @@
-import * as React from 'react';
+import * as React from "react";
 import FaqsHero from "@/app/ui/Faqs/faqs-hero";
 import FaqsBody from "@/app/ui/Faqs/faqs-body";
 import FaqsFrequestions from "@/app/ui/Faqs/faqs-frequestions";
-// import PersonalInfromation from "@/app/ui/Faqs/perosnal-information";
-
 
 export default function FAQs() {
-   return (
+  return (
     <>
       <div>
-         <FaqsHero />
+        <FaqsHero />
       </div>
 
       <div>
@@ -24,5 +22,5 @@ export default function FAQs() {
         <PersonalInfromation />
       </div> */}
     </>
-   );
+  );
 }

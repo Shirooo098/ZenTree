@@ -47,8 +47,12 @@ const RefundRequestDialog = ({
   onSuccess,
 }: RefundRequestDialogProps) => {
   const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set());
-  const [itemConditions, setItemConditions] = useState<Record<number, string>>({});
-  const [itemQuantities, setItemQuantities] = useState<Record<number, number>>({});
+  const [itemConditions, setItemConditions] = useState<Record<number, string>>(
+    {}
+  );
+  const [itemQuantities, setItemQuantities] = useState<Record<number, number>>(
+    {}
+  );
   const [reason, setReason] = useState("");
   const [comments, setComments] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -94,28 +98,31 @@ const RefundRequestDialog = ({
       setItemQuantities(newQuantities);
     } else {
       newSelected.add(productId);
-      // Default to full quantity
-      const product = order?.products.find(p => p.product_id === productId);
+
+      const product = order?.products.find((p) => p.product_id === productId);
       if (product) {
-        setItemQuantities(prev => ({ ...prev, [productId]: product.quantity }));
+        setItemQuantities((prev) => ({
+          ...prev,
+          [productId]: product.quantity,
+        }));
       }
     }
     setSelectedItems(newSelected);
   };
 
   const handleConditionChange = (productId: number, condition: string) => {
-    setItemConditions(prev => ({ ...prev, [productId]: condition }));
+    setItemConditions((prev) => ({ ...prev, [productId]: condition }));
   };
 
   const handleQuantityChange = (productId: number, quantity: number) => {
-    setItemQuantities(prev => ({ ...prev, [productId]: quantity }));
+    setItemQuantities((prev) => ({ ...prev, [productId]: quantity }));
   };
 
   const calculateRefundTotal = () => {
     if (!order) return 0;
     let total = 0;
-    selectedItems.forEach(productId => {
-      const product = order.products.find(p => p.product_id === productId);
+    selectedItems.forEach((productId) => {
+      const product = order.products.find((p) => p.product_id === productId);
       if (product) {
         const quantity = itemQuantities[productId] || product.quantity;
         const price = product.price_at_purchase || product.price || 0;
@@ -136,9 +143,8 @@ const RefundRequestDialog = ({
       return;
     }
 
-    // Validate all selected items have conditions
     const allHaveConditions = Array.from(selectedItems).every(
-      productId => itemConditions[productId]
+      (productId) => itemConditions[productId]
     );
 
     if (!allHaveConditions) {
@@ -159,18 +165,22 @@ const RefundRequestDialog = ({
     setIsSubmitting(true);
 
     try {
-      // Prepare refund items data
-      const refundItems: RefundItem[] = Array.from(selectedItems).map(productId => {
-        const product = order.products.find(p => p.product_id === productId);
-        return {
-          product_id: productId,
-          quantity: itemQuantities[productId] || product!.quantity,
-          condition: itemConditions[productId],
-        };
-      });
+      const refundItems: RefundItem[] = Array.from(selectedItems).map(
+        (productId) => {
+          const product = order.products.find(
+            (p) => p.product_id === productId
+          );
+          return {
+            product_id: productId,
+            quantity: itemQuantities[productId] || product!.quantity,
+            condition: itemConditions[productId],
+          };
+        }
+      );
 
-      const isFullRefund = selectedItems.size === order.products.length &&
-        order.products.every(p => {
+      const isFullRefund =
+        selectedItems.size === order.products.length &&
+        order.products.every((p) => {
           const refundQty = itemQuantities[p.product_id] || p.quantity;
           return refundQty === p.quantity;
         });
@@ -204,7 +214,11 @@ const RefundRequestDialog = ({
       onClose();
     } catch (error) {
       console.error("❌ Refund submission error:", error);
-      toast.error(error instanceof Error ? error.message : "Failed to submit refund request");
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to submit refund request"
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -246,14 +260,26 @@ const RefundRequestDialog = ({
                     <div className="flex items-start gap-4">
                       <Checkbox
                         checked={selectedItems.has(product.product_id)}
-                        onCheckedChange={() => handleItemToggle(product.product_id)}
+                        onCheckedChange={() =>
+                          handleItemToggle(product.product_id)
+                        }
                         className="mt-1"
                       />
                       <Package className="w-10 h-10 text-gray-400 flex-shrink-0" />
                       <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-gray-900">{product.product_name}</p>
+                        <p className="font-semibold text-gray-900">
+                          {product.product_name}
+                        </p>
                         <div className="flex items-center gap-3 mt-1 text-sm text-gray-600">
-                          <span>₱{(product.price_at_purchase || product.price || 0).toFixed(2)} each</span>
+                          <span>
+                            ₱
+                            {(
+                              product.price_at_purchase ||
+                              product.price ||
+                              0
+                            ).toFixed(2)}{" "}
+                            each
+                          </span>
                           <span>•</span>
                           <span>Available: {product.quantity}</span>
                         </div>
@@ -262,19 +288,32 @@ const RefundRequestDialog = ({
                           <div className="mt-4 space-y-3">
                             {/* Quantity Selector */}
                             <div>
-                              <Label className="text-sm mb-2 block">Quantity to Refund</Label>
+                              <Label className="text-sm mb-2 block">
+                                Quantity to Refund
+                              </Label>
                               <Select
-                                value={String(itemQuantities[product.product_id] || product.quantity)}
-                                onValueChange={(value) => handleQuantityChange(product.product_id, Number(value))}
+                                value={String(
+                                  itemQuantities[product.product_id] ||
+                                    product.quantity
+                                )}
+                                onValueChange={(value) =>
+                                  handleQuantityChange(
+                                    product.product_id,
+                                    Number(value)
+                                  )
+                                }
                               >
                                 <SelectTrigger className="w-full">
                                   <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
                                   <SelectGroup>
-                                    {Array.from({ length: product.quantity }, (_, i) => i + 1).map(qty => (
+                                    {Array.from(
+                                      { length: product.quantity },
+                                      (_, i) => i + 1
+                                    ).map((qty) => (
                                       <SelectItem key={qty} value={String(qty)}>
-                                        {qty} {qty === 1 ? 'item' : 'items'}
+                                        {qty} {qty === 1 ? "item" : "items"}
                                       </SelectItem>
                                     ))}
                                   </SelectGroup>
@@ -285,20 +324,31 @@ const RefundRequestDialog = ({
                             {/* Condition Selector */}
                             <div>
                               <Label className="text-sm mb-2 block">
-                                Item Condition <span className="text-red-500">*</span>
+                                Item Condition{" "}
+                                <span className="text-red-500">*</span>
                               </Label>
                               <Select
                                 value={itemConditions[product.product_id] || ""}
-                                onValueChange={(value) => handleConditionChange(product.product_id, value)}
+                                onValueChange={(value) =>
+                                  handleConditionChange(
+                                    product.product_id,
+                                    value
+                                  )
+                                }
                               >
                                 <SelectTrigger className="w-full">
                                   <SelectValue placeholder="Select condition" />
                                 </SelectTrigger>
                                 <SelectContent>
                                   <SelectGroup>
-                                    <SelectLabel>Choose the item&apos;s condition</SelectLabel>
+                                    <SelectLabel>
+                                      Choose the item&apos;s condition
+                                    </SelectLabel>
                                     {conditionOptions.map((option) => (
-                                      <SelectItem key={option.value} value={option.value}>
+                                      <SelectItem
+                                        key={option.value}
+                                        value={option.value}
+                                      >
                                         {option.label}
                                       </SelectItem>
                                     ))}
@@ -309,9 +359,18 @@ const RefundRequestDialog = ({
 
                             {/* Subtotal for this item */}
                             <div className="flex justify-between items-center pt-2 border-t">
-                              <span className="text-sm text-gray-600">Refund for this item:</span>
+                              <span className="text-sm text-gray-600">
+                                Refund for this item:
+                              </span>
                               <span className="font-semibold text-green-600">
-                                ₱{((product.price_at_purchase || product.price || 0) * (itemQuantities[product.product_id] || product.quantity)).toFixed(2)}
+                                ₱
+                                {(
+                                  (product.price_at_purchase ||
+                                    product.price ||
+                                    0) *
+                                  (itemQuantities[product.product_id] ||
+                                    product.quantity)
+                                ).toFixed(2)}
                               </span>
                             </div>
                           </div>
@@ -327,13 +386,16 @@ const RefundRequestDialog = ({
             {selectedItems.size > 0 && (
               <div className="bg-gray-50 rounded-lg p-4 border-2 border-green-500">
                 <div className="flex justify-between items-center">
-                  <span className="text-lg font-semibold text-gray-900">Total Refund Amount:</span>
+                  <span className="text-lg font-semibold text-gray-900">
+                    Total Refund Amount:
+                  </span>
                   <span className="text-2xl font-bold text-green-600">
                     ₱{calculateRefundTotal().toFixed(2)}
                   </span>
                 </div>
                 <p className="text-xs text-gray-600 mt-1">
-                  {selectedItems.size} {selectedItems.size === 1 ? 'item' : 'items'} selected
+                  {selectedItems.size}{" "}
+                  {selectedItems.size === 1 ? "item" : "items"} selected
                 </p>
               </div>
             )}
@@ -394,8 +456,12 @@ const RefundRequestDialog = ({
                 <p className="font-medium mb-1">Refund Process Information</p>
                 <ul className="list-disc list-inside space-y-1 text-blue-800">
                   <li>Your refund request will be reviewed by our team</li>
-                  <li>You&apos;ll receive an email update within 2-3 business days</li>
-                  <li>Approved refunds are processed within 5-7 business days</li>
+                  <li>
+                    You&apos;ll receive an email update within 2-3 business days
+                  </li>
+                  <li>
+                    Approved refunds are processed within 5-7 business days
+                  </li>
                 </ul>
               </div>
             </div>
@@ -403,11 +469,7 @@ const RefundRequestDialog = ({
         </ScrollArea>
 
         <DialogFooter>
-          <Button
-            variant="outline"
-            onClick={onClose}
-            disabled={isSubmitting}
-          >
+          <Button variant="outline" onClick={onClose} disabled={isSubmitting}>
             Cancel
           </Button>
           <Button

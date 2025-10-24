@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
         const userId = session.user.id;
         const { orderId, paypalOrderId } = await req.json();
 
-        // Get the order to check if it's from cart checkout
+          
         const [order] = await db
             .select()
             .from(orders)
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // Verify order belongs to user
+          
         if (order.user_id !== userId) {
             return NextResponse.json(
                 { error: "Unauthorized" },
@@ -44,11 +44,11 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // Capture the PayPal payment
+          
         const captureData = await capturePayPalOrder(paypalOrderId);
 
         if (captureData.status === "COMPLETED") {
-            // Update order status to "paid"
+              
             const completedStatus = await db
                 .select()
                 .from(order_status)
@@ -66,13 +66,13 @@ export async function POST(req: NextRequest) {
                     .where(eq(orders.order_id, orderId));
             }
 
-            // Get all order items
+              
             const orderItems = await db
                 .select()
                 .from(order_products)
                 .where(eq(order_products.order_id, orderId));
 
-            // Decrement stock for all order items
+              
             for (const item of orderItems) {
                 const [product] = await db
                     .select()
@@ -87,8 +87,8 @@ export async function POST(req: NextRequest) {
                 }
             }
 
-            // IMPORTANT: Only remove cart items if this was a cart checkout
-            // Check if there are corresponding cart items for this order
+              
+              
             const [userCart] = await db
                 .select({ cart_id: carts.cart_id })
                 .from(carts)
@@ -96,7 +96,7 @@ export async function POST(req: NextRequest) {
                 .limit(1);
 
             if (userCart) {
-                // Find cart items that match the order products
+                  
                 const productIds = orderItems.map(item => item.product_id);
                 
                 const matchingCartItems = await db
@@ -112,7 +112,7 @@ export async function POST(req: NextRequest) {
                         )
                     );
 
-                // Only delete cart items that were actually in this order
+                  
                 if (matchingCartItems.length > 0) {
                     const cartProductIdsToRemove = matchingCartItems.map(
                         item => item.cart_products_id

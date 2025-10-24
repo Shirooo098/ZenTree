@@ -1,15 +1,14 @@
-// app/api/admin/audit-logs/route.ts
 import { db } from "@/db/drizzle";
 import { audit_log, user } from "@/db/schema";
-import { desc, eq, sql, and } from "drizzle-orm"; // Add 'and' import
+import { desc, eq, sql, and } from "drizzle-orm"; 
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/server/users";
 
 export async function GET(req: NextRequest) {
   try {
-    // Check permissions
+   
     const session = await getCurrentUser();
-    
+
     if (!session) {
       return NextResponse.json(
         { error: "Unauthorized - Please log in" },
@@ -24,16 +23,16 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // Get query parameters
+    
     const searchParams = req.nextUrl.searchParams;
-    const page = Number(searchParams.get('page')) || 1;
-    const limit = Number(searchParams.get('limit')) || 50;
-    const tableName = searchParams.get('table');
-    const action = searchParams.get('action');
+    const page = Number(searchParams.get("page")) || 1;
+    const limit = Number(searchParams.get("limit")) || 50;
+    const tableName = searchParams.get("table");
+    const action = searchParams.get("action");
 
     const offset = (page - 1) * limit;
 
-    // Build filter conditions
+   
     const conditions = [];
     if (tableName) {
       conditions.push(eq(audit_log.table_name, tableName));
@@ -42,7 +41,7 @@ export async function GET(req: NextRequest) {
       conditions.push(eq(audit_log.action, action));
     }
 
-    // Build the base query with $dynamic()
+   
     let logsQuery = db
       .select({
         id: audit_log.id,
@@ -63,26 +62,26 @@ export async function GET(req: NextRequest) {
       .leftJoin(user, eq(audit_log.user_id, user.id))
       .$dynamic();
 
-    // Apply filters if they exist
+   
     if (conditions.length > 0) {
       logsQuery = logsQuery.where(
         conditions.length === 1 ? conditions[0] : and(...conditions)
       );
     }
 
-    // Get logs with pagination
+  
     const logs = await logsQuery
       .orderBy(desc(audit_log.created_at))
       .limit(limit)
       .offset(offset);
 
-    // Build count query with $dynamic()
+    
     let countQuery = db
       .select({ count: sql<number>`count(*)` })
       .from(audit_log)
       .$dynamic();
 
-    // Apply same filters to count query
+   
     if (conditions.length > 0) {
       countQuery = countQuery.where(
         conditions.length === 1 ? conditions[0] : and(...conditions)
@@ -94,8 +93,8 @@ export async function GET(req: NextRequest) {
     const total = Number(count);
     const pages = Math.ceil(total / limit);
 
-    // Parse JSON fields
-    const parsedLogs = logs.map(log => ({
+    
+    const parsedLogs = logs.map((log) => ({
       ...log,
       old_values: log.old_values ? JSON.parse(log.old_values as string) : null,
       new_values: log.new_values ? JSON.parse(log.new_values as string) : null,
@@ -109,7 +108,6 @@ export async function GET(req: NextRequest) {
       pages,
       limit,
     });
-
   } catch (error) {
     console.error("Error fetching audit logs:", error);
     return NextResponse.json(

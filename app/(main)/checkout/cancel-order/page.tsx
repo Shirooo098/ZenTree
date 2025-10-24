@@ -20,10 +20,8 @@ export default function CancelOrderPage() {
           });
         }
 
-        // Clear session storage
         sessionStorage.removeItem("pending_order_id");
         sessionStorage.removeItem("paypal_order_id");
-
       } catch (error) {
         console.error("Error cancelling order:", error);
       } finally {
@@ -49,14 +47,14 @@ export default function CancelOrderPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
         <XCircle className="w-16 h-16 text-orange-500 mx-auto mb-4" />
-        
+
         <h2 className="text-2xl font-bold text-gray-900 mb-2">
           Payment Cancelled
         </h2>
-        
+
         <p className="text-gray-600 mb-6">
-          Your payment was cancelled. No charges were made to your account.
-          Your items are still in your cart.
+          Your payment was cancelled. No charges were made to your account. Your
+          items are still in your cart.
         </p>
 
         <div className="space-y-3">
@@ -67,7 +65,7 @@ export default function CancelOrderPage() {
             <ShoppingCart className="w-4 h-4 mr-2" />
             Return to Cart
           </Button>
-          
+
           <Button
             onClick={() => router.push("/product")}
             variant="outline"
@@ -79,7 +77,10 @@ export default function CancelOrderPage() {
         </div>
 
         <p className="text-sm text-gray-500 mt-6">
-          Need help? <a href="/contact" className="text-green-600 hover:underline">Contact us</a>
+          Need help?{" "}
+          <a href="/contact" className="text-green-600 hover:underline">
+            Contact us
+          </a>
         </p>
       </div>
     </div>

@@ -1,9 +1,7 @@
-
-// import { DMSans } from "../fonts"
-import CareHero from "@/app/ui/care/Care-Hero"; 
+import CareHero from "@/app/ui/care/Care-Hero";
 import CareTopics from "@/app/ui/care/topics";
 import Carefundamentals from "@/app/ui/care/fundamentals";
-import CareFAQ from  "@/app/ui/care/CareFAQ"
+import CareFAQ from "@/app/ui/care/CareFAQ";
 import Faqsfrequestions from "@/app/ui/care/faqsQ";
 
 export default function CareGuide() {
@@ -14,7 +12,6 @@ export default function CareGuide() {
       <Carefundamentals />
       <CareFAQ />
       <Faqsfrequestions />
-
     </div>
   );
 }

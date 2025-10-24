@@ -1,4 +1,4 @@
-// app/api/admin/revenue/route.ts
+  
 import { NextResponse } from "next/server";
 
 import { sql, eq, and, gte } from "drizzle-orm";
@@ -45,7 +45,7 @@ export async function GET(request: Request) {
   }
 }
 
-// Helper function to fill missing dates with 0 revenue
+  
 function fillMissingDates(
   data: Array<{ date: string; total: number }>,
   days: number

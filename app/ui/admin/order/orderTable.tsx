@@ -29,7 +29,6 @@ const OrdersTable = ({
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<AdminOrder | null>(null);
 
-  // 🔍 Search & Filter states
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
 
@@ -57,7 +56,6 @@ const OrdersTable = ({
     onOrderUpdated?.();
   };
 
-  // 🧠 Filtered & searched data
   const filteredOrders = useMemo(() => {
     return ordersData.filter((order) => {
       const matchesSearch =
@@ -166,7 +164,6 @@ const OrdersTable = ({
   return (
     <>
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mt-6 w-full">
-       
         <div className="relative w-full md:w-[40%]">
           <Search className="absolute left-2 top-2.5 w-4 h-4 text-gray-400" />
           <Input

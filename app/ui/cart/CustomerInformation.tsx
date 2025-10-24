@@ -3,18 +3,18 @@
 import { CheckoutPageProps } from "./CheckoutPage";
 
 export default function CustomerInformation({ userData }: CheckoutPageProps) {
-  // Split name safely
   const firstName = userData.name?.split(" ")[0] || "";
   const lastName = userData.name?.split(" ")[1] || "";
   const email = userData.email || "";
   const phone = userData.phoneNumber || "";
 
-  // Helper function to check if field has a value
   const isFilled = (value: string) => value.trim() !== "";
 
   return (
     <div className="bg-white rounded-lg border border-gray-300 p-6 shadow-sm pb-4">
-      <h3 className="text-xl font-semibold mb-4 text-gray-900">Customer Information</h3>
+      <h3 className="text-xl font-semibold mb-4 text-gray-900">
+        Customer Information
+      </h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm text-gray-600 mb-1"> Name</label>

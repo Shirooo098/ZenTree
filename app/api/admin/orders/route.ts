@@ -24,7 +24,7 @@ export async function GET() {
       );
     }
 
-    // Fetch ALL orders (no user filter)
+      
     const allOrders = await db
       .select({
         order_id: orders.order_id,
@@ -46,7 +46,7 @@ export async function GET() {
       );
     console.log("Admin fetching all orders. Total found:", allOrders.length);
     
-    // Fetch products for each order
+      
     const ordersWithProducts = await Promise.all(
       allOrders.map(async (order) => {
         const productsInOrder = await db
@@ -63,7 +63,7 @@ export async function GET() {
           .leftJoin(imageKit_productFiles, eq(products.imageKit_productFiles_id, imageKit_productFiles.id))
           .where(eq(order_products.order_id, order.order_id));
 
-        // Calculate total
+          
         const total = productsInOrder.reduce(
           (sum, item) => sum + (item.price_at_purchase * item.quantity), 
           0

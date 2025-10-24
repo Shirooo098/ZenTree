@@ -16,7 +16,7 @@ export async function GET(
     const periodDate = new Date();
     periodDate.setDate(periodDate.getDate() - period);
 
-    // Get monthly performance data - only for completed orders
+
     const monthlyDataResult = await db.execute(sql`
       SELECT 
         TO_CHAR(DATE_TRUNC('month', ${orders.created_at}), 'Month') as month,
@@ -33,7 +33,7 @@ export async function GET(
       ORDER BY DATE_TRUNC('month', ${orders.created_at}) ASC
     `);
 
-    // Get product details with overall stats - only for completed orders
+   
     const productDetails = await db
       .select({
         product_id: products.product_id,
@@ -82,7 +82,7 @@ export async function GET(
       Number(productDetails[0].total_revenue)
     );
 
-    // Format monthly data
+      
     const monthlyData = (monthlyDataResult.rows as any[]).map((row) => ({
       month: row.month.trim(),
       orders: Number(row.orders),

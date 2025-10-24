@@ -1,4 +1,4 @@
-// definitions.ts
+  
 export type EmailState = {
   errors: {
     firstName?: string[];

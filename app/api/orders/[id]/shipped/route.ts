@@ -31,7 +31,7 @@ export async function PATCH(
       );
     }
 
-    // Parse request body
+      
     const { status } = await req.json();
 
     if (!status) {

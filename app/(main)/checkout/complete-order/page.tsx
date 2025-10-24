@@ -12,7 +12,9 @@ function CompleteOrderValidator() {
   const [isClient, setIsClient] = useState(false);
   const paypalOrderId = searchParams.get("token");
   const [storedOrderId, setStoredOrderId] = useState<string | null>(null);
-  const [storedPaypalOrderId, setStoredPaypalOrderId] = useState<string | null>(null);
+  const [storedPaypalOrderId, setStoredPaypalOrderId] = useState<string | null>(
+    null
+  );
 
   useEffect(() => {
     setIsClient(true);
@@ -20,7 +22,6 @@ function CompleteOrderValidator() {
     setStoredPaypalOrderId(sessionStorage.getItem("paypal_order_id"));
   }, []);
 
-  // Show loading state until client-side hydration completes
   if (!isClient) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -35,7 +36,6 @@ function CompleteOrderValidator() {
     );
   }
 
-  // Validation
   if (!paypalOrderId || !storedOrderId) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -99,9 +99,9 @@ function CompleteOrderValidator() {
   }
 
   return (
-    <CompleteOrder 
-      paypalOrderId={paypalOrderId} 
-      storedOrderId={storedOrderId} 
+    <CompleteOrder
+      paypalOrderId={paypalOrderId}
+      storedOrderId={storedOrderId}
     />
   );
 }

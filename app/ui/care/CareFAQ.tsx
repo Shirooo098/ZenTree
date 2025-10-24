@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 interface FAQ {
   id?: number;
@@ -17,23 +17,24 @@ export default function CareFAQ() {
 
   useEffect(() => {
     fetch("/api/care-faq")
-      .then(res => res.json())
-      .then(data => {
-        // Ensure it's always an array
+      .then((res) => res.json())
+      .then((data) => {
         setFaqs(Array.isArray(data) ? data : []);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error("Failed to fetch FAQs:", err);
-        setFaqs([]); // fallback
+        setFaqs([]);
       });
   }, []);
 
   return (
     <main className="flex items-center justify-center text-center flex-col gap-[0vw]">
-      <p className="mb-[2vw] text-4xl font-bold italic">Frequently Asked Questions</p>
+      <p className="mb-[2vw] text-4xl font-bold italic">
+        Frequently Asked Questions
+      </p>
       <div className="w-[80vw] mb-0">
         {Array.isArray(faqs) && faqs.length > 0 ? (
-          faqs.map(faq => (
+          faqs.map((faq) => (
             <Accordion
               key={faq.id}
               disableGutters

@@ -1,4 +1,4 @@
-// app/lib/query/admin/refunds/refund-data.ts (or wherever your query is)
+  
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 export async function fetchRefunds() {
@@ -11,7 +11,7 @@ export async function fetchRefunds() {
   return response.json();
 }
 
-// React Query Hook
+  
 export function useRefunds() {
   return useQuery({
     queryKey: ["refunds"],
@@ -19,7 +19,7 @@ export function useRefunds() {
   });
 }
 
-// Update refund status mutation
+  
 export function useUpdateRefundStatus() {
   const queryClient = useQueryClient();
 

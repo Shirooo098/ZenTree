@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { z } from "zod"
 
-// Schema for product performance data
+  
 export const productPerformanceSchema = z.object({
   product_id: z.number(),
   product_name: z.string(),
@@ -29,7 +29,7 @@ interface ProductPerformanceResponse {
   }
 }
 
-// Fetch products by type (top or least)
+  
 async function fetchProductPerformance(
   type: "top" | "least",
   limit: number = 10,
@@ -56,7 +56,7 @@ async function fetchProductPerformance(
   return result.data
 }
 
-// Hook for product performance data
+  
 export function useProductPerformance(
   type: "top" | "least",
   limit: number = 10,
@@ -65,12 +65,12 @@ export function useProductPerformance(
   return useQuery({
     queryKey: ["product-performance", type, limit, period],
     queryFn: () => fetchProductPerformance(type, limit, period),
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000,   
     refetchOnWindowFocus: false,
   })
 }
 
-// Performance summary response interface
+  
 interface PerformanceSummaryData {
   total_products: number
   total_orders: number
@@ -87,7 +87,7 @@ interface PerformanceSummaryResponse {
   data: PerformanceSummaryData
 }
 
-// Fetch performance summary
+  
 async function fetchPerformanceSummary(
   period: number = 30
 ): Promise<PerformanceSummaryData> {
@@ -112,7 +112,7 @@ async function fetchPerformanceSummary(
   return result.data
 }
 
-// Hook for performance summary
+  
 export function usePerformanceSummary(period: number = 30) {
   return useQuery({
     queryKey: ["performance-summary", period],
@@ -122,7 +122,7 @@ export function usePerformanceSummary(period: number = 30) {
   })
 }
 
-// Category performance response interface
+  
 interface CategoryPerformance {
   category: string
   product_count: number
@@ -141,7 +141,7 @@ interface CategoryPerformanceResponse {
   }
 }
 
-// Fetch category performance
+  
 async function fetchCategoryPerformance(
   period: number = 30
 ): Promise<CategoryPerformance[]> {
@@ -166,7 +166,7 @@ async function fetchCategoryPerformance(
   return result.data
 }
 
-// Hook for category performance
+  
 export function useCategoryPerformance(period: number = 30) {
   return useQuery({
     queryKey: ["category-performance", period],
@@ -176,7 +176,7 @@ export function useCategoryPerformance(period: number = 30) {
   })
 }
 
-// Individual product detail response interface
+  
 interface ProductDetailData extends ProductPerformance {
   product_price: number
   review_count: number
@@ -193,7 +193,7 @@ interface ProductDetailResponse {
   data: ProductDetailData
 }
 
-// Fetch individual product details
+  
 async function fetchProductDetail(
   productId: number,
   period: number = 180
@@ -219,7 +219,7 @@ async function fetchProductDetail(
   return result.data
 }
 
-// Hook for individual product details
+  
 export function useProductDetail(
     productId: number,
     period: number = 180,
@@ -228,10 +228,10 @@ export function useProductDetail(
   return useQuery({
     queryKey: ["product-detail", productId, period],
     queryFn: () => fetchProductDetail(productId, period),
-    staleTime: 30 * 60 * 1000, // 30 minutes
-    gcTime: 60 * 60 * 1000, // Keep in cache for 1 hour
+    staleTime: 30 * 60 * 1000,   
+    gcTime: 60 * 60 * 1000,   
     refetchOnWindowFocus: false,
-    refetchOnMount: false, // Don't refetch if data exists in cache
+    refetchOnMount: false,   
     refetchOnReconnect: false,
     enabled: enabled && !!productId,
   })

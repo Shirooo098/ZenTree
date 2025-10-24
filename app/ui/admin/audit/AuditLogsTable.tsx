@@ -1,4 +1,3 @@
-// app/admin/audit-logs/AuditLogsTable.tsx
 "use client";
 
 import { TableCell, TableRow } from "@/components/ui/table";
@@ -27,7 +26,7 @@ const AuditLogsTable = ({ auditLogs }: AuditLogsTableProps) => {
     "Record ID",
     "IP Address",
     "Timestamp",
-    "Details"
+    "Details",
   ];
 
   const getActionBadge = (action: string) => {
@@ -114,7 +113,9 @@ const AuditLogsTable = ({ auditLogs }: AuditLogsTableProps) => {
               <div className="flex justify-between items-start mb-3">
                 <div>
                   <p className="font-medium">{log.user_name}</p>
-                  <p className="text-xs text-muted-foreground">{log.user_email}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {log.user_email}
+                  </p>
                 </div>
                 <div className="text-right">
                   {getActionBadge(log.action)}
@@ -133,7 +134,9 @@ const AuditLogsTable = ({ auditLogs }: AuditLogsTableProps) => {
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground">Record ID</p>
-                  <p className="font-medium font-mono text-sm">{log.record_id}</p>
+                  <p className="font-medium font-mono text-sm">
+                    {log.record_id}
+                  </p>
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground">IP Address</p>

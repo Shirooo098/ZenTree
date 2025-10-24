@@ -1,4 +1,4 @@
-// lib/rbac-middleware.ts
+  
 import { getCurrentUser } from "@/server/users";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -27,7 +27,7 @@ export async function checkPermission(
     };
   }
 
-  // Check if user role is allowed
+    
   if (!config.allowedRoles.includes(session.role as UserRole)) {
     return {
       authorized: false,
@@ -39,7 +39,7 @@ export async function checkPermission(
     };
   }
 
-  // Special check for delete operations - only admin
+    
   if (config.action === 'delete' && session.role !== 'admin') {
     return {
       authorized: false,

@@ -1,4 +1,3 @@
-// app/components/forms/rate-form.tsx
 "use client";
 
 import { useSubmitReview } from "@/app/lib/query/review/review-data";
@@ -80,9 +79,7 @@ export default function RateForm({
           ))}
         </div>
         {rating > 0 && (
-          <p className="text-sm text-gray-600 mt-1">
-            {rating} out of 5 leaves
-          </p>
+          <p className="text-sm text-gray-600 mt-1">{rating} out of 5 leaves</p>
         )}
       </div>
 

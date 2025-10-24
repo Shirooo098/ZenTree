@@ -11,7 +11,7 @@ try {
     const periodDate = new Date();
     periodDate.setDate(periodDate.getDate() - period);
 
-    // Get overall statistics
+      
     const summary = await db
       .select({
         total_products: sql<number>`COUNT(DISTINCT ${products.product_id})`,
@@ -31,7 +31,7 @@ try {
         )
       );
 
-    // Get top category
+      
     const topCategory = await db
       .select({
         category: products.product_category,
@@ -51,7 +51,7 @@ try {
       .orderBy(desc(sql`SUM(${order_products.price_at_purchase} * ${order_products.quantity})`))
       .limit(1);
 
-    // Get low stock products (stock < 10)
+      
     const lowStockCount = await db
       .select({
         count: sql<number>`COUNT(*)`,

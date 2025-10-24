@@ -20,7 +20,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { AlertTriangle, Ban, CheckCircle, Mail, Phone, MoreHorizontal, Eye, Edit, Trash2, Search, X } from "lucide-react";
+import {
+  AlertTriangle,
+  Ban,
+  CheckCircle,
+  Mail,
+  Phone,
+  MoreHorizontal,
+  Eye,
+  Edit,
+  Trash2,
+  Search,
+  X,
+} from "lucide-react";
 import { useState, useMemo } from "react";
 import BanUserDialog from "../dialog/user-dialog/BanUserDialog";
 import { ViewUserDialog } from "../dialog/user-dialog/ViewUserDialog";
@@ -46,7 +58,7 @@ type UserData = {
 
 const UsersTable = ({
   usersData,
-  onUserUpdated
+  onUserUpdated,
 }: {
   usersData: UserData[];
   onUserUpdated?: () => void;
@@ -57,7 +69,6 @@ const UsersTable = ({
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-  // Filter states
   const [searchQuery, setSearchQuery] = useState("");
   const [roleFilter, setRoleFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -74,47 +85,49 @@ const UsersTable = ({
     "Actions",
   ];
 
-  // Filter users based on all filter criteria
   const filteredUsers = useMemo(() => {
     return usersData.filter((user) => {
-      // Search filter (name, email, username)
-      const matchesSearch = searchQuery === "" || 
+      const matchesSearch =
+        searchQuery === "" ||
         user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (user.username && user.username.toLowerCase().includes(searchQuery.toLowerCase()));
+        (user.username &&
+          user.username.toLowerCase().includes(searchQuery.toLowerCase()));
 
-      // Role filter
       const matchesRole = roleFilter === "all" || user.role === roleFilter;
 
-      // Status filter (banned/active)
-      const matchesStatus = 
+      const matchesStatus =
         statusFilter === "all" ||
         (statusFilter === "active" && !user.banned) ||
         (statusFilter === "banned" && user.banned);
 
-      // Verification filter
-      const matchesVerification = 
+      const matchesVerification =
         verificationFilter === "all" ||
         (verificationFilter === "verified" && user.emailVerified) ||
         (verificationFilter === "unverified" && !user.emailVerified);
 
-      return matchesSearch && matchesRole && matchesStatus && matchesVerification;
+      return (
+        matchesSearch && matchesRole && matchesStatus && matchesVerification
+      );
     });
   }, [usersData, searchQuery, roleFilter, statusFilter, verificationFilter]);
 
-  const handleActionClick = (user: UserData, action: 'view' | 'edit' | 'delete' | 'ban') => {
+  const handleActionClick = (
+    user: UserData,
+    action: "view" | "edit" | "delete" | "ban"
+  ) => {
     setSelectedUser(user);
     switch (action) {
-      case 'view':
+      case "view":
         setIsViewDialogOpen(true);
         break;
-      case 'edit':
+      case "edit":
         setIsEditDialogOpen(true);
         break;
-      case 'delete':
+      case "delete":
         setIsDeleteDialogOpen(true);
         break;
-      case 'ban':
+      case "ban":
         setIsBanDialogOpen(true);
         break;
     }
@@ -139,7 +152,11 @@ const UsersTable = ({
     setVerificationFilter("all");
   };
 
-  const hasActiveFilters = searchQuery !== "" || roleFilter !== "all" || statusFilter !== "all" || verificationFilter !== "all";
+  const hasActiveFilters =
+    searchQuery !== "" ||
+    roleFilter !== "all" ||
+    statusFilter !== "all" ||
+    verificationFilter !== "all";
 
   const getRoleBadgeVariant = (role: string | null) => {
     switch (role) {
@@ -216,7 +233,7 @@ const UsersTable = ({
 
       <TableCell>
         {user.cancellationCount !== undefined && user.cancellationCount > 0 ? (
-          <Badge 
+          <Badge
             variant={user.cancellationCount >= 3 ? "destructive" : "secondary"}
             className="font-mono"
           >
@@ -247,24 +264,24 @@ const UsersTable = ({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => handleActionClick(user, 'view')}>
+            <DropdownMenuItem onClick={() => handleActionClick(user, "view")}>
               <Eye className="mr-2 h-4 w-4" />
               View
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleActionClick(user, 'edit')}>
+            <DropdownMenuItem onClick={() => handleActionClick(user, "edit")}>
               <Edit className="mr-2 h-4 w-4" />
               Edit
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem 
-              onClick={() => handleActionClick(user, 'ban')}
+            <DropdownMenuItem
+              onClick={() => handleActionClick(user, "ban")}
               className="text-orange-600"
             >
               <Ban className="mr-2 h-4 w-4" />
               {user.banned ? "Manage Ban" : "Ban User"}
             </DropdownMenuItem>
-            <DropdownMenuItem 
-              onClick={() => handleActionClick(user, 'delete')}
+            <DropdownMenuItem
+              onClick={() => handleActionClick(user, "delete")}
               className="text-red-600"
             >
               <Trash2 className="mr-2 h-4 w-4" />
@@ -318,7 +335,10 @@ const UsersTable = ({
           </Select>
 
           {/* Verification Filter */}
-          <Select value={verificationFilter} onValueChange={setVerificationFilter}>
+          <Select
+            value={verificationFilter}
+            onValueChange={setVerificationFilter}
+          >
             <SelectTrigger className="w-full sm:w-[180px]">
               <SelectValue placeholder="Verification" />
             </SelectTrigger>
@@ -371,10 +391,15 @@ const UsersTable = ({
                   <div className="flex-1">
                     <p className="font-medium">{user.name}</p>
                     {user.username && (
-                      <p className="text-xs text-muted-foreground">@{user.username}</p>
+                      <p className="text-xs text-muted-foreground">
+                        @{user.username}
+                      </p>
                     )}
                     <div className="flex gap-2 mt-1">
-                      <Badge variant={getRoleBadgeVariant(user.role)} className="text-xs">
+                      <Badge
+                        variant={getRoleBadgeVariant(user.role)}
+                        className="text-xs"
+                      >
                         {user.role || "user"}
                       </Badge>
                       {user.banned ? (
@@ -382,7 +407,10 @@ const UsersTable = ({
                           Banned
                         </Badge>
                       ) : (
-                        <Badge variant="outline" className="text-xs bg-green-50">
+                        <Badge
+                          variant="outline"
+                          className="text-xs bg-green-50"
+                        >
                           Active
                         </Badge>
                       )}
@@ -409,22 +437,30 @@ const UsersTable = ({
                   </p>
                 </div>
 
-                {user.cancellationCount !== undefined && user.cancellationCount > 0 && (
-                  <div className="flex items-center gap-2 mt-2">
-                    <AlertTriangle className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-xs font-medium">Cancellations (24h):</span>
-                    <Badge 
-                      variant={user.cancellationCount >= 3 ? "destructive" : "secondary"}
-                      className="text-xs"
-                    >
-                      {user.cancellationCount}
-                    </Badge>
-                  </div>
-                )}
+                {user.cancellationCount !== undefined &&
+                  user.cancellationCount > 0 && (
+                    <div className="flex items-center gap-2 mt-2">
+                      <AlertTriangle className="w-4 h-4 text-muted-foreground" />
+                      <span className="text-xs font-medium">
+                        Cancellations (24h):
+                      </span>
+                      <Badge
+                        variant={
+                          user.cancellationCount >= 3
+                            ? "destructive"
+                            : "secondary"
+                        }
+                        className="text-xs"
+                      >
+                        {user.cancellationCount}
+                      </Badge>
+                    </div>
+                  )}
 
                 {user.banned && user.banReason && (
                   <div className="mt-3 p-2 bg-red-50 rounded text-xs">
-                    <span className="font-medium">Ban reason:</span> {user.banReason}
+                    <span className="font-medium">Ban reason:</span>{" "}
+                    {user.banReason}
                   </div>
                 )}
 
@@ -432,28 +468,29 @@ const UsersTable = ({
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handleActionClick(user, 'view')}
+                    onClick={() => handleActionClick(user, "view")}
                   >
                     <Eye className="w-4 h-4 mr-1" /> View
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handleActionClick(user, 'edit')}
+                    onClick={() => handleActionClick(user, "edit")}
                   >
                     <Edit className="w-4 h-4 mr-1" /> Edit
                   </Button>
                   <Button
                     variant="destructive"
                     size="sm"
-                    onClick={() => handleActionClick(user, 'ban')}
+                    onClick={() => handleActionClick(user, "ban")}
                   >
-                    <Ban className="w-4 h-4 mr-1" /> {user.banned ? "Banned" : "Ban"}
+                    <Ban className="w-4 h-4 mr-1" />{" "}
+                    {user.banned ? "Banned" : "Ban"}
                   </Button>
                   <Button
                     variant="destructive"
                     size="sm"
-                    onClick={() => handleActionClick(user, 'delete')}
+                    onClick={() => handleActionClick(user, "delete")}
                   >
                     <Trash2 className="w-4 h-4 mr-1" /> Delete
                   </Button>
@@ -462,39 +499,37 @@ const UsersTable = ({
             ))
           ) : (
             <div className="col-span-full text-center py-12">
-              <p className="text-muted-foreground">No users found matching your filters</p>
-              <Button
-                variant="link"
-                onClick={clearFilters}
-                className="mt-2"
-              >
+              <p className="text-muted-foreground">
+                No users found matching your filters
+              </p>
+              <Button variant="link" onClick={clearFilters} className="mt-2">
                 Clear all filters
               </Button>
             </div>
           )}
         </div>
       </div>
-      
+
       <BanUserDialog
         user={selectedUser}
         isOpen={isBanDialogOpen}
         onClose={handleDialogClose}
         onSuccess={handleSuccess}
       />
-      
+
       <ViewUserDialog
         user={selectedUser}
         isOpen={isViewDialogOpen}
         onClose={handleDialogClose}
       />
-      
+
       <EditUserDialog
         user={selectedUser}
         isOpen={isEditDialogOpen}
         onClose={handleDialogClose}
         onSuccess={handleSuccess}
       />
-      
+
       <DeleteUserDialog
         user={selectedUser}
         isOpen={isDeleteDialogOpen}

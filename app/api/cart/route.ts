@@ -20,7 +20,7 @@ export async function GET() {
             );
         }
 
-        // Check if session exists and has user
+          
         if (!session || !session.user || !session.user.id) {
             console.log("No valid session found");
             return NextResponse.json(

@@ -199,7 +199,7 @@ export default function Carefundamentals() {
             {/* Pruning Shears */}
             <div className="border rounded-[10px] bg-white w-80 h-40 flex flex-col justify-center items-center text-[15px] p-4">
               <svg
-                xmlns="http://www.w3.org/2000/svg"
+                xmlns="http:  
                 width="50"
                 height="50"
                 viewBox="0 0 24 24"
@@ -222,7 +222,7 @@ export default function Carefundamentals() {
             {/* Watering Can */}
             <div className="border rounded-[10px] bg-white w-80 h-40 flex flex-col justify-center items-center text-[15px] p-4">
               <svg
-                xmlns="http://www.w3.org/2000/svg"
+                xmlns="http:  
                 width="50"
                 height="50"
                 viewBox="0 0 24 24"
@@ -241,7 +241,7 @@ export default function Carefundamentals() {
             {/* Root Hook */}
             <div className="border rounded-[10px] bg-white w-80 h-40 flex flex-col justify-center items-center text-[15px] p-4">
               <svg
-                xmlns="http://www.w3.org/2000/svg"
+                xmlns="http:  
                 width="50"
                 height="50"
                 viewBox="0 0 24 24"

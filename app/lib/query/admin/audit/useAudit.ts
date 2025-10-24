@@ -49,7 +49,7 @@ interface UseAuditLogsOptions {
   action?: string;
 }
 
-// Query keys factory
+  
 export const auditLogsKeys = {
   all: ['audit-logs'] as const,
   lists: () => [...auditLogsKeys.all, 'list'] as const,
@@ -58,26 +58,26 @@ export const auditLogsKeys = {
   detail: (id: number) => [...auditLogsKeys.details(), id] as const,
 };
 
-// Hook for fetching audit logs list
+  
 export function useAuditLogs(options: UseAuditLogsOptions = {}) {
   return useQuery({
     queryKey: auditLogsKeys.list(options),
     queryFn: () => fetchAuditLogs(options),
-    staleTime: 30 * 1000, // 30 seconds
+    staleTime: 30 * 1000,   
   });
 }
 
-// Hook for fetching a single audit log
+  
 export function useAuditLog(id: number | null) {
   return useQuery({
     queryKey: auditLogsKeys.detail(id!),
     queryFn: () => fetchAuditLogById(id!),
-    enabled: id !== null, // Only run query if id is provided
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    enabled: id !== null,   
+    staleTime: 5 * 60 * 1000,   
   });
 }
 
-// Hook for prefetching next page
+  
 export function usePrefetchAuditLogs() {
   const queryClient = useQueryClient();
 

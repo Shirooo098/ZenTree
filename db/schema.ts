@@ -87,7 +87,7 @@ export const products = pgTable('products', {
   created_by: text('created_by').references(() => user.id),
   updated_at: timestamp('updated_at').notNull().defaultNow(),
   updated_by: text('updated_by').references(() => user.id),
-  deleted_at: timestamp('deleted_at'), // Soft delete
+  deleted_at: timestamp('deleted_at'),   
   deleted_by: text('deleted_by').references(() => user.id),
 });
 
@@ -266,17 +266,17 @@ export const refund = pgTable("refund", {
   updated_by: text('updated_by').references(() => user.id),
 });
 
-// Audit log table for tracking all admin/staff actions
+  
 export const audit_log = pgTable("audit_log", {
   id: serial("id").primaryKey(),
   user_id: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-  action: text("action").notNull(), // 'create', 'update', 'delete'
+  action: text("action").notNull(),   
   table_name: text("table_name").notNull(),
   record_id: text("record_id").notNull(),
-  old_values: text("old_values"), // JSON string
-  new_values: text("new_values"), // JSON string
+  old_values: text("old_values"),   
+  new_values: text("new_values"),   
   ip_address: text("ip_address"),
   user_agent: text("user_agent"),
   metadata: jsonb('metadata'), 

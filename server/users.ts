@@ -78,7 +78,7 @@ export const signUp = async (
 export const getAllUsers = async () => {
   try {
     const dateThreshold = new Date();
-    dateThreshold.setHours(dateThreshold.getHours() - 24); // More precise 24-hour window
+    dateThreshold.setHours(dateThreshold.getHours() - 24);   
 
     const users = await db
       .select({

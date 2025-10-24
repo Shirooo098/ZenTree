@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "@/db/drizzle"; // your drizzle instance
+import { db } from "@/db/drizzle";   
 import { nextCookies } from "better-auth/next-js";
 import { schema } from "@/db/schema"
 
@@ -9,7 +9,7 @@ import { ac, admin, user } from "./auth/permissions"
 import { sendEmailAction } from "../actions/send-email.action";
 
 
-// const resend = new Resend(process.env.ZENTREE_RESEND_API_KEY as string)
+  
 
 export const auth = betterAuth({
     socialProviders: {
@@ -40,7 +40,7 @@ export const auth = betterAuth({
         }
     },
     database: drizzleAdapter(db, {
-        provider: "pg", // or "mysql", "sqlite"
+        provider: "pg",   
         schema
     }),
     plugins: [
@@ -70,7 +70,7 @@ export const auth = betterAuth({
         }),
         nextCookies(),
     ],
-    trustedOrigins: [process.env.BETTER_AUTH_URL as string, "http://localhost:3000"],
+    trustedOrigins: [process.env.BETTER_AUTH_URL as string, "http:  
     rateLimit: {
         enabled: true,
         window: 30,

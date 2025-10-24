@@ -1,4 +1,4 @@
-// app/api/admin/refund/[id]/route.ts
+  
 import { createAuditLog, getRequestMetadata } from "@/app/lib/audit-server.action";
 import { db } from "@/db/drizzle";
 import { refund, refund_items, products, orders, order_status } from "@/db/schema";
@@ -62,13 +62,13 @@ export async function POST(
       );
     }
 
-    // Get metadata for audit logs
+      
     const { ipAddress, userAgent } = await getRequestMetadata();
     let updatedRefund;
     let updatedOrder;
 
     await db.transaction(async (tx) => {
-      // Get the refund to find the associated order
+        
       const [existingRefund] = await tx
         .select()
         .from(refund)
@@ -79,14 +79,14 @@ export async function POST(
         throw new Error("Refund not found");
       }
 
-      // Get old order data for audit
+        
       const [oldOrder] = await tx
         .select()
         .from(orders)
         .where(eq(orders.order_id, existingRefund.order_id))
         .limit(1);
 
-      // Determine the order status based on refund status
+        
       let orderStatusName: string;
       if (newStatus === 'approved') {
         orderStatusName = 'refunded';
@@ -96,7 +96,7 @@ export async function POST(
         orderStatusName = 'refund processing';
       }
 
-      // Get the order status ID
+        
       const [targetOrderStatus] = await tx
         .select()
         .from(order_status)
@@ -107,7 +107,7 @@ export async function POST(
         throw new Error(`Order status "${orderStatusName}" not found`);
       }
 
-      // Update refund status
+        
       [updatedRefund] = await tx
         .update(refund)
         .set({
@@ -119,7 +119,7 @@ export async function POST(
         .where(eq(refund.refund_id, refundId))
         .returning();
 
-      // Create audit log for refund update
+        
       await createAuditLog({
         userId: session.id,
         action: 'update',
@@ -137,7 +137,7 @@ export async function POST(
         userAgent,
       });
 
-      // Update order status
+        
       [updatedOrder] = await tx
         .update(orders)
         .set({
@@ -148,7 +148,7 @@ export async function POST(
         .where(eq(orders.order_id, existingRefund.order_id))
         .returning();
 
-      // Create audit log for order update
+        
       await createAuditLog({
         userId: session.id,
         action: 'update',
@@ -167,7 +167,7 @@ export async function POST(
       console.log(`✅ Updated refund #${refundId} to ${newStatus}`);
       console.log(`✅ Updated order #${existingRefund.order_id} to ${orderStatusName}`);
 
-      // If approving, process items
+        
       if (newStatus === 'approved') {
         if (!item_conditions || Object.keys(item_conditions).length === 0) {
           throw new Error("Item conditions are required when approving a refund");
@@ -184,7 +184,7 @@ export async function POST(
 
         console.log(`  Processing ${items.length} items...`);
 
-        // Process each item
+          
         for (const item of items) {
           const condition = item_conditions[item.refund_item_id];
           
@@ -194,14 +194,14 @@ export async function POST(
 
           const isResellable = condition === 'resellable';
 
-          // Get old product stock for audit
+            
           const [oldProduct] = await tx
             .select()
             .from(products)
             .where(eq(products.product_id, item.product_id))
             .limit(1);
 
-          // Update refund item with condition
+            
           await tx
             .update(refund_items)
             .set({
@@ -213,7 +213,7 @@ export async function POST(
 
           console.log(`  ↳ Item #${item.refund_item_id}: ${condition}, restocked: ${isResellable}`);
 
-          // If resellable, restore stock
+            
           if (isResellable) {
             const [updatedProduct] = await tx
               .update(products)
@@ -225,7 +225,7 @@ export async function POST(
               .where(eq(products.product_id, item.product_id))
               .returning();
 
-            // Create audit log for stock restoration
+              
             await createAuditLog({
               userId: session.id,
               action: 'update',

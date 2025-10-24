@@ -16,28 +16,29 @@ export default function Page() {
       .then((data) => setBanner(data));
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setBanner({ ...banner, [e.target.name]: e.target.value });
   };
 
-const handleSave = async () => {
-  try {
-    const res = await fetch("/api/top-banner", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(banner),
-    });
+  const handleSave = async () => {
+    try {
+      const res = await fetch("/api/top-banner", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(banner),
+      });
 
-    if (res.ok) {
-      toast.success("Content banner updated!");
-    } else {
-      toast.error("Failed to update content banner.");
+      if (res.ok) {
+        toast.success("Content banner updated!");
+      } else {
+        toast.error("Failed to update content banner.");
+      }
+    } catch (error) {
+      toast.error("⚠️ An error occurred while updating the banner.");
     }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (error) {
-    toast.error("⚠️ An error occurred while updating the banner.");
-  }
-};
+  };
 
   return (
     <main className="min-h-screen bg-white px-4 py-12 flex flex-col items-center">
@@ -65,7 +66,6 @@ const handleSave = async () => {
             value={banner.description}
             onChange={handleChange}
           />
-          
         </div>
 
         <div className="flex justify-center">

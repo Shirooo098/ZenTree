@@ -26,12 +26,10 @@ export default function Cart() {
   const updateQuantity = useUpdateCartQuantity();
   const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set());
 
-  // Local quantity state for instant UI updates
   const [localQuantities, setLocalQuantities] = useState<
     Record<number, number>
   >({});
 
-  // Initialize local quantities when cart data loads
   useEffect(() => {
     if (!cart?.items || cart.items.length === 0) return;
 
@@ -56,16 +54,13 @@ export default function Cart() {
             quantity: validQuantity,
           },
           {
-            onSuccess: () => {
-              // Silent update
-            },
+            onSuccess: () => {},
           }
         );
       }
     });
 
     setLocalQuantities(quantities);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cart?.items]);
 
   const handleQuantityChange = (
@@ -91,7 +86,6 @@ export default function Cart() {
       (item) => item.cart_products_id === cartProductId
     )?.quantity;
 
-    // Only update if quantity changed
     if (localQty && localQty !== serverQty) {
       updateQuantity.mutate({ cartProductId, quantity: localQty });
     }
@@ -135,7 +129,6 @@ export default function Cart() {
       return;
     }
 
-    // Get selected items with updated quantities
     const selectedCartItems = cart.items
       .filter((item) => selectedItems.has(item.cart_products_id))
       .map((item) => ({
@@ -143,18 +136,16 @@ export default function Cart() {
         quantity: localQuantities[item.cart_products_id] || item.quantity,
       }));
 
-    // Store checkout data in sessionStorage (similar to direct checkout)
     const checkoutData = {
-      isDirect: false, // This is from cart, not product page
+      isDirect: false,
       fromCart: true,
       items: selectedCartItems,
       cartProductIds: Array.from(selectedItems),
     };
 
-    sessionStorage.setItem('checkout_data', JSON.stringify(checkoutData));
+    sessionStorage.setItem("checkout_data", JSON.stringify(checkoutData));
 
-    // Navigate to checkout page
-    router.push('/checkout');
+    router.push("/checkout");
   };
 
   const selectedTotal =
@@ -167,7 +158,6 @@ export default function Cart() {
 
   const selectedCount = selectedItems.size;
 
-  // Check if any selected item is out of stock
   const hasOutOfStock =
     cart?.items
       .filter((item) => selectedItems.has(item.cart_products_id))

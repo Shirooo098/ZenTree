@@ -51,7 +51,7 @@ export default function FaqsHero() {
               className="w-full h-full pl-4 outline-none placeholder-gray-500 text-sm"
             />
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              xmlns="http:  
               width="22"
               height="22"
               viewBox="0 0 30 30"

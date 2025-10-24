@@ -44,7 +44,7 @@ const BanUserDialog = ({
   onSuccess,
 }: BanUserDialogProps) => {
   const [banReason, setBanReason] = useState("");
-  const [banDuration, setBanDuration] = useState("7"); // days
+  const [banDuration, setBanDuration] = useState("7");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleBan = async () => {
@@ -56,7 +56,7 @@ const BanUserDialog = ({
     setIsLoading(true);
     try {
       const daysInSeconds = parseInt(banDuration) * 60 * 60 * 24;
-      
+
       const result = await banUser(user.id, banReason, daysInSeconds);
 
       if (result.success) {
@@ -142,11 +142,7 @@ const BanUserDialog = ({
         </div>
 
         <DialogFooter>
-          <Button
-            variant="outline"
-            onClick={handleClose}
-            disabled={isLoading}
-          >
+          <Button variant="outline" onClick={handleClose} disabled={isLoading}>
             Cancel
           </Button>
           <Button

@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
     const periodDate = new Date();
     periodDate.setDate(periodDate.getDate() - period);
 
-    // First get all products with their performance data
+      
     const performanceData = await db
       .select({
         product_id: products.product_id,
@@ -77,7 +77,7 @@ export async function GET(request: NextRequest) {
         products.stock
       );
 
-    // Calculate trends for each product
+      
     const productsWithTrends = await Promise.all(
       performanceData.map(async (product) => {
         const trend = await calculateTrend(
@@ -101,7 +101,7 @@ export async function GET(request: NextRequest) {
       })
     );
 
-    // Sort the results based on type
+      
     const sortedProducts = productsWithTrends.sort((a, b) => {
       if (type === "top") {
         return b.total_revenue - a.total_revenue;
@@ -110,7 +110,7 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    // Apply limit
+      
     const limitedProducts = sortedProducts.slice(0, limit);
 
     return NextResponse.json({

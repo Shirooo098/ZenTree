@@ -2,9 +2,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-
 export default function Page() {
-  // Hero section
   const [hero, setHero] = useState({
     quote1: "",
     quote2: "",
@@ -12,7 +10,6 @@ export default function Page() {
     author: "",
   });
 
-  // Bonsai section
   const [bonsai, setBonsai] = useState({
     bonsai1_title: "",
     bonsai1_description: "",
@@ -20,15 +17,13 @@ export default function Page() {
     bonsai2_description: "",
   });
 
-  // Promotion banner section
   const [banner, setBanner] = useState({
     title: "",
     subtitle: "",
     discount_text: "",
-    show_banner: true, // ✅ include visibility in initial state
+    show_banner: true,
   });
 
-  // Fetch content for all sections
   useEffect(() => {
     fetch("/api/homepage-content")
       .then((res) => res.json())
@@ -40,10 +35,9 @@ export default function Page() {
 
     fetch("/api/promotion-banner")
       .then((res) => res.json())
-      .then((data) => setBanner(data)); 
+      .then((data) => setBanner(data));
   }, []);
 
-  // Handlers
   const handleHeroChange = (e: any) =>
     setHero({ ...hero, [e.target.name]: e.target.value });
   const handleBonsaiChange = (e: any) =>
@@ -51,54 +45,51 @@ export default function Page() {
   const handleBannerChange = (e: any) =>
     setBanner({ ...banner, [e.target.name]: e.target.value });
 
-// Save Hero
-const saveHero = async () => {
-  const res = await fetch("/api/homepage-content", {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(hero),
-  });
+  const saveHero = async () => {
+    const res = await fetch("/api/homepage-content", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(hero),
+    });
 
-  if (res.ok) {
-    toast.success("Banner content updated!");
-  } else {
-    toast.error("Failed to update banner content.");
-  }
-};
-
-// Save Bonsai
-const saveBonsai = async () => {
-  const res = await fetch("/api/bonsai-content", {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(bonsai),
-  });
-
-  if (res.ok) {
-    toast.success("Bonsai content updated!");
-  } else {
-    toast.error("Failed to update bonsai content.");
-  }
-};
-
-// Save Banner
-const saveBanner = async () => {
-  const res = await fetch("/api/promotion-banner", {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(banner),
-  });
-
-  if (res.ok) {
-    if (banner.show_banner) {
-      toast.success("Promotion banner updated and visible!");
+    if (res.ok) {
+      toast.success("Banner content updated!");
     } else {
-      toast.warning("Promotion banner updated and hidden!");
+      toast.error("Failed to update banner content.");
     }
-  } else {
-    toast.error("Failed to update banner.");
-  }
-};
+  };
+
+  const saveBonsai = async () => {
+    const res = await fetch("/api/bonsai-content", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(bonsai),
+    });
+
+    if (res.ok) {
+      toast.success("Bonsai content updated!");
+    } else {
+      toast.error("Failed to update bonsai content.");
+    }
+  };
+
+  const saveBanner = async () => {
+    const res = await fetch("/api/promotion-banner", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(banner),
+    });
+
+    if (res.ok) {
+      if (banner.show_banner) {
+        toast.success("Promotion banner updated and visible!");
+      } else {
+        toast.warning("Promotion banner updated and hidden!");
+      }
+    } else {
+      toast.error("Failed to update banner.");
+    }
+  };
 
   return (
     <main className="min-h-screen bg-white px-4 py-12 flex flex-col items-center space-y-16">

@@ -47,13 +47,13 @@ export function useDirectCheckout() {
     return useMutation({
         mutationFn: directCheckout,
         onSuccess: (data) => {
-            // Store order IDs in sessionStorage for the complete-order page
+              
             sessionStorage.setItem("pending_order_id", data.order.order_id.toString());
             sessionStorage.setItem("paypal_order_id", data.order.paypal_order_id);
 
             toast.success("Redirecting to PayPal...");
 
-            // Small delay to show the toast before redirect
+              
             setTimeout(() => {
                 router.push(data.order.approval_url)
             }, 500);
@@ -75,7 +75,7 @@ export function useCheckout() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    checkoutItems: checkoutItems  // Send full array with quantities
+                    checkoutItems: checkoutItems    
                 }),
                 credentials: 'include',
             });
@@ -89,20 +89,20 @@ export function useCheckout() {
         },
         onSuccess: (data) => {
             if (data.success && data.order.approval_url) {
-                // Store order information in sessionStorage
+                  
                 if (typeof window !== 'undefined') {
                     sessionStorage.setItem("pending_order_id", data.order.order_id.toString());
                     sessionStorage.setItem("paypal_order_id", data.order.paypal_order_id);
-                    // Store which cart items were checked out so we can remove them later
+                      
                     sessionStorage.setItem("checkout_cart_ids", JSON.stringify(data.order.cart_product_ids));
                 }
                 
-                // DON'T invalidate cart here - cart should stay as-is until payment is complete
-                // Only invalidate after successful payment confirmation
+                  
+                  
                 
                 toast.success("Redirecting to PayPal...");
                 
-                // Redirect to PayPal
+                  
                 setTimeout(() => {
                     window.location.href = data.order.approval_url;
                 }, 500);

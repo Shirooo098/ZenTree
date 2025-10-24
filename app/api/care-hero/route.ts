@@ -6,7 +6,7 @@ export async function GET() {
   try {
     const data = await db.select().from(care_hero).limit(1);
     return Response.json(data[0]);
-     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+       
   } catch (error) {
     return Response.json({ error: "Failed to fetch Care Hero" }, { status: 500 });
   }
@@ -27,7 +27,7 @@ export async function PUT(req: Request) {
     }
 
     return Response.json({ success: true });
-     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+       
   } catch (error) {
     return Response.json({ error: "Failed to update Care Hero" }, { status: 500 });
   }

@@ -74,18 +74,18 @@ export const useProductForm = ({ mode, productId, productData, initialData }: Us
             const { signature, expire, token, publicKey } = authParams;
 
             const uploadResponse = await upload({
-                 // Authentication parameters
+                   
                 expire,
                 token,
                 signature,
                 publicKey,
                 file,
-                fileName: file.name,// Optionally set a custom file name
-                // Progress callback to update upload progress state       
+                fileName: file.name,  
+                  
                 onProgress: (event) => {
                     setProgress((event.loaded / event.total) * 100);
                 },
-                // Abort signal to allow cancellation of the upload if needed.
+                  
                 abortSignal: abortController.signal,
             });
 
@@ -140,7 +140,7 @@ export const useProductForm = ({ mode, productId, productData, initialData }: Us
             formData.append("imageRecordId", imageRecordId);
         }
 
-        // Add product ID for edit mode
+          
         if (mode === 'edit' && productId) {
             formData.append("productId", String(productId));
         }

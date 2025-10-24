@@ -1,4 +1,3 @@
-// app/admin/audit-logs/AuditLogDetailsDialog.tsx
 "use client";
 
 import {
@@ -70,8 +69,8 @@ export function AuditLogDetailsDialog({
                     log.action === "create"
                       ? "default"
                       : log.action === "update"
-                      ? "secondary"
-                      : "destructive"
+                        ? "secondary"
+                        : "destructive"
                   }
                 >
                   {log.action.toUpperCase()}
@@ -92,7 +91,9 @@ export function AuditLogDetailsDialog({
               <p className="text-sm text-muted-foreground">Performed By</p>
               <div className="mt-1">
                 <p className="font-medium">{log.user_name}</p>
-                <p className="text-sm text-muted-foreground">{log.user_email}</p>
+                <p className="text-sm text-muted-foreground">
+                  {log.user_email}
+                </p>
               </div>
             </div>
 
@@ -125,7 +126,8 @@ export function AuditLogDetailsDialog({
             {renderJsonData(log.new_values, "New Values")}
 
             {/* Metadata */}
-            {log.metadata && renderJsonData(log.metadata, "Additional Metadata")}
+            {log.metadata &&
+              renderJsonData(log.metadata, "Additional Metadata")}
           </div>
         ) : null}
       </DialogContent>

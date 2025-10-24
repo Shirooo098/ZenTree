@@ -15,7 +15,7 @@ interface CompleteOrderResponse {
 
 type UpdateOrderStatusPayload = {
   orderId: number;
-  status: string; // e.g., "delivered", "shipped"
+  status: string;   
 };
 
 type UpdateOrderStatusResponse = {

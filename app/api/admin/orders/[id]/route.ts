@@ -1,4 +1,4 @@
-// app/api/admin/orders/[id]/route.ts
+  
 import { createAuditLog, getRequestMetadata } from "@/app/lib/audit-server.action";
 import { db } from "@/db/drizzle";
 import { order_status, orders } from "@/db/schema";
@@ -61,7 +61,7 @@ export async function PATCH(
       );
     }
 
-    // Get old order data for audit log
+      
     const [oldOrder] = await db
       .select()
       .from(orders)
@@ -96,7 +96,7 @@ export async function PATCH(
         break;
     }
 
-    // Update order
+      
     const [updatedOrder] = await db
       .update(orders)
       .set({
@@ -108,7 +108,7 @@ export async function PATCH(
       .where(eq(orders.order_id, orderId))
       .returning();
 
-    // Create audit log
+      
     const { ipAddress, userAgent } = await getRequestMetadata();
     await createAuditLog({
       userId: session.id,

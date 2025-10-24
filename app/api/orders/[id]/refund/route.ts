@@ -20,7 +20,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   }
 
   try {
-    // Validate that all items belong to this order
+      
     const orderProducts = await db
       .select()
       .from(order_products)
@@ -36,7 +36,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         );
       }
 
-      // Validate quantity
+        
       const orderProduct = orderProducts.find(p => p.product_id === item.product_id);
       if (orderProduct && item.quantity > orderProduct.quantity) {
         return NextResponse.json(
@@ -46,7 +46,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       }
     }
 
-    // Create refund record
+      
     const [newRefund] = await db.insert(refund).values({
       order_id: orderId,
       user_id,
@@ -57,7 +57,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       status: "pending",
     }).returning();
 
-    // Insert refund items with product details
+      
     const refundItemsData = await Promise.all(
       (items as RefundItem[]).map(async (item) => {
         const orderProduct = orderProducts.find(p => p.product_id === item.product_id);

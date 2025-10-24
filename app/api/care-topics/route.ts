@@ -22,14 +22,14 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// PUT: update a topic
+  
 export async function PUT(req: NextRequest) {
   const { id, title, description } = await req.json();
   await db.update(care_topics).set({ title, description }).where(eq(care_topics.id, id));
   return NextResponse.json({ success: true });
 }
 
-// DELETE: remove a topic
+  
 export async function DELETE(req: NextRequest) {
   const { id } = await req.json();
   await db.delete(care_topics).where(eq(care_topics.id, id));

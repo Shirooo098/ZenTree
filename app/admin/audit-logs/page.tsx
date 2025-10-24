@@ -1,4 +1,3 @@
-// app/admin/audit-logs/page.tsx
 "use client";
 
 import AuditLogsTable from "@/app/ui/admin/audit/AuditLogsTable";
@@ -14,27 +13,29 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useAuditLogs, usePrefetchAuditLogs } from "@/app/lib/query/admin/audit/useAudit";
+import {
+  useAuditLogs,
+  usePrefetchAuditLogs,
+} from "@/app/lib/query/admin/audit/useAudit";
 
 export default function Page() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const page = Number(searchParams.get('page')) || 1;
-  const table = searchParams.get('table') || undefined;
-  const action = searchParams.get('action') || undefined;
-  
+  const page = Number(searchParams.get("page")) || 1;
+  const table = searchParams.get("table") || undefined;
+  const action = searchParams.get("action") || undefined;
+
   const [showFilters, setShowFilters] = useState(false);
 
-  const { data, isLoading, isFetching } = useAuditLogs({ 
-    page, 
+  const { data, isLoading, isFetching } = useAuditLogs({
+    page,
     limit: 50,
     table,
-    action 
+    action,
   });
 
   const prefetchAuditLogs = usePrefetchAuditLogs();
 
-  // Prefetch next page
   useEffect(() => {
     if (data && page < data.pages) {
       prefetchAuditLogs({ page: page + 1, limit: 50, table, action });
@@ -43,30 +44,33 @@ export default function Page() {
 
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams();
-    params.set('page', newPage.toString());
-    if (table) params.set('table', table);
-    if (action) params.set('action', action);
-    
+    params.set("page", newPage.toString());
+    if (table) params.set("table", table);
+    if (action) params.set("action", action);
+
     router.push(`/admin/audit-logs?${params.toString()}`);
   };
 
-  const handleFilterChange = (filterType: 'table' | 'action', value: string) => {
+  const handleFilterChange = (
+    filterType: "table" | "action",
+    value: string
+  ) => {
     const params = new URLSearchParams();
-    params.set('page', '1'); // Reset to page 1 when filtering
-    
-    if (filterType === 'table') {
-      if (value && value !== 'all') params.set('table', value);
-      if (action) params.set('action', action);
+    params.set("page", "1");
+
+    if (filterType === "table") {
+      if (value && value !== "all") params.set("table", value);
+      if (action) params.set("action", action);
     } else {
-      if (table) params.set('table', table);
-      if (value && value !== 'all') params.set('action', value);
+      if (table) params.set("table", table);
+      if (value && value !== "all") params.set("action", value);
     }
-    
+
     router.push(`/admin/audit-logs?${params.toString()}`);
   };
 
   const clearFilters = () => {
-    router.push('/admin/audit-logs?page=1');
+    router.push("/admin/audit-logs?page=1");
     setShowFilters(false);
   };
 
@@ -91,8 +95,6 @@ export default function Page() {
     );
   }
 
-
-
   if (!data) {
     return null;
   }
@@ -112,8 +114,9 @@ export default function Page() {
           </span>
           <div className="flex items-center gap-4 mt-2">
             <span className="text-sm text-muted-foreground">
-              Total Records: <span className="font-semibold">{data.total}</span> | 
-              Page <span className="font-semibold">{data.page}</span> of <span className="font-semibold">{data.pages}</span>
+              Total Records: <span className="font-semibold">{data.total}</span>{" "}
+              | Page <span className="font-semibold">{data.page}</span> of{" "}
+              <span className="font-semibold">{data.pages}</span>
             </span>
             {isFetching && (
               <div className="flex items-center text-sm text-muted-foreground">
@@ -147,8 +150,8 @@ export default function Page() {
             <div className="flex-1">
               <label className="text-sm font-medium mb-2 block">Table</label>
               <Select
-                value={table || 'all'}
-                onValueChange={(value) => handleFilterChange('table', value)}
+                value={table || "all"}
+                onValueChange={(value) => handleFilterChange("table", value)}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="All Tables" />
@@ -166,8 +169,8 @@ export default function Page() {
             <div className="flex-1">
               <label className="text-sm font-medium mb-2 block">Action</label>
               <Select
-                value={action || 'all'}
-                onValueChange={(value) => handleFilterChange('action', value)}
+                value={action || "all"}
+                onValueChange={(value) => handleFilterChange("action", value)}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="All Actions" />
@@ -202,9 +205,11 @@ export default function Page() {
         <div className="mb-4 flex flex-wrap gap-2">
           {table && (
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
-              <span>Table: <span className="font-semibold">{table}</span></span>
+              <span>
+                Table: <span className="font-semibold">{table}</span>
+              </span>
               <button
-                onClick={() => handleFilterChange('table', 'all')}
+                onClick={() => handleFilterChange("table", "all")}
                 className="hover:bg-blue-200 rounded-full p-0.5"
               >
                 <X className="h-3 w-3" />
@@ -213,9 +218,11 @@ export default function Page() {
           )}
           {action && (
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
-              <span>Action: <span className="font-semibold">{action}</span></span>
+              <span>
+                Action: <span className="font-semibold">{action}</span>
+              </span>
               <button
-                onClick={() => handleFilterChange('action', 'all')}
+                onClick={() => handleFilterChange("action", "all")}
                 className="hover:bg-green-200 rounded-full p-0.5"
               >
                 <X className="h-3 w-3" />
@@ -234,9 +241,10 @@ export default function Page() {
       {data.pages > 1 && (
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6">
           <div className="text-sm text-muted-foreground">
-            Showing {((page - 1) * 50) + 1} to {Math.min(page * 50, data.total)} of {data.total} entries
+            Showing {(page - 1) * 50 + 1} to {Math.min(page * 50, data.total)}{" "}
+            of {data.total} entries
           </div>
-          
+
           <div className="flex gap-2">
             <Button
               variant="outline"
@@ -245,7 +253,7 @@ export default function Page() {
             >
               Previous
             </Button>
-            
+
             {/* Page Numbers */}
             <div className="hidden sm:flex gap-1">
               {Array.from({ length: Math.min(5, data.pages) }, (_, i) => {
@@ -278,7 +286,7 @@ export default function Page() {
             <div className="sm:hidden flex items-center px-4 py-2 border rounded bg-slate-100">
               {data.page} / {data.pages}
             </div>
-            
+
             <Button
               variant="outline"
               disabled={page === data.pages || isFetching}

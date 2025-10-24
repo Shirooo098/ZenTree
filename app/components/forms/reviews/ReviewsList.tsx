@@ -1,4 +1,3 @@
-// app/components/forms/reviews/ReviewsList.tsx
 "use client";
 
 import { Leaf } from "lucide-react";

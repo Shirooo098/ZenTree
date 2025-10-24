@@ -4,7 +4,10 @@ import Image from "next/image";
 import { ShieldCheckIcon, TruckIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { CartItemProps } from "@/app/types/definition";
-import { useCheckout, useDirectCheckout } from "@/app/lib/query/checkout/checkout-data";
+import {
+  useCheckout,
+  useDirectCheckout,
+} from "@/app/lib/query/checkout/checkout-data";
 import { toast } from "sonner";
 import { useState } from "react";
 
@@ -27,59 +30,57 @@ export default function OrderSummary({
   total,
   onCheckout,
   isDirectCheckout = false,
-  isFromCart = false
+  isFromCart = false,
 }: OrderSummaryProps) {
   const router = useRouter();
   const { mutate: checkoutFromCart, isPending: isCartPending } = useCheckout();
-  const { mutate: directCheckout, isPending: isDirectPending } = useDirectCheckout();
+  const { mutate: directCheckout, isPending: isDirectPending } =
+    useDirectCheckout();
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleCompletePurchase = async () => {
-  if (isProcessing) return;
-  
-  setIsProcessing(true);
+    if (isProcessing) return;
 
-  try {
-    // Check if this is from cart by looking at sessionStorage
-    const storedData = sessionStorage.getItem('checkout_data');
-    const parsed = storedData ? JSON.parse(storedData) : null;
-    
+    setIsProcessing(true);
+
+    try {
+      const storedData = sessionStorage.getItem("checkout_data");
+      const parsed = storedData ? JSON.parse(storedData) : null;
+
       if (parsed?.fromCart) {
-        // Cart checkout - use cartProductIds
-        const checkoutItems = cartItems.map(item => ({
+        const checkoutItems = cartItems.map((item) => ({
           cartProductId: item.cart_products_id,
           quantity: item.quantity,
         }));
 
         checkoutFromCart(checkoutItems, {
           onSuccess: () => {
-            sessionStorage.removeItem('checkout_data');
+            sessionStorage.removeItem("checkout_data");
           },
           onError: (error: Error) => {
             setIsProcessing(false);
             toast.error(error.message || "Failed to process checkout");
-          }
+          },
         });
       } else if (isDirectCheckout) {
-          // Direct checkout from product page
-          const items = cartItems.map(item => ({
-            productId: item.product_id,
-            quantity: item.quantity,
-          }));
+        const items = cartItems.map((item) => ({
+          productId: item.product_id,
+          quantity: item.quantity,
+        }));
 
-          directCheckout(items, {
-            onSuccess: () => {
-              sessionStorage.removeItem('checkout_data');
-            },
-            onError: (error: Error) => {
-              setIsProcessing(false);
-              toast.error(error.message || "Failed to process checkout");
-            }
-          });
+        directCheckout(items, {
+          onSuccess: () => {
+            sessionStorage.removeItem("checkout_data");
+          },
+          onError: (error: Error) => {
+            setIsProcessing(false);
+            toast.error(error.message || "Failed to process checkout");
+          },
+        });
       }
     } catch (error) {
       setIsProcessing(false);
-      console.error(error)
+      console.error(error);
       toast.error("An unexpected error occurred");
     }
   };
@@ -89,7 +90,7 @@ export default function OrderSummary({
     <div>
       <div className="bg-white rounded-lg border border-gray-300 p-6 shadow-sm sticky top-24">
         <h3 className="text-xl font-semibold mb-4">Order Summary</h3>
-        
+
         {/* Order Items */}
         <div className="space-y-4 mb-6 max-h-96 overflow-y-auto">
           {cartItems.map((item, index) => (
@@ -108,7 +109,9 @@ export default function OrderSummary({
                 <h4 className="font-medium">{item.product_name}</h4>
                 <p className="text-sm text-gray-500">{item.product_category}</p>
                 <div className="flex items-center mt-1">
-                  <span className="font-semibold">₱{Number(item.product_price).toFixed(2)}</span>
+                  <span className="font-semibold">
+                    ₱{Number(item.product_price).toFixed(2)}
+                  </span>
                   <span className="text-gray-500 text-sm ml-2">
                     x{item.quantity}
                   </span>
@@ -126,7 +129,7 @@ export default function OrderSummary({
           </div>
           <div className="flex justify-between">
             <span className="text-gray-500">Shipping</span>
-            <span>{shipping === 0 ? 'FREE' : `₱${shipping.toFixed(2)}`}</span>
+            <span>{shipping === 0 ? "FREE" : `₱${shipping.toFixed(2)}`}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-gray-500">Tax (5%)</span>

@@ -1,10 +1,10 @@
-// app/api/reviews/route.ts
+  
 import { db } from "@/db/drizzle";
 import { eq } from "drizzle-orm";
 import { products, reviews, user} from "@/db/schema";
 import { NextRequest, NextResponse } from "next/server";
  
-// GET reviews for a specific product
+  
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{id: string}>}

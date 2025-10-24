@@ -51,7 +51,7 @@ export async function DELETE(request: Request) {
             );
         }
 
-        // Delete the cart product
+          
         await db
             .delete(cart_products)
             .where(eq(cart_products.cart_products_id, cartProductId));

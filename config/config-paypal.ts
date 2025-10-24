@@ -45,7 +45,7 @@ export async function createPayPalOrder(cartItems: CartItem[]) {
     },
   }));
 
-  // Calculate total
+    
   const total = cartItems.reduce(
     (sum, item) => sum + Number(item.product_price) * item.quantity,
     0

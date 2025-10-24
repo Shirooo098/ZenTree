@@ -1,4 +1,3 @@
-// EditUserDialog.tsx
 "use client";
 
 import { useState } from "react";
@@ -51,7 +50,11 @@ type UserData = {
 const editUserSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
-  username: z.string().min(3, "Username must be at least 3 characters").optional().or(z.literal("")),
+  username: z
+    .string()
+    .min(3, "Username must be at least 3 characters")
+    .optional()
+    .or(z.literal("")),
   role: z.enum(["admin", "staff", "user"], {
     message: "Please select a role",
   }),

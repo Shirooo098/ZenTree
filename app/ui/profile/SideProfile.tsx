@@ -1,19 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation"; 
-import {  User, History, MapPinHouse } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { User, History, MapPinHouse } from "lucide-react";
 import Logout from "../logout";
 
 export default function SideProfile() {
-  const pathname = usePathname(); 
+  const pathname = usePathname();
 
-  // define the sidebar links
   const links = [
     { href: "/profile", label: "Profile Information", icon: <User /> },
-    
+
     { href: "/profile/order", label: "Order History", icon: <History /> },
-    { href: "/profile/shipping-address", label: "Shipping Address", icon: <MapPinHouse /> },
+    {
+      href: "/profile/shipping-address",
+      label: "Shipping Address",
+      icon: <MapPinHouse />,
+    },
   ];
 
   return (
@@ -21,7 +24,7 @@ export default function SideProfile() {
       <div className="flex flex-col justify-between h-[500px] w-[300px] bg-gray-100 p-10 rounded-md inset-shadow-nav">
         <div className="space-y-4">
           {links.map((link) => {
-            const isActive = pathname === link.href; 
+            const isActive = pathname === link.href;
 
             return (
               <Link

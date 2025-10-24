@@ -20,7 +20,7 @@ export async function PATCH(
   }
 
   try {
-    // Get the refund to find the associated order
+      
     const [existingRefund] = await db
       .select()
       .from(refund)
@@ -34,7 +34,7 @@ export async function PATCH(
       );
     }
 
-    // Get the "refund processing" order status ID
+      
     const [refundProcessingStatus] = await db
       .select()
       .from(order_status)
@@ -48,7 +48,7 @@ export async function PATCH(
       );
     }
 
-    // Update refund status
+      
     const [updatedRefund] = await db
       .update(refund)
       .set({ 
@@ -58,7 +58,7 @@ export async function PATCH(
       .where(eq(refund.refund_id, refundId))
       .returning();
 
-    // Update order status to "refund processing"
+      
     await db
       .update(orders)
       .set({ 

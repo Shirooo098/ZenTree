@@ -1,11 +1,11 @@
-// middleware.ts
+  
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "./app/lib/auth";
 import { headers } from "next/headers";
 
 const protectedRoute = {
 	admin: ["/admin"],
-	adminOnly: ["/admin/audit-logs"], // Only admin, not staff
+	adminOnly: ["/admin/audit-logs"],   
 	user: ["/profile", "/cart"],
 	product: ["/product/"]
 }
@@ -35,22 +35,22 @@ export async function middleware(request: NextRequest) {
 
 	const isCheckoutRoute = /^\/product\/[^/]+\/checkout(\/confirm)?$/.test(currentPath);
 
-	// Redirect to sign-in if not logged in and accessing protected routes
+	  
     if (!isLoggedIn && (isAdminRoute || isUserRoute || isCheckoutRoute)) {
         return NextResponse.redirect(new URL("/sign-in", request.url));
     }
 
-	// Admin routes: allow admin and staff
+	  
 	if (isLoggedIn && isAdminRoute && userRole !== 'admin' && userRole !== 'staff') {
 		return NextResponse.redirect(new URL("/", request.url));
 	}
 
-	// Admin-only routes: only allow admin (not staff)
+	  
 	if (isLoggedIn && isAdminOnlyRoute && userRole !== 'admin') {
 		return NextResponse.redirect(new URL("/admin", request.url));
 	}
 
-	// Redirect logged-in users away from auth pages
+	  
 	if (isLoggedIn && (currentPath === "/sign-in" || currentPath === "/sign-up")) {
         const redirectPath = (userRole === 'admin' || userRole === 'staff') ? '/admin' : '/profile';
         return NextResponse.redirect(new URL(redirectPath, request.url));

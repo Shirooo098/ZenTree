@@ -23,14 +23,12 @@ interface Hero {
 }
 
 export default function AdminFaqsPage() {
-  // ✅ HERO SECTION STATE
   const [faqHero, setFaqHero] = useState<Hero>({
     title: "",
     description: "",
     image_url: "",
   });
 
-  // ✅ FAQ STATES
   const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [form, setForm] = useState<FAQ>({
     category: "",
@@ -39,13 +37,11 @@ export default function AdminFaqsPage() {
   });
   const [editing, setEditing] = useState<FAQ | null>(null);
 
-  // ✅ Fetch data on mount
   useEffect(() => {
     fetchFaqHero();
     fetchFaqs();
   }, []);
 
-  // ✅ Fetch Hero
   const fetchFaqHero = async () => {
     try {
       const res = await fetch("/api/faq-hero");
@@ -56,14 +52,12 @@ export default function AdminFaqsPage() {
     }
   };
 
-  // ✅ Fetch FAQs
   const fetchFaqs = async () => {
     const res = await fetch("/api/faqs");
     const data = await res.json();
     setFaqs(Array.isArray(data) ? data : []);
   };
 
-  // ✅ Save Hero
   const saveFaqHero = async () => {
     const toastId = toast.loading("Saving FAQ Hero...");
     try {
@@ -78,16 +72,16 @@ export default function AdminFaqsPage() {
     }
   };
 
-  // ✅ Handle Hero Input
   const handleHeroChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setFaqHero({ ...faqHero, [e.target.name]: e.target.value });
   };
 
-  // ✅ Handle FAQ Create / Update
   const handleSubmit = async () => {
-    const toastId = toast.loading(editing ? "Updating FAQ..." : "Adding FAQ...");
+    const toastId = toast.loading(
+      editing ? "Updating FAQ..." : "Adding FAQ..."
+    );
     try {
       await fetch("/api/faqs", {
         method: editing ? "PUT" : "POST",
@@ -100,11 +94,10 @@ export default function AdminFaqsPage() {
       setEditing(null);
       fetchFaqs();
     } catch (err) {
-       console.error("Error:", err);
+      console.error("Error:", err);
       toast.error("Error saving FAQ", { id: toastId });
     }
   };
-
 
   const handleDelete = async (id: number) => {
     if (!confirm("Delete this FAQ?")) return;
@@ -126,7 +119,6 @@ export default function AdminFaqsPage() {
     setEditing(faq);
     setForm(faq);
   };
-
 
   const grouped = faqs.reduce((acc: any, faq) => {
     (acc[faq.category] = acc[faq.category] || []).push(faq);
@@ -223,9 +215,7 @@ export default function AdminFaqsPage() {
           {Object.keys(grouped).map((category) => (
             <div key={category} className="space-y-4">
               <div className="flex items-center justify-between mb-2">
-                <h2 className="text-xl font-bold text-green-700">
-                  {category}
-                </h2>
+                <h2 className="text-xl font-bold text-green-700">{category}</h2>
                 <Button
                   variant="outline"
                   className="border-green-600 text-green-600"

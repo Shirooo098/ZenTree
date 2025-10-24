@@ -3,9 +3,9 @@ import { FaTree, FaBookOpen } from "react-icons/fa";
 
 
 async function getAboutPageContent() {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http:  
   const res = await fetch(`${baseUrl}/api/aboutpage-content`, {
-    cache: 'no-store' // or 'force-cache' depending on your needs
+    cache: 'no-store'   
   });
  
   if (!res.ok) {

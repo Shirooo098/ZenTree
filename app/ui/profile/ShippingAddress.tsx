@@ -10,7 +10,6 @@ import Button from "@/app/ui/button";
 import { useActionState } from "react";
 import { toast } from "sonner";
 
-
 interface Address {
   address_id: number;
   user_id: string;
@@ -43,9 +42,9 @@ export default function ShippingAddress({
   });
 
   const [state, formAction] = useActionState(addAddress, {
-  message: "",
-  errors: {},
-});
+    message: "",
+    errors: {},
+  });
 
   const resetForm = () => {
     setFormState({
@@ -83,12 +82,12 @@ export default function ShippingAddress({
   const handleDelete = async (id: number) => {
     await deleteAddress(id);
 
-    toast.success("Delete Address Successfully")
+    toast.success("Delete Address Successfully");
     setAddresses(addresses.filter((a) => a.address_id !== id));
   };
 
   const fetchAddresses = async () => {
-    const res = await fetch("/api/get-addresses?userId=" + userId); // optional API route
+    const res = await fetch("/api/get-addresses?userId=" + userId);
     return await res.json();
   };
 
@@ -158,7 +157,12 @@ export default function ShippingAddress({
           />
 
           <div className="flex justify-end gap-2 mt-3">
-            <Button type="button" variant="secondary"  onClick={resetForm} className="px-3 py-2">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={resetForm}
+              className="px-3 py-2"
+            >
               Cancel
             </Button>
             <Button type="submit" variant="primary" className="px-3 py-2">
@@ -212,11 +216,16 @@ export default function ShippingAddress({
                 className="w-full p-2 border rounded"
               />
               <div className="flex justify-end gap-2 mt-2">
-                <Button variant="secondary" className="px-3 py-2" onClick={resetForm}>
+                <Button
+                  variant="secondary"
+                  className="px-3 py-2"
+                  onClick={resetForm}
+                >
                   Cancel
                 </Button>
                 <Button
-                  variant="primary" className="px-3 py-2"
+                  variant="primary"
+                  className="px-3 py-2"
                   onClick={() => handleUpdate(addr.address_id)}
                 >
                   Save
@@ -244,7 +253,7 @@ export default function ShippingAddress({
                   <button
                     onClick={() => handleDelete(addr.address_id)}
                     className="flex items-center gap-1 text-sm text-red-600 hover:underline"
-                  > 
+                  >
                     <Trash2 size={16} /> Delete
                   </button>
                 </div>

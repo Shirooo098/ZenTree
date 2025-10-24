@@ -38,7 +38,7 @@ export async function submitReview(
 
     const userId = session.user.id;
 
-    // Validate required fields
+      
     if (!data.productId || !data.rating) {
       return {
         success: false,
@@ -47,7 +47,7 @@ export async function submitReview(
       };
     }
 
-    // Validate rating range
+      
     if (data.rating < 1 || data.rating > 5) {
       return {
         success: false,
@@ -56,7 +56,7 @@ export async function submitReview(
       };
     }
 
-    // Optional: Validate order and delivery status
+      
     if (data.orderId) {
       const [order] = await db
         .select({
@@ -89,7 +89,7 @@ export async function submitReview(
         };
       }
 
-      // Verify product is in the order
+        
       const [orderProduct] = await db
         .select()
         .from(order_products)
@@ -110,7 +110,7 @@ export async function submitReview(
       }
     }
 
-    // Check for existing review
+      
     const [existingReview] = await db
       .select()
       .from(reviews)
@@ -130,7 +130,7 @@ export async function submitReview(
       };
     }
 
-    // Insert review
+      
     const [insertedReview] = await db
       .insert(reviews)
       .values({
@@ -173,7 +173,7 @@ export async function getProductReviews(productId: number) {
       .where(eq(reviews.product_id, productId))
       .orderBy(reviews.created_at);
 
-    // Calculate average rating
+      
     const avgRating =
       productReviews.length > 0
         ? productReviews.reduce((sum, r) => sum + r.rating, 0) /

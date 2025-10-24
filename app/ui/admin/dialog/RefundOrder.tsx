@@ -39,7 +39,9 @@ const RefundDetailsDialog = ({
   onClose,
   onSuccess,
 }: RefundDetailsDialogProps) => {
-  const [selectedConditions, setSelectedConditions] = useState<Record<number, string>>({});
+  const [selectedConditions, setSelectedConditions] = useState<
+    Record<number, string>
+  >({});
   const [adminNotes, setAdminNotes] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const updateRefundStatus = useUpdateRefundStatus();
@@ -54,18 +56,30 @@ const RefundDetailsDialog = ({
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'pending':
-        return <Badge className="bg-yellow-50 text-yellow-700 border-yellow-200">Pending</Badge>;
-      case 'approved':
-        return <Badge className="bg-green-50 text-green-700 border-green-200">Approved</Badge>;
-      case 'rejected':
-        return <Badge className="bg-red-50 text-red-700 border-red-200">Rejected</Badge>;
+      case "pending":
+        return (
+          <Badge className="bg-yellow-50 text-yellow-700 border-yellow-200">
+            Pending
+          </Badge>
+        );
+      case "approved":
+        return (
+          <Badge className="bg-green-50 text-green-700 border-green-200">
+            Approved
+          </Badge>
+        );
+      case "rejected":
+        return (
+          <Badge className="bg-red-50 text-red-700 border-red-200">
+            Rejected
+          </Badge>
+        );
       default:
         return <Badge>{status}</Badge>;
     }
   };
 
- const handleApprove = async () => {
+  const handleApprove = async () => {
     if (!refund) return;
 
     if (!refund.refund_items || refund.refund_items.length === 0) {
@@ -74,7 +88,7 @@ const RefundDetailsDialog = ({
     }
 
     const allConditionsSet = refund.refund_items.every(
-      item => selectedConditions[item.refund_item_id]
+      (item) => selectedConditions[item.refund_item_id]
     );
 
     if (!allConditionsSet) {
@@ -94,7 +108,7 @@ const RefundDetailsDialog = ({
           toast.success("Refund approved successfully");
           onSuccess?.();
           onClose();
-          // Reset form
+
           setSelectedConditions({});
           setAdminNotes("");
         },
@@ -124,7 +138,7 @@ const RefundDetailsDialog = ({
           toast.success("Refund rejected successfully");
           onSuccess?.();
           onClose();
-          // Reset form
+
           setSelectedConditions({});
           setAdminNotes("");
         },
@@ -136,7 +150,8 @@ const RefundDetailsDialog = ({
   };
 
   const calculateTotalRefund = () => {
-    if (!refund || !refund.refund_items || refund.refund_items.length === 0) return 0;
+    if (!refund || !refund.refund_items || refund.refund_items.length === 0)
+      return 0;
     return refund.refund_items.reduce(
       (total, item) => total + item.price_at_purchase * item.quantity,
       0
@@ -166,7 +181,9 @@ const RefundDetailsDialog = ({
           <div className="space-y-6 py-4">
             {/* Customer Information */}
             <div className="border-b pb-4">
-              <Label className="text-base font-semibold mb-2 block">Customer Information</Label>
+              <Label className="text-base font-semibold mb-2 block">
+                Customer Information
+              </Label>
               <div className="flex gap-3">
                 <div>
                   <p className="text-sm text-muted-foreground">Email</p>
@@ -174,7 +191,11 @@ const RefundDetailsDialog = ({
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Refund Type</p>
-                  <Badge variant={refund?.refund_type === 'full' ? 'default' : 'secondary'}>
+                  <Badge
+                    variant={
+                      refund?.refund_type === "full" ? "default" : "secondary"
+                    }
+                  >
                     {refund?.refund_type}
                   </Badge>
                 </div>
@@ -189,44 +210,62 @@ const RefundDetailsDialog = ({
 
             {/* Refund Reason */}
             <div className="border-b pb-4">
-              <Label className="text-base font-semibold mb-2 block">Refund Reason</Label>
+              <Label className="text-base font-semibold mb-2 block">
+                Refund Reason
+              </Label>
               <div className="bg-muted p-3 rounded-md">
                 <p className="text-sm font-medium mb-1">{refund?.reason}</p>
                 {refund?.comments && (
-                  <p className="text-sm text-muted-foreground">{refund.comments}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {refund.comments}
+                  </p>
                 )}
               </div>
             </div>
 
             {/* Refund Items */}
             <div className="border-b pb-4">
-              <Label className="text-base font-semibold mb-3 block">Items to Refund</Label>
+              <Label className="text-base font-semibold mb-3 block">
+                Items to Refund
+              </Label>
               <div className="space-y-3">
                 {refund?.refund_items && refund.refund_items.length > 0 ? (
                   refund.refund_items.map((item) => (
-                    <div key={item.refund_item_id} className="border rounded-lg p-4">
+                    <div
+                      key={item.refund_item_id}
+                      className="border rounded-lg p-4"
+                    >
                       <div className="flex items-start gap-4">
                         <Package className="h-8 w-8 text-muted-foreground flex-shrink-0" />
                         <div className="flex-1 min-w-0">
                           <p className="font-medium">{item.product_name}</p>
                           <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
                             <span>Qty: {item.quantity}</span>
-                            <span>₱{item.price_at_purchase.toFixed(2)} each</span>
+                            <span>
+                              ₱{item.price_at_purchase.toFixed(2)} each
+                            </span>
                             <span className="font-medium text-foreground">
-                              Total: ₱{(item.price_at_purchase * item.quantity).toFixed(2)}
+                              Total: ₱
+                              {(item.price_at_purchase * item.quantity).toFixed(
+                                2
+                              )}
                             </span>
                           </div>
 
                           {/* Condition Selector - Only show for pending refunds */}
-                          {refund.status === 'pending' && (
+                          {refund.status === "pending" && (
                             <div className="mt-3">
-                              <Label className="text-xs mb-1 block">Item Condition</Label>
+                              <Label className="text-xs mb-1 block">
+                                Item Condition
+                              </Label>
                               <Select
-                                value={selectedConditions[item.refund_item_id] || ""}
+                                value={
+                                  selectedConditions[item.refund_item_id] || ""
+                                }
                                 onValueChange={(value) =>
-                                  setSelectedConditions(prev => ({
+                                  setSelectedConditions((prev) => ({
                                     ...prev,
-                                    [item.refund_item_id]: value
+                                    [item.refund_item_id]: value,
                                   }))
                                 }
                               >
@@ -237,7 +276,10 @@ const RefundDetailsDialog = ({
                                   <SelectGroup>
                                     <SelectLabel>Condition</SelectLabel>
                                     {conditionOptions.map((option) => (
-                                      <SelectItem key={option.value} value={option.value}>
+                                      <SelectItem
+                                        key={option.value}
+                                        value={option.value}
+                                      >
                                         {option.label}
                                       </SelectItem>
                                     ))}
@@ -248,14 +290,19 @@ const RefundDetailsDialog = ({
                           )}
 
                           {/* Show existing condition for processed refunds */}
-                          {refund.status !== 'pending' && item.condition && (
+                          {refund.status !== "pending" && item.condition && (
                             <div className="mt-2">
-                              <Label className="text-xs mb-1 block">Condition</Label>
+                              <Label className="text-xs mb-1 block">
+                                Condition
+                              </Label>
                               <Badge variant="outline" className="text-xs">
-                                {item.condition.replace('_', ' ')}
+                                {item.condition.replace("_", " ")}
                               </Badge>
                               {item.restocked && (
-                                <Badge variant="outline" className="ml-2 bg-green-50 text-green-700 text-xs">
+                                <Badge
+                                  variant="outline"
+                                  className="ml-2 bg-green-50 text-green-700 text-xs"
+                                >
                                   Restocked
                                 </Badge>
                               )}
@@ -276,17 +323,24 @@ const RefundDetailsDialog = ({
             {/* Total Refund Amount */}
             <div className="border-b pb-4">
               <div className="flex justify-between items-center">
-                <Label className="text-base font-semibold">Total Refund Amount</Label>
-                <p className="text-2xl font-bold">₱{calculateTotalRefund().toFixed(2)}</p>
+                <Label className="text-base font-semibold">
+                  Total Refund Amount
+                </Label>
+                <p className="text-2xl font-bold">
+                  ₱{calculateTotalRefund().toFixed(2)}
+                </p>
               </div>
             </div>
 
             {/* Admin Notes */}
             <div>
               <Label className="text-base font-semibold mb-2 block">
-                Admin Notes {refund?.status === 'pending' && <span className="text-red-500">*</span>}
+                Admin Notes{" "}
+                {refund?.status === "pending" && (
+                  <span className="text-red-500">*</span>
+                )}
               </Label>
-              {refund?.status === 'pending' ? (
+              {refund?.status === "pending" ? (
                 <Textarea
                   placeholder="Add notes about this refund decision..."
                   value={adminNotes}
@@ -296,7 +350,9 @@ const RefundDetailsDialog = ({
                 />
               ) : (
                 <div className="bg-muted p-3 rounded-md">
-                  <p className="text-sm">{refund?.admin_notes || "No admin notes"}</p>
+                  <p className="text-sm">
+                    {refund?.admin_notes || "No admin notes"}
+                  </p>
                 </div>
               )}
             </div>
@@ -304,7 +360,7 @@ const RefundDetailsDialog = ({
         </ScrollArea>
 
         <DialogFooter>
-          {refund?.status === 'pending' ? (
+          {refund?.status === "pending" ? (
             <>
               <Button
                 variant="outline"

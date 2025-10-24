@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // Get pending order status
+          
         const pendingOrderStatus = await getOrderStatus('pending');
         if (!pendingOrderStatus) {
             return NextResponse.json(
@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // Prepare items for PayPal
+          
         const paypalItems = items.map((item: DirectCheckoutItem) => {
             const product = productMap.get(item.productId)!;
             return {
@@ -75,10 +75,10 @@ export async function POST(req: NextRequest) {
             };
         });
 
-        // Create PayPal order
+          
         const paypalOrder = await createPayPalOrder(paypalItems);
 
-        // Create order with pending status
+          
         const newOrder = await createOrder(
             userId, 
             pendingOrderStatus.order_status_id,
@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
             newOrder.order_id,
             items,
             productMap,
-            false // Don't decrement stock until payment confirmed
+            false   
         );
 
         return NextResponse.json({
@@ -202,7 +202,7 @@ async function processOrderItems(
     for (const item of items) {
         const product = productMap.get(item.productId)!;
         
-        // Insert order product
+          
         await db.insert(order_products).values({
             order_id: orderId,
             product_id: item.productId,
@@ -210,7 +210,7 @@ async function processOrderItems(
             price_at_purchase: Number(product.product_price)
         });
 
-        // Only decrement stock if payment is confirmed
+          
         if (decrementStock) {
             await db
                 .update(products)

@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // Extract cart product IDs for database query
+          
         const cartProductIds = checkoutItems.map((item: any) => item.cartProductId);
 
         const selectedCartItems = await getSelectedCartItems(cartProductIds, userId);
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // Override quantities with the ones from the client
+          
         const itemsWithUpdatedQuantities = selectedCartItems.map(item => {
             const checkoutItem = checkoutItems.find(
                 (ci: any) => ci.cartProductId === item.cart_products_id

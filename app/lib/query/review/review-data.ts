@@ -43,7 +43,7 @@ export function useSubmitReview() {
     mutationFn: submitReview,
     onSuccess: (data, variables) => {
       toast.success("Review submitted successfully!");
-      // Invalidate reviews for the specific product
+        
       queryClient.invalidateQueries({ 
         queryKey: ["reviews", variables.productId] 
       });
@@ -58,6 +58,6 @@ export function useGetReviews(productId: number) {
   return useQuery({
     queryKey: ["reviews", productId],
     queryFn: () => fetchReviews(productId),
-    enabled: !!productId, // Only fetch when productId exists
+    enabled: !!productId,   
   });
 }

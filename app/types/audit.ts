@@ -1,4 +1,4 @@
-// app/types/audit.ts
+  
 export interface AuditLogWithUser {
   id: number;
   user_id: string;
