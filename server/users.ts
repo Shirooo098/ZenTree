@@ -3,8 +3,11 @@
 import { auth } from "@/app/lib/auth"
 import { getUserRole } from "@/app/util/user-role.action"
 import { db } from "@/db/drizzle"
-import { order_status, orders, user } from "@/db/schema";
-import { sql } from "drizzle-orm";
+import { account, order_status, orders, user } from "@/db/schema";
+import { eq, sql } from "drizzle-orm";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 
 export const signIn = async (email: string, password: string) => {
@@ -33,7 +36,13 @@ export const signIn = async (email: string, password: string) => {
     }
 }
 
-export const signUp = async (email: string, password: string, username: string, name: string) => {
+export const signUp = async (
+  email: string,
+  password: string,
+  username: string,
+  name: string,
+  role?: string,
+  phoneNumber?: string) => {
     try {
         await auth.api.signUpEmail({
             body: {
@@ -43,6 +52,15 @@ export const signUp = async (email: string, password: string, username: string, 
                 username
             },
         })
+
+        console.log("Role:", role)
+         await db
+          .update(user)
+          .set({
+            role: role ?? "user",
+            phoneNumber: phoneNumber ?? null,
+          })
+          .where(eq(user.email, email));
         return{
             success: true,
             message: "Signed-Up Successfully"
@@ -97,3 +115,72 @@ export const getAllUsers = async () => {
     return [];
   }
 };
+export const getCurrentUser = async () => {
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    });
+
+    if (!session) {
+        redirect("/sign-in");
+    }
+
+    const currentUser = await db.query.user.findFirst({
+        where: eq(user.id, session.user.id),
+    });
+
+    if (!currentUser) {
+        redirect("/sign-in");
+    }
+    
+    return {
+        id: session.user.id,
+        name: session.user.name,
+        username: session.user.username,
+        phoneNumber: currentUser.phoneNumber,
+        email: session.user.email,
+        avatar: session.user.image,
+        role: session.user.role
+    }
+}
+
+export async function deleteUser(userId: string) {
+  try {
+    await db.delete(user).where(eq(user.id, userId));
+    revalidatePath("/admin/users");
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    throw new Error("Failed to delete user");
+  }
+}
+export async function updateUser(
+  userId: string,
+  data: {
+    name: string;
+    email: string;
+    username: string | null;
+    role: string;
+    phoneNumber: string | null;
+  }
+) {
+  try {
+    await db
+      .update(user)
+      .set({
+        name: data.name,
+        email: data.email,
+        username: data.username,
+        displayUsername: data.username,
+        role: data.role,
+        phoneNumber: data.phoneNumber,
+        updatedAt: new Date(),
+      })
+      .where(eq(user.id, userId));
+
+    revalidatePath("/admin/users");
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating user:", error);
+    throw new Error("Failed to update user");
+  }
+}

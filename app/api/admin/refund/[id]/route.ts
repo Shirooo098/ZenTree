@@ -1,9 +1,9 @@
 // app/api/admin/refund/[id]/route.ts
-import { auth } from "@/app/lib/auth";
+import { createAuditLog, getRequestMetadata } from "@/app/lib/audit-server.action";
 import { db } from "@/db/drizzle";
-import { refund, refund_items, user, products, orders, order_status } from "@/db/schema";
+import { refund, refund_items, products, orders, order_status } from "@/db/schema";
+import { getCurrentUser } from "@/server/users";
 import { eq, sql } from "drizzle-orm";
-import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
@@ -11,10 +11,8 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers()
-    });
-
+    const session = await getCurrentUser();
+    
     if (!session) {
       return NextResponse.json(
         { error: "Unauthorized" },
@@ -22,15 +20,9 @@ export async function POST(
       );
     }
 
-    const [currentUser] = await db
-      .select({ role: user.role })
-      .from(user)
-      .where(eq(user.id, session.user.id))
-      .limit(1);
-
-    if (!currentUser || currentUser.role !== "admin") {
+    if (session.role !== "admin" && session.role !== "staff") {
       return NextResponse.json(
-        { error: "Forbidden - Admin access required" },
+        { error: "Forbidden - Admin or Staff access required" },
         { status: 403 }
       );
     }
@@ -70,6 +62,11 @@ export async function POST(
       );
     }
 
+    // Get metadata for audit logs
+    const { ipAddress, userAgent } = await getRequestMetadata();
+    let updatedRefund;
+    let updatedOrder;
+
     await db.transaction(async (tx) => {
       // Get the refund to find the associated order
       const [existingRefund] = await tx
@@ -82,6 +79,13 @@ export async function POST(
         throw new Error("Refund not found");
       }
 
+      // Get old order data for audit
+      const [oldOrder] = await tx
+        .select()
+        .from(orders)
+        .where(eq(orders.order_id, existingRefund.order_id))
+        .limit(1);
+
       // Determine the order status based on refund status
       let orderStatusName: string;
       if (newStatus === 'approved') {
@@ -89,7 +93,7 @@ export async function POST(
       } else if (newStatus === 'rejected') {
         orderStatusName = 'refund rejected';
       } else {
-        orderStatusName = 'refund processing'; // for pending
+        orderStatusName = 'refund processing';
       }
 
       // Get the order status ID
@@ -104,24 +108,61 @@ export async function POST(
       }
 
       // Update refund status
-      await tx
+      [updatedRefund] = await tx
         .update(refund)
         .set({
           status: newStatus,
           admin_notes: admin_notes || null,
-          processed_by: session.user.id,
+          processed_by: session.id,
           updated_at: new Date()
         })
-        .where(eq(refund.refund_id, refundId));
+        .where(eq(refund.refund_id, refundId))
+        .returning();
+
+      // Create audit log for refund update
+      await createAuditLog({
+        userId: session.id,
+        action: 'update',
+        tableName: 'refund',
+        recordId: refundId,
+        oldValues: {
+          status: existingRefund.status,
+          admin_notes: existingRefund.admin_notes,
+        },
+        newValues: {
+          status: updatedRefund.status,
+          admin_notes: updatedRefund.admin_notes,
+        },
+        ipAddress,
+        userAgent,
+      });
 
       // Update order status
-      await tx
+      [updatedOrder] = await tx
         .update(orders)
         .set({
           order_status_id: targetOrderStatus.order_status_id,
+          updated_by: session.id,
           updated_at: new Date()
         })
-        .where(eq(orders.order_id, existingRefund.order_id));
+        .where(eq(orders.order_id, existingRefund.order_id))
+        .returning();
+
+      // Create audit log for order update
+      await createAuditLog({
+        userId: session.id,
+        action: 'update',
+        tableName: 'orders',
+        recordId: existingRefund.order_id,
+        oldValues: {
+          order_status_id: oldOrder.order_status_id,
+        },
+        newValues: {
+          order_status_id: updatedOrder.order_status_id,
+        },
+        ipAddress,
+        userAgent,
+      });
 
       console.log(`✅ Updated refund #${refundId} to ${newStatus}`);
       console.log(`✅ Updated order #${existingRefund.order_id} to ${orderStatusName}`);
@@ -153,6 +194,13 @@ export async function POST(
 
           const isResellable = condition === 'resellable';
 
+          // Get old product stock for audit
+          const [oldProduct] = await tx
+            .select()
+            .from(products)
+            .where(eq(products.product_id, item.product_id))
+            .limit(1);
+
           // Update refund item with condition
           await tx
             .update(refund_items)
@@ -167,12 +215,37 @@ export async function POST(
 
           // If resellable, restore stock
           if (isResellable) {
-            await tx
+            const [updatedProduct] = await tx
               .update(products)
               .set({
-                stock: sql`${products.stock} + ${item.quantity}`
+                stock: sql`${products.stock} + ${item.quantity}`,
+                updated_by: session.id,
+                updated_at: new Date()
               })
-              .where(eq(products.product_id, item.product_id));
+              .where(eq(products.product_id, item.product_id))
+              .returning();
+
+            // Create audit log for stock restoration
+            await createAuditLog({
+              userId: session.id,
+              action: 'update',
+              tableName: 'products',
+              recordId: item.product_id,
+              oldValues: {
+                stock: oldProduct.stock,
+              },
+              newValues: {
+                stock: updatedProduct.stock,
+              },
+              ipAddress,
+              userAgent,
+              metadata: {
+                reason: 'refund_restock',
+                refund_id: refundId,
+                refund_item_id: item.refund_item_id,
+                quantity_restored: item.quantity
+              }
+            });
 
             console.log(`  ↳ Restored ${item.quantity} units to product #${item.product_id}`);
           }

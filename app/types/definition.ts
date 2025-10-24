@@ -35,7 +35,7 @@ export interface User{
     username?: string | null,
     phoneNumber?: string | null | undefined,
     email: string,
-    avater?: string | null,
+    avatar?: string | null,
     role?: string | null,
 }
 

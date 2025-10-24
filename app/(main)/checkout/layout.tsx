@@ -1,25 +1,9 @@
-import { auth } from "@/app/lib/auth";
 import { UserProvider } from "@/context/user-context";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { getCurrentUser } from "@/server/users";
 import { Toaster } from "sonner";
 
 export default async function RootLayout({ children }: {children: React.ReactNode}) {
-  const session = await auth.api.getSession({
-    headers: await headers()
-  })
-
-  if(!session) redirect("/login")
-
-  const user = {
-    id: session.user.id!,
-    name: session.user.name!,
-    username: session.user.username,
-    phoneNumber: session.user.phoneNumber,
-    email: session.user.email!,
-    avater: session.user.image,
-    role: session.user.role,
-  };
+  const user = await getCurrentUser();
 
   return (
     <UserProvider user={user}>

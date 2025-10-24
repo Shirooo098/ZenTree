@@ -1,8 +1,9 @@
-import { auth } from "@/app/lib/auth";
+// app/api/admin/orders/[id]/route.ts
+import { createAuditLog, getRequestMetadata } from "@/app/lib/audit-server.action";
 import { db } from "@/db/drizzle";
-import { order_status, orders, user } from "@/db/schema";
+import { order_status, orders } from "@/db/schema";
+import { getCurrentUser } from "@/server/users";
 import { eq } from "drizzle-orm";
-import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
@@ -10,10 +11,8 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers()
-    });
-
+    const session = await getCurrentUser();
+    
     if (!session) {
       return NextResponse.json(
         { error: "Unauthorized" },
@@ -21,22 +20,15 @@ export async function PATCH(
       );
     }
 
-    const [currentUser] = await db
-      .select({ role: user.role })
-      .from(user)
-      .where(eq(user.id, session.user.id))
-      .limit(1);
-
-    if (!currentUser || currentUser.role !== "admin") {
+    if (session.role !== "admin" && session.role !== "staff") {
       return NextResponse.json(
         { error: "Forbidden - Admin access required" },
         { status: 403 }
       );
     }
 
-    const { id } = await params
-    const orderId = Number(id)
-    
+    const { id } = await params;
+    const orderId = Number(id);
 
     if (isNaN(orderId) || !orderId) {
       return NextResponse.json(
@@ -45,7 +37,6 @@ export async function PATCH(
       );
     }
 
-    // Parse request body
     const { status } = await req.json();
 
     if (!status) {
@@ -55,7 +46,6 @@ export async function PATCH(
       );
     }
 
-    // Rest of your code remains the same...
     const statusNameLower = status.toLowerCase();
 
     const [orderStatus] = await db
@@ -68,6 +58,20 @@ export async function PATCH(
       return NextResponse.json(
         { error: `Invalid order status: ${status}` },
         { status: 400 }
+      );
+    }
+
+    // Get old order data for audit log
+    const [oldOrder] = await db
+      .select()
+      .from(orders)
+      .where(eq(orders.order_id, orderId))
+      .limit(1);
+
+    if (!oldOrder) {
+      return NextResponse.json(
+        { error: "Order not found" },
+        { status: 404 }
       );
     }
 
@@ -92,14 +96,36 @@ export async function PATCH(
         break;
     }
 
-    await db
+    // Update order
+    const [updatedOrder] = await db
       .update(orders)
       .set({
         order_status_id: orderStatus.order_status_id,
         payment_status: payment_status,
+        updated_by: session.id,
         updated_at: new Date()
       })
-      .where(eq(orders.order_id, orderId));
+      .where(eq(orders.order_id, orderId))
+      .returning();
+
+    // Create audit log
+    const { ipAddress, userAgent } = await getRequestMetadata();
+    await createAuditLog({
+      userId: session.id,
+      action: 'update',
+      tableName: 'orders',
+      recordId: orderId,
+      oldValues: {
+        order_status_id: oldOrder.order_status_id,
+        payment_status: oldOrder.payment_status,
+      },
+      newValues: {
+        order_status_id: updatedOrder.order_status_id,
+        payment_status: updatedOrder.payment_status,
+      },
+      ipAddress,
+      userAgent,
+    });
 
     return NextResponse.json({
       success: true,

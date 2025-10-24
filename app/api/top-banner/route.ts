@@ -1,18 +1,18 @@
 import { db } from "@/db/drizzle";
 import { top_banner } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
   try {
     const data = await db.select().from(top_banner).limit(1);
-    return Response.json(data[0]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    return NextResponse.json(data[0]);
   } catch (error) {
-    return Response.json({ error: "Failed to fetch banner" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to fetch banner" + error }, { status: 500 });
   }
 }
 
-export async function PUT(req: Request) {
+export async function PUT(req: NextRequest) {
   try {
     const { title, subtitle, description} = await req.json();
     const [existing] = await db.select().from(top_banner).limit(1);
@@ -26,9 +26,8 @@ export async function PUT(req: Request) {
       await db.insert(top_banner).values({ title, subtitle, description });
     }
 
-    return Response.json({ success: true });
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    return NextResponse.json({ success: true });
   } catch (error) {
-    return Response.json({ error: "Failed to update banner" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to update banner" + error }, { status: 500 });
   }
 }

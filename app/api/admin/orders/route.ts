@@ -4,12 +4,11 @@ import { imageKit_productFiles, order_products, order_status, orders, products, 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { desc, eq, sql } from "drizzle-orm";
+import { getCurrentUser } from "@/server/users";
 
 export async function GET() {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers()
-    });
+    const session = await getCurrentUser();
     
     if (!session) {
       return NextResponse.json(
@@ -18,14 +17,7 @@ export async function GET() {
       );
     }
 
-    // Check if user is admin
-    const [currentUser] = await db
-      .select({ role: user.role })
-      .from(user)
-      .where(eq(user.id, session.user.id))
-      .limit(1);
-
-    if (!currentUser || currentUser.role !== "admin") {
+    if (session.role !== "admin" && session.role !== "staff") {
       return NextResponse.json(
         { error: "Forbidden - Admin access required" },
         { status: 403 }

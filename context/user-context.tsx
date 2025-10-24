@@ -15,7 +15,7 @@ interface UserProviderProps {
     user: User,
 }
 
-export function UserProvider({ children, user} : UserProviderProps) {
+export function UserProvider({ children, user } : UserProviderProps) {
     return(
         <UserContext.Provider value = {{ user, userId: user.id}}>
             {children}

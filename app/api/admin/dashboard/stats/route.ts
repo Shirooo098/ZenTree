@@ -1,27 +1,25 @@
-import { auth } from "@/app/lib/auth"
-import { headers } from "next/headers"
 import { NextResponse } from "next/server"
 import { count, sum, gte, lte, lt, gt, and, eq, inArray } from "drizzle-orm"
 import { db } from "@/db/drizzle"
 import { order_products, order_status, orders, products } from "@/db/schema"
+import { getCurrentUser } from "@/server/users"
 
 export async function GET(){
     try {
         const dates = getDateRanges();
 
-        const session = await auth.api.getSession({
-            headers: await headers()
-        })
-        if (!session) {
+        const user = await getCurrentUser();
+
+        if (!user) {
             return NextResponse.json(
                 { error: "Unauthorized - No session" }, 
                 { status: 401 }
             )
         }
         
-        if (session.user.role !== "admin") {
+        if (user.role !== "admin" && user.role !== "staff") {
             return NextResponse.json(
-                { error: "Unauthorized - Admin access required" }, 
+                { error: "Unauthorized - Admin or Staff access required" }, 
                 { status: 403 }
             )
         }

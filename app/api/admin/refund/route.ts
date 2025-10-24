@@ -1,19 +1,26 @@
 // app/api/refunds/route.ts
-import { auth } from "@/app/lib/auth";
 import { db } from "@/db/drizzle";
 import { refund, refund_items, user, products, order_products } from "@/db/schema";
+import { getCurrentUser } from "@/server/users";
 import { eq, desc, and } from "drizzle-orm";
-import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
-
+    const session = await getCurrentUser();
+    
     if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    if (session.role !== "admin" && session.role !== "staff") {
+      return NextResponse.json(
+        { error: "Forbidden - Admin or Staff access required" },
+        { status: 403 }
+      );
     }
 
 

@@ -1,17 +1,14 @@
 // File: app/api/upload-auth/route.ts
-import { auth } from "@/app/lib/auth"
 import { getUploadAuthParams } from "@imagekit/next/server"
 import { redirect } from "next/navigation";
-import { headers } from "next/headers"
+import { getCurrentUser } from "@/server/users";
 
 export async function GET() {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    })
+    const session = await getCurrentUser()
 
     if(!session) redirect ("/sign-in");
 
-    if(session.user.role !== "admin") redirect ("/");
+    if(session.role !== "admin" && session.role !== "staff") redirect ("/");
 
     const { token, expire, signature } = getUploadAuthParams({
         privateKey: process.env.IMAGEKIT_PRIVATE_KEY as string, // Never expose this on client side

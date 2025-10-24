@@ -1,5 +1,6 @@
 "use server";
 
+import { createAuditLog, getRequestMetadata, requireAdminOrStaff } from "@/app/lib/audit-server.action";
 import { productSchema } from "@/app/types/schema";
 import { db } from "@/db/drizzle";
 import { products } from "@/db/schema";
@@ -7,6 +8,11 @@ import z from "zod";
 
 export async function createProductAction(formData: FormData){
     try {
+
+        const { authorized, session, error } = await requireAdminOrStaff();
+        if (!authorized) return error;
+
+
         const data = {
             productCategory: formData.get("productCategory"),
             productName: formData.get("productName"),
@@ -48,7 +54,8 @@ export async function createProductAction(formData: FormData){
         } = validateFields.data;
 
 
-            await db.insert(products).values({
+             // 3. Insert product with created_by field
+            const [newProduct] = await db.insert(products).values({
                 product_category: productCategory,
                 product_name: productName,
                 bonsai_size: size,
@@ -58,8 +65,28 @@ export async function createProductAction(formData: FormData){
                 product_price: productPrice,
                 product_desc: productDescription,
                 imageKit_productFiles_id: parseInt(imageRecordId),
-                stock: stock
+                stock: stock,
+                created_by: session!.id,  // Track who created it
+                created_at: new Date(),
+            }).returning();
+
+            // 4. Create audit log
+            const { ipAddress, userAgent } = await getRequestMetadata();
+            await createAuditLog({
+                userId: session!.id,
+                action: 'create',
+                tableName: 'products',
+                recordId: newProduct.product_id,
+                newValues: {
+                    product_name: newProduct.product_name,
+                    product_category: newProduct.product_category,
+                    product_price: newProduct.product_price,
+                    stock: newProduct.stock,
+                },
+                ipAddress,
+                userAgent,
             });
+
 
             return{
                 message: "Product Created Successfully."

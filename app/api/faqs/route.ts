@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db/drizzle";
 import { faqs } from "@/db/schema";
 import { eq, asc } from "drizzle-orm";
@@ -15,18 +15,17 @@ export async function GET() {
   }
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const { category, title, description } = await req.json();
     await db.insert(faqs).values({ category, title, description });
     return NextResponse.json({ success: true });
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    return NextResponse.json({ error: "Failed to add FAQ" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to add FAQ" + error }, { status: 500 });
   }
 }
 
-export async function PUT(req: Request) {
+export async function PUT(req: NextRequest) {
   try {
     const { id, category, title, description } = await req.json();
     await db
@@ -34,19 +33,17 @@ export async function PUT(req: Request) {
       .set({ category, title, description })
       .where(eq(faqs.id, id));
     return NextResponse.json({ success: true });
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    return NextResponse.json({ error: "Failed to update FAQ" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to update FAQ" + error }, { status: 500 });
   }
 }
 
-export async function DELETE(req: Request) {
+export async function DELETE(req: NextRequest) {
   try {
     const { id } = await req.json();
     await db.delete(faqs).where(eq(faqs.id, id));
     return NextResponse.json({ success: true });
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    return NextResponse.json({ error: "Failed to delete FAQ" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to delete FAQ" + error  }, { status: 500 });
   }
 }

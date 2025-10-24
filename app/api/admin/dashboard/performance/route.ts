@@ -1,5 +1,5 @@
 import { db } from "@/db/drizzle";
-import { products, order_products, orders, reviews } from "@/db/schema";
+import { products, order_products, orders, reviews, order_status } from "@/db/schema";
 import { sql, eq, and, gte, desc, asc } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -15,12 +15,13 @@ async function calculateTrend(productId: number, currentRevenue: number) {
     })
     .from(order_products)
     .innerJoin(orders, eq(order_products.order_id, orders.order_id))
+    .innerJoin(order_status, eq(orders.order_status_id, order_status.order_status_id))
     .where(
       and(
         eq(order_products.product_id, productId),
         gte(orders.created_at, previousPeriodStart),
         sql`${orders.created_at} < ${previousPeriodEnd}`,
-        eq(orders.payment_status, "completed")
+        eq(order_status.order_status_name, "completed")
       )
     );
 
@@ -53,9 +54,9 @@ export async function GET(request: NextRequest) {
         product_name: products.product_name,
         product_category: products.product_category,
         current_stock: products.stock,
-        total_orders: sql<number>`COUNT(DISTINCT CASE WHEN ${orders.payment_status} = 'completed' THEN ${orders.order_id} END)`,
-        total_quantity_sold: sql<number>`COALESCE(SUM(CASE WHEN ${orders.payment_status} = 'completed' THEN ${order_products.quantity} ELSE 0 END), 0)`,
-        total_revenue: sql<number>`COALESCE(SUM(CASE WHEN ${orders.payment_status} = 'completed' THEN ${order_products.price_at_purchase} * ${order_products.quantity} ELSE 0 END), 0)`,
+        total_orders: sql<number>`COUNT(DISTINCT CASE WHEN ${order_status.order_status_name} = 'completed' THEN ${orders.order_id} END)`,
+        total_quantity_sold: sql<number>`COALESCE(SUM(CASE WHEN ${order_status.order_status_name} = 'completed' THEN ${order_products.quantity} ELSE 0 END), 0)`,
+        total_revenue: sql<number>`COALESCE(SUM(CASE WHEN ${order_status.order_status_name} = 'completed' THEN ${order_products.price_at_purchase} * ${order_products.quantity} ELSE 0 END), 0)`,
         average_rating: sql<number>`AVG(${reviews.rating})`,
       })
       .from(products)
@@ -67,6 +68,7 @@ export async function GET(request: NextRequest) {
           gte(orders.created_at, periodDate)
         )
       )
+      .leftJoin(order_status, eq(orders.order_status_id, order_status.order_status_id))
       .leftJoin(reviews, eq(products.product_id, reviews.product_id))
       .groupBy(
         products.product_id,
