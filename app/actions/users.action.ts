@@ -3,8 +3,10 @@
 import { auth } from "@/app/lib/auth";
 import { headers } from "next/headers";
 import { db } from "@/db/drizzle";
-import { order_status, orders, user } from "@/db/schema";
-import { eq, and, gte, count, sql } from "drizzle-orm";
+import { user } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { createAuditLog, getRequestMetadata, } from "@/app/lib/audit-server.action";
+import { getCurrentUser } from "@/server/users";
 
 export const banUser = async (
   userId: string, 
@@ -12,6 +14,38 @@ export const banUser = async (
   banExpiresIn: number
 ) => {
   try {
+    // 1. Check permissions (only admins can ban users)
+    const session = await getCurrentUser();
+    
+    if (!session) {
+      return {
+        success: false,
+        message: "Unauthorized - Please log in",
+      };
+    }
+
+    if (session.role !== "admin") {
+      return {
+        success: false,
+        message: "Forbidden - Only admins can ban users",
+      };
+    }
+
+    // 2. Get old user data for audit log
+    const [oldUser] = await db
+      .select()
+      .from(user)
+      .where(eq(user.id, userId))
+      .limit(1);
+
+    if (!oldUser) {
+      return {
+        success: false,
+        message: "User not found",
+      };
+    }
+
+    // 3. Ban user via auth API
     await auth.api.banUser({
       body: {
         userId,
@@ -23,7 +57,8 @@ export const banUser = async (
 
     const banExpiresDate = new Date(Date.now() + banExpiresIn * 1000);
     
-    await db
+    // 4. Update user in database
+    const [updatedUser] = await db
       .update(user)
       .set({
         banned: true,
@@ -31,7 +66,36 @@ export const banUser = async (
         banExpires: banExpiresDate,
         updatedAt: new Date(),
       })
-      .where(eq(user.id, userId));
+      .where(eq(user.id, userId))
+      .returning();
+
+    // 5. Create audit log
+    const { ipAddress, userAgent } = await getRequestMetadata();
+    await createAuditLog({
+      userId: session.id,
+      action: 'update',
+      tableName: 'user',
+      recordId: userId,
+      oldValues: {
+        banned: oldUser.banned,
+        banReason: oldUser.banReason,
+        banExpires: oldUser.banExpires,
+      },
+      newValues: {
+        banned: updatedUser.banned,
+        banReason: updatedUser.banReason,
+        banExpires: updatedUser.banExpires,
+      },
+      ipAddress,
+      userAgent,
+      metadata: {
+        action_type: 'ban_user',
+        target_user_id: userId,
+        target_user_email: oldUser.email,
+        ban_duration_seconds: banExpiresIn,
+        ban_expires_at: banExpiresDate.toISOString(),
+      }
+    });
 
     return {
       success: true,
@@ -49,12 +113,45 @@ export const banUser = async (
 
 export const unbanUser = async (userId: string) => {
   try {
+    // 1. Check permissions (only admins can unban users)
+    const session = await getCurrentUser();
+    
+    if (!session) {
+      return {
+        success: false,
+        message: "Unauthorized - Please log in",
+      };
+    }
+
+    if (session.role !== "admin") {
+      return {
+        success: false,
+        message: "Forbidden - Only admins can unban users",
+      };
+    }
+
+    // 2. Get old user data for audit log
+    const [oldUser] = await db
+      .select()
+      .from(user)
+      .where(eq(user.id, userId))
+      .limit(1);
+
+    if (!oldUser) {
+      return {
+        success: false,
+        message: "User not found",
+      };
+    }
+
+    // 3. Unban user via auth API
     await auth.api.unbanUser({
       body: { userId },
       headers: await headers(),
     });
 
-    await db
+    // 4. Update user in database
+    const [updatedUser] = await db
       .update(user)
       .set({
         banned: false,
@@ -62,7 +159,35 @@ export const unbanUser = async (userId: string) => {
         banExpires: null,
         updatedAt: new Date(),
       })
-      .where(eq(user.id, userId));
+      .where(eq(user.id, userId))
+      .returning();
+
+    // 5. Create audit log
+    const { ipAddress, userAgent } = await getRequestMetadata();
+    await createAuditLog({
+      userId: session.id,
+      action: 'update',
+      tableName: 'user',
+      recordId: userId,
+      oldValues: {
+        banned: oldUser.banned,
+        banReason: oldUser.banReason,
+        banExpires: oldUser.banExpires,
+      },
+      newValues: {
+        banned: updatedUser.banned,
+        banReason: updatedUser.banReason,
+        banExpires: updatedUser.banExpires,
+      },
+      ipAddress,
+      userAgent,
+      metadata: {
+        action_type: 'unban_user',
+        target_user_id: userId,
+        target_user_email: oldUser.email,
+        previous_ban_reason: oldUser.banReason,
+      }
+    });
 
     return {
       success: true,
@@ -70,6 +195,7 @@ export const unbanUser = async (userId: string) => {
     };
   } catch (error) {
     const e = error as Error;
+    console.error("Unban user error:", e);
     return {
       success: false,
       message: e.message || "Failed to unban user",

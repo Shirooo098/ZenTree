@@ -151,19 +151,12 @@ export const useProductForm = ({ mode, productId, productData, initialData }: Us
 
     const submitFormData = async (formData: FormData) => {
         try {
-            let result;
             if (mode === 'add') {
-                result = await createProductAction(formData);
+                await createProductAction(formData);
             } else {
-                // You'll need to create an updateProductAction
-                // result = await updateProductAction(formData);
-                // For now, using the same action - you may need to modify this
-                result = await editProductAction(formData);
+                await editProductAction(formData);
             }
 
-            if (result.message) {
-                toast.success(result.message);
-            }
 
             router.push("/admin/products");
         } catch (error) {
