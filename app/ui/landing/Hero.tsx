@@ -11,7 +11,7 @@ async function getHeroContent() {
 }
 
 async function getBanner() {
-  const res = await fetch(`api/promotion-banner`, { cache: "no-store" });
+  const res = await fetch(`/api/promotion-banner`, { cache: "no-store" });
   return res.json();
 }
 
