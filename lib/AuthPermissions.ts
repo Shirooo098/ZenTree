@@ -1,4 +1,3 @@
-// lib/rbac-middleware.ts
 import { getCurrentUser } from "@/server/users";
 import { NextRequest, NextResponse } from "next/server";
 

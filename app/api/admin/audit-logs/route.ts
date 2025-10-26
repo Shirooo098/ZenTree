@@ -1,7 +1,6 @@
-// app/api/admin/audit-logs/route.ts
 import { db } from "@/db/drizzle";
 import { audit_log, user } from "@/db/schema";
-import { desc, eq, sql, and } from "drizzle-orm"; // Add 'and' import
+import { desc, eq, sql, and } from "drizzle-orm"; 
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/server/users";
 

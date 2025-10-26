@@ -1,4 +1,3 @@
-// app/api/admin/audit-logs/[id]/route.ts
 import { db } from "@/db/drizzle";
 import { audit_log, user } from "@/db/schema";
 import { eq } from "drizzle-orm";
