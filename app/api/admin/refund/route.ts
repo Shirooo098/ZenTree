@@ -1,4 +1,3 @@
-// app/api/refunds/route.ts
 import { db } from "@/db/drizzle";
 import { refund, refund_items, user, products, order_products } from "@/db/schema";
 import { getCurrentUser } from "@/server/users";

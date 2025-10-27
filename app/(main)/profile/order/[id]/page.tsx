@@ -161,7 +161,7 @@ export default function OrderPage() {
             Thank you for your purchase. Your order has been confirmed.
           </p>
           <div className="inline-block bg-gray-100 px-4 py-2 rounded">
-            <p className="text-sm text-gray-600">Order Number</p>
+            <p className="text-sm text-gray-600">Serial Number</p>
             <p className="text-xl font-bold text-gray-900">#{order.order_id}</p>
           </div>
         </div>

@@ -44,6 +44,7 @@ export function DeleteUserDialog({
 }) {
   const [isLoading, setIsLoading] = useState(false);
 
+  console.log("Role:", user?.role);
   async function handleDelete() {
     if (!user) return;
 

@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
     const { title, description } = await req.json();
     const inserted = await db.insert(care_faq).values({ title, description });
     return NextResponse.json({ success: true, faq: inserted });
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   } catch (error) {
     return NextResponse.json({ error: `Failed to delete FAQ: ${error}` }, { status: 500 });
   }

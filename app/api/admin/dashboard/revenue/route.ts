@@ -1,4 +1,3 @@
-// app/api/admin/revenue/route.ts
 import { NextResponse } from "next/server";
 
 import { sql, eq, and, gte } from "drizzle-orm";

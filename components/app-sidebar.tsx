@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   IconCamera,
   IconChartBar,
@@ -20,12 +20,12 @@ import {
   IconSearch,
   IconSettings,
   IconUsers,
-} from "@tabler/icons-react"
+} from "@tabler/icons-react";
 
-import { NavDocuments } from "@/components/nav-documents"
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { NavDocuments } from "@/components/nav-documents";
+import { NavMain } from "@/components/nav-main";
+import { NavSecondary } from "@/components/nav-secondary";
+import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -34,9 +34,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { User } from "@/app/types/definition"
-import Logo from "@/app/ui/Logo"
+} from "@/components/ui/sidebar";
+import { User } from "@/app/types/definition";
+import Logo from "@/app/ui/Logo";
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   user: User;
@@ -176,17 +176,19 @@ const data = {
       href: "/admin/content-management/faq",
       icon: IconClipboard,
     },
-
   ],
-}
+};
 
 export function AppSidebar({ user, ...props }: AppSidebarProps) {
   const userData = user;
 
   // Filter navMain items based on user role
-  const filteredNavMain = data.navMain.filter(item => {
+  const filteredNavMain = data.navMain.filter((item) => {
     // Hide Audit Logs if user is not admin
-    if (item.title === "Audit Logs" && user.role !== "admin") {
+    if (
+      (item.title === "Audit Logs" || item.title === "Users") &&
+      user.role !== "admin"
+    ) {
       return false;
     }
     return true;
@@ -202,7 +204,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
               className="data-[slot=sidebar-menu-button]:!p-1.5 "
             >
               <a href="/admin" className="flex h-full justify-start">
-                <Logo size="nav"/>
+                <Logo size="nav" />
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -217,5 +219,5 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
         <NavUser user={userData} />
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }
