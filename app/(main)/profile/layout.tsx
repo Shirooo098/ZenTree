@@ -2,6 +2,11 @@ import SideProfile from "@/app/ui/profile/SideProfile";
 import { Toaster } from "sonner";
 import { UserProvider } from "@/context/user-context";
 import { getCurrentUser } from "@/server/users";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Profile",
+};
 
 export default async function RootLayout({ children }: {children: React.ReactNode}) {
   const user = await getCurrentUser()

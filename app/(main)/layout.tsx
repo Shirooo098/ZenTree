@@ -2,7 +2,12 @@ import NavBar from "../ui/navbar";
 import Footer from "../ui/landing/Footer";
 import { Toaster } from "@/components/ui/sonner"
 import { TanstackProvider } from "@/context/tanstack-provider";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "ZenTree",
+  description: "An Ecommerce website for bonsai",
+};
 
 export default async function RootLayout({
   children,

@@ -5,6 +5,12 @@ import CareTopics from "@/app/ui/care/topics";
 import Carefundamentals from "@/app/ui/care/fundamentals";
 import CareFAQ from  "@/app/ui/care/CareFAQ"
 import Faqsfrequestions from "@/app/ui/care/faqsQ";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Care Guide',
+};
+
 
 export default function CareGuide() {
   return (
