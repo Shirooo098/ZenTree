@@ -3,12 +3,7 @@
 import { Loader } from "@/app/components/loader/loader";
 import CheckoutPage from "@/app/ui/cart/CheckoutPage";
 import { useUser } from "@/context/user-context";
-import { Metadata } from "next";
 import { Suspense } from "react";
-
-export const metadata: Metadata = {
-  title: 'Checkout',
-};
 
 export default function Checkout() {
   const { user } = useUser();

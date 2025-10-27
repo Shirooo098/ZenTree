@@ -1,6 +1,12 @@
 import { UserProvider } from "@/context/user-context";
 import { getCurrentUser } from "@/server/users";
+import { Metadata } from "next";
 import { Toaster } from "sonner";
+
+export const metadata: Metadata = {
+  title: "Checkout",
+};
+
 
 export default async function RootLayout({ children }: {children: React.ReactNode}) {
   const user = await getCurrentUser();
