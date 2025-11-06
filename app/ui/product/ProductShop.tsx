@@ -31,8 +31,8 @@ export default function ProductShop() {
       inPriceRange = p.price >= 9999 && p.price <= 18999;
     if (filters.price === "18999-24999")
       inPriceRange = p.price >= 18999 && p.price <= 24999;
-    if (filters.price === "24999-34999")
-      inPriceRange = p.price >= 24999 && p.price <= 34999;
+    if (filters.price === "24999-1000000")
+      inPriceRange = p.price >= 24999 && p.price <= 1000000;
 
     return (
       (filters.care ? p.bonsaiCareLevel === filters.care : true) &&

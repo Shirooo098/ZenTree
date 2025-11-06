@@ -18,6 +18,12 @@ import {
   useRemoveFromCart,
   useUpdateCartQuantity,
 } from "@/app/lib/query/cart/cart-data";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Cart',
+};
+
 
 export default function Cart() {
   const router = useRouter();

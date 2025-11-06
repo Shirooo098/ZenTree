@@ -62,8 +62,8 @@ export default function Search({ filters, setFilters }: SearchProps) {
         <input
           type="radio"
           name="price"
-          value="24999-Infinity"
-          checked={filters.price === "24999-Infinity"}
+          value="24999-1000000"
+          checked={filters.price === "24999-1000000"}
           onChange={(e) => setFilters((f) => ({ ...f, price: e.target.value }))}
         />
         <span>₱ 24,999 and above</span>
